@@ -19,15 +19,15 @@ string Driver::getName() const{
 }
 
 unsigned int Driver::getShiftMaxDuration() const{
-  return maxHours;
+  return max_shift;
 }
 
 unsigned int Driver::getMaxWeekWorkingTime() const{
-  return maxWeekWorkingTime;
+  return max_week;
 }
 
 unsigned int Driver::getMinRestTime() const{
-  return minRestTime;
+  return min_rest;
 }
 
 vector<Shift> Driver::getShifts() const{
