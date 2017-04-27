@@ -1,24 +1,32 @@
-#include "Empresa.h"
+#include "Company.h"
 
+// CONSTRUCTORS
 
-Empresa::Empresa(string nome, string fichCondutores, string fichLinhas){
-  
+Company::Company(string nome, string driversFile, string linesFile){}
+
+// GET METHODS
+
+string Company::getName() const{
+  return name;
 }
 
-////////////////////////////////
-// metodos get
-///////////////////////////////
-string Empresa::getNome() const{
-  return nome;
+Line Company::getLine(int index) const{
+	return lines.at(index);
 }
 
-//////////////////////////////
-// metodos set
-/////////////////////////////
+Driver Company::getDriver(int index) const{
+	return drivers.at(index);
+}
 
-////////////////////////////
-// outros metodos
-///////////////////////////
+void Company::distribuiServico(){
+}
 
-void Empresa::distribuiServico(){
+// MUTATING METHODS
+
+void Company::addLine(Line l) {
+	lines.push_back(l);
+}
+
+void Company::addDriver(Driver d){
+	drivers.push_back(d);
 }
