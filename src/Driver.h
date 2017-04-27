@@ -27,7 +27,13 @@ class Driver{
   unsigned int getMaxWeekWorkingTime() const;
   unsigned int getMinRestTime() const;
   vector<Shift> getShifts() const;
-
-  // outher methods
+  //set methods
+  void setId(unsigned int id);
+  void setName (string name);
+  void setMax_shift(unsigned int max_shift);
+  void setMax_week(unsigned int max_week);
+  void setMin_rest(unsigned int min_rest);
+  void setShifts(vector<Shift> shifts);
+  // other methods
   void showDriver(Driver);
 };
