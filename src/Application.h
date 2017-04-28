@@ -15,9 +15,9 @@
 
 using namespace std;
 
-typedef void  (*MenuOption)();
 
 class Application {
+typedef void(Application::*MenuOption)(void);
 private:
 	Company company;
 	int day_start;

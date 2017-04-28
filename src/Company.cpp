@@ -12,7 +12,6 @@ Company::Company(string name, LineList lines , DriverList drivers){
 	this->drivers = drivers;
 }
 
-Company::Company();
 
 // GET METHODS
 

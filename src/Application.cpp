@@ -11,10 +11,14 @@
 #include "Line.h"
 #include "Driver.h"
 
+
 Application::Application() {
 	day_start = 7;
 	day_end = 23;
-	company = new Company;
+	LineList l;
+	DriverList d;
+	Company c = Company("semprarrolar",l, d) ;
+	company = c;
 }
 
 void Application::linesShow(){
@@ -69,33 +73,33 @@ void Application::exitMenu(){
 
 }
 void Application::setupMenu(){
-	menu["lines show"] = linesShow;
-	menu["lines create"] = linesCreate;
-	menu["lines update"] = linesUpdate;
-	menu["lines delete"] = linesDelete;
-	menu["lines schedules"] = linesSchedule;
-	menu["lines travel time"] = linesTravelTimes;
-	menu["lines stop lines"] = linesStopLines;
-	menu["lines stop timetable"] = linesStopTimetable;
-	menu["drivers show"] = driversShow;
-	menu["drivers create"] = driversCreate;
-	menu["drivers update"] = driversUpdate;
-	menu["drivers delete"] = driversDelete;
-	menu["exit"] = exitMenu;
+	menu["lines show"] = &Application::linesShow;
+	menu["lines create"] = &Application::linesCreate;
+	menu["lines update"] = &Application::linesUpdate;
+	menu["lines delete"] = &Application::linesDelete;
+	menu["lines schedules"] = &Application::linesSchedule;
+	menu["lines travel time"] = &Application::linesTravelTimes;
+	menu["lines stop lines"] = &Application::linesStopLines;
+	menu["lines stop timetable"] = &Application::linesStopTimetable;
+	menu["drivers show"] = &Application::driversShow;
+	menu["drivers create"] = &Application::driversCreate;
+	menu["drivers update"] = &Application::driversUpdate;
+	menu["drivers delete"] = &Application::driversDelete;
+	menu["exit"] = &Application::exitMenu;
 	//shortcuts
-	menu["ls"] = linesShow;
-	menu["lc"] = linesCreate;
-	menu["lu"] = linesUpdate;
-	menu["ld"] = linesDelete;
-	menu["lsch"] = linesSchedule;
-	menu["ltt"] = linesTravelTimes;
-	menu["lsl"] = linesStopLines;
-	menu["lst"] = linesStopTimetable;
-	menu["ds"] = driversShow;
-	menu["dc"] = driversCreate;
-	menu["du"] = driversUpdate;
-	menu["dd"] = driversDelete;
-	menu["e"] = exitMenu;
+	menu["ls"] = &Application::linesShow;
+	menu["lc"] = &Application::linesCreate;
+	menu["lu"] = &Application::linesUpdate;
+	menu["ld"] = &Application::linesDelete;
+	menu["lsch"] = &Application::linesSchedule;
+	menu["ltt"] = &Application::linesTravelTimes;
+	menu["lsl"] = &Application::linesStopLines;
+	menu["lst"] = &Application::linesStopTimetable;
+	menu["ds"] = &Application::driversShow;
+	menu["dc"] = &Application::driversCreate;
+	menu["du"] = &Application::driversUpdate;
+	menu["dd"] = &Application::driversDelete;
+	menu["e"] = &Application::exitMenu;
 }
 
 void Application::displayMenu(){
