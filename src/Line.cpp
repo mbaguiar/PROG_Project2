@@ -1,5 +1,13 @@
 #include "Line.h"
 
+Line::Line(){
+	id = -1;
+	freq = 0;
+	vector<string> s;
+	stops = s;
+	vector<int> t;
+	times = t;
+}
 
 Line::Line(string textLIne){
   

@@ -1,5 +1,15 @@
 #include "Driver.h"
 
+Driver::Driver(){
+	id = -1;
+	name = "";
+	max_shift = 0;
+	max_week = 0;
+	min_rest = 0;
+	vector<Shift> s;
+	shifts = s;
+}
+
 Driver::Driver(string textLine){
 
 }
