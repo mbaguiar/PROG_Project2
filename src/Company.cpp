@@ -6,6 +6,14 @@ using namespace std;
 
 // CONSTRUCTORS
 
+Company::Company(){
+	name = "";
+	DriverList d;
+	LineList l;
+	drivers = d;
+	lines = l;
+}
+
 Company::Company(string name, LineList lines , DriverList drivers){
 	this->name = name;
 	this->lines = lines;

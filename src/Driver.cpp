@@ -1,6 +1,20 @@
 #include "Driver.h"
 
+<<<<<<< HEAD
 Driver::Driver(string textLine){ }
+=======
+Driver::Driver(){
+	id = -1;
+	name = "";
+	max_shift = 0;
+	max_week = 0;
+	min_rest = 0;
+	vector<Shift> s;
+	shifts = s;
+}
+
+Driver::Driver(string textLine){
+>>>>>>> 24f88279de541ad365a146247fd6dca4bc489083
 
 
 Driver::Driver(int id, string name, unsigned int max_shift, unsigned int max_week, unsigned int min_rest, vector<Shift> shifts) {
