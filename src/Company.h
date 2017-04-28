@@ -22,7 +22,7 @@ class Company{
   LineList lines;
  public:
   // CONSTRUCTORS
-  Company(string nome, vector<Line> lines, vector<Driver> drivers);
+  Company(string nome, LineList lines, DriverList drivers);
   Company();
 
   // GET METHODS
@@ -35,7 +35,7 @@ class Company{
 
   string getName() const; // returns company name
 
-  // metodos set
+  // SET METHODS
 
   void setLine(int index, Line newLine); // replaces line at index with newLine
   void setDriver(int index, Driver newDriver); // replaces driver at index with newDriver
