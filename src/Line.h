@@ -15,8 +15,10 @@ class Line{
   unsigned int freq;
   vector<string> stops;
   vector<int> times;
+
  public:
   Line(string textLine);
+  Line (unsigned int id, unsigned int freq, vector<string> stops, vector<int> times);
 
   // GET METHODS
 

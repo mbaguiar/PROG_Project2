@@ -8,6 +8,13 @@ Line::Line(string textLIne){
 
 }
 
+Line::Line (unsigned int id, unsigned int freq, vector<string> stops, vector<int> times) {
+	this->id = id;
+	this->freq = freq;
+	this->stops = stops;
+	this->times = times;
+}
+
 // GET METHODS
 
 unsigned int Line::getId() const{
