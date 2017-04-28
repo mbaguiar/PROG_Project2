@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SHIFT_H_
+#define SHIFT_H_
 
 #include <iostream>
 #include <vector>
@@ -34,3 +35,5 @@ class Shift{
   void setEndTime(unsigned int);
 
 };
+
+#endif

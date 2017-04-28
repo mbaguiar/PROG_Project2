@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BUS_H_
+#define BUS_H_
 
 #include <iostream>
 #include <vector>
@@ -27,3 +28,5 @@ class Bus{
   // other methods
 
 };
+
+#endif

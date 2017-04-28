@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LINES_H_
+#define LINES_H_
 
 #include <iostream>
 #include <string>
@@ -32,3 +33,5 @@ class Line{
   void setTimes(vector<int> times);
 
 };
+
+#endif

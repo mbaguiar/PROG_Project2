@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DRIVER_H_
+#define DRIVER_H_
 
 #include <iostream>
 #include <string>
@@ -39,5 +40,6 @@ class Driver{
   void setMin_rest(unsigned int min_rest);
   void setShifts(vector<Shift> shifts);
 
-
 };
+
+#endif
