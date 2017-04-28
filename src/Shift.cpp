@@ -31,22 +31,22 @@ unsigned int Shift::getEndTime() const{
 // set methods
 //////////////
 
-unsigned int Shift::setBusLineId(unsigned int busLineId){
+void Shift::setBusLineId(unsigned int busLineId){
   this->busLineId = busLineId;
 }
 
-unsigned int Shift::setDriverId(unsigned int driverId){
+void Shift::setDriverId(unsigned int driverId){
   this->driverId = driverId;
 }
 
-unsigned int Shift::setBusOrderNumber(unsigned int busOrderNumber){
+void Shift::setBusOrderNumber(unsigned int busOrderNumber){
   this->busOrderNumber = busOrderNumber;
 }
 
-unsigned int Shift::setStartTime(unsigned int startTime){
+void Shift::setStartTime(unsigned int startTime){
   this->startTime = startTime;
 }
 
-unsigned int Shift::setEndTime(unsigned int endTime){
+void Shift::setEndTime(unsigned int endTime){
   this->endTime = endTime;
 }

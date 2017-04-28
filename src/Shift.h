@@ -17,21 +17,23 @@ class Shift{
 
  public:
   Shift(unsigned int busLineId, unsigned int driverId, unsigned int busNumber, unsigned int startTime, unsigned int endTime);
-  // get methdos
+
+  // GET METHODS
+
   unsigned int getBusLineId() const;
   unsigned int getDriverId() const;
   unsigned int getBusOrderNumber() const; // order of the bus within the bus line
   unsigned int getStartTime() const;
   unsigned int getEndTime() const;
 
-  //  set methods
-  unsigned int setBusLineId(unsigned int);
-  unsigned int setDriverId(unsigned int);
-  unsigned int setBusOrderNumber(unsigned int);
-  unsigned int setStartTime(unsigned int);
-  unsigned int setEndTime(unsigned int);
+  // SET METHODS
 
-  // other methods
+  void setBusLineId(unsigned int);
+  void setDriverId(unsigned int);
+  void setBusOrderNumber(unsigned int);
+  void setStartTime(unsigned int);
+  void setEndTime(unsigned int);
+
 };
 
 #endif

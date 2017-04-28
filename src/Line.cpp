@@ -8,18 +8,38 @@ Line::Line(string textLIne){
 
 }
 
-////////////////
-// get methods
-////////////////
+// GET METHODS
 
 unsigned int Line::getId() const{
   return id;
 }
 
-vector<string> Line::getBusStops() const{
+unsigned int Line::getFreq() const {
+	return freq;
+}
+
+vector<string> Line::getStops() const{
   return stops;
 }
 
-vector<int> Line::getTimings() const{
+vector<int> Line::getTimes() const{
   return times;
+}
+
+// SET METHODS
+
+void Line::setId(unsigned int id) {
+	this->id = id;
+}
+
+void Line::setFreq(unsigned int freq){
+	this->freq = freq;
+}
+
+void Line::setStops(vector<string> stops) {
+	this->stops = stops;
+}
+
+void Line::setTimes(vector<int> times) {
+	this->times = times;
 }
