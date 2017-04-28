@@ -16,19 +16,19 @@ class Line{
   vector<int> times;
  public:
   Line(string textLine);
-  // metodos get
+
+  // GET METHODS
+
   unsigned int getId() const;
   unsigned int getFreq() const;
-  vector<string> getBusStops() const;
-  vector<int> getTimings() const;
-  // set methods
+  vector<string> getStops() const;
+  vector<int> getTimes() const;
+
+  // GET METHODS
+
   void setId(unsigned int id);
   void setFreq(unsigned int freq);
   void setStops(vector<string> stops);
   void setTimes(vector<int> times);
-  // other methods
-  void showLine(Line) const;
-  void showSchedule(Line) const;
-  int getTimeStops(Line, string stop1, string stop2) const;
-  void showScheduleStops(Line) const;
+
 };

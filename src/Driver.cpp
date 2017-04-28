@@ -2,8 +2,14 @@
 
 Driver::Driver(string textLine){
 
-  // INITIALISATION CODE GOES IN HERE
-  
+}
+
+Driver::Driver(int id, string name, unsigned int max_shift, unsigned int max_week, unsigned int min_rest, vector<Shift> shifts) {
+	this->id = id;
+	this->max_shift = max_shift;
+	this->max_week = max_week;
+	this->min_rest = min_rest;
+	this->shifts = shifts;
 }
 
 // GET METHODS
