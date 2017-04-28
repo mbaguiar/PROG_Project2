@@ -1,4 +1,6 @@
-#pragma once
+#ifndef COMPANY_H_
+#define COMPANY_H_
+
 
 #include <iostream>
 #include <string>
@@ -18,7 +20,8 @@ class Company{
   vector<Line> lines;
  public:
   // CONSTRUCTORS
-  Company(string nome, string driversFile, string linesFile);
+  Company(string nome, vector<Line> lines, vector<Driver> drivers);
+  Company();
 
   // GET METHODS
   vector<Driver> getLines() const; // returns lines vector
@@ -39,3 +42,6 @@ class Company{
 
   void distribuiServico();  // funcao que implementa a afectacao de servico
 };
+
+
+#endif

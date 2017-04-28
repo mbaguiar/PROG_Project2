@@ -2,7 +2,13 @@
 
 // CONSTRUCTORS
 
-Company::Company(string nome, string driversFile, string linesFile){}
+Company::Company(string name, vector<Line> lines , vector<Driver> drivers){
+	this->name = name;
+	this->lines = lines;
+	this->drivers = drivers;
+}
+
+Company::Company();
 
 // GET METHODS
 
