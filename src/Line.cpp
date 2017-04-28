@@ -17,9 +17,9 @@ unsigned int Line::getId() const{
 }
 
 vector<string> Line::getBusStops() const{
-  return busStopList;
+  return stops;
 }
 
 vector<int> Line::getTimings() const{
-  return timesList;
+  return times;
 }
