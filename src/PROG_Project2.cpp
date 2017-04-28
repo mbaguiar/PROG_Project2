@@ -1,10 +1,10 @@
-//============================================================================
-// Name        : PROG_Project2.cpp
-// Author      : 
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Project 2 - Semprarrolar
-//============================================================================
+/*
+ * PROG_Project2.cpp
+ *
+ *  Created on: Apr 28, 2017
+ *      Author: mariana
+ */
+
 
 #include <iostream>
 using namespace std;
@@ -15,8 +15,10 @@ using namespace std;
 #include "Company.h"
 
 int main() {
-	Application app;
-	app.setupMenu();
-	app.displayMenu();
-	return 0;
+//	Application app;
+//	app.setupMenu();
+//	app.displayMenu();
+return 0;
 }
+
+
