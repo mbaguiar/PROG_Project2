@@ -16,10 +16,13 @@
 using namespace std;
 
 class Company{
+
  private:
   string name;
   DriverList drivers;
   LineList lines;
+
+
  public:
   // CONSTRUCTORS
   Company(string nome, LineList lines, DriverList drivers);
@@ -40,7 +43,7 @@ class Company{
   void setLine(int index, Line newLine); // replaces line at index with newLine
   void setDriver(int index, Driver newDriver); // replaces driver at index with newDriver
 
-  // outros metodos
+  // OTHER METHODS
 
   void addLine(Line l);
   void addDriver(Driver d);

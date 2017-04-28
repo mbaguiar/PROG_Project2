@@ -20,20 +20,24 @@ class Driver{
  public:
   Driver(string textLine);
   Driver(int id, string name, unsigned int max_shift, unsigned int max_week, unsigned int min_rest, vector<Shift> shifts);
-  // get methods
+
+  // GET METHODS
+
   unsigned int getId() const;
   string getName() const;
   unsigned int getShiftMaxDuration() const;
   unsigned int getMaxWeekWorkingTime() const;
   unsigned int getMinRestTime() const;
   vector<Shift> getShifts() const;
-  //set methods
+
+  // SET METHODS
+
   void setId(unsigned int id);
   void setName (string name);
   void setMax_shift(unsigned int max_shift);
   void setMax_week(unsigned int max_week);
   void setMin_rest(unsigned int min_rest);
   void setShifts(vector<Shift> shifts);
-  // other methods
-  void showDriver(Driver);
+
+
 };
