@@ -1,4 +1,8 @@
 #include "Company.h"
+#include <map>
+#include <string>
+
+using namespace std;
 
 // CONSTRUCTORS
 
@@ -10,13 +14,21 @@ string Company::getName() const{
   return name;
 }
 
-Line Company::getLine(int index) const{
-	return lines.at(index);
+LineList Company::getLines() const {
+	return lines;
 }
 
-Driver Company::getDriver(int index) const{
-	return drivers.at(index);
+DriverList Company::getDrivers() const {
+	return drivers;
 }
+
+//Line Company::getLine(int index) const{
+//	return lines.at(index);
+//}
+//
+//Driver Company::getDriver(int index) const{
+//	return drivers.at(index);
+//}
 
 void Company::distribuiServico(){
 }
@@ -24,9 +36,9 @@ void Company::distribuiServico(){
 // MUTATING METHODS
 
 void Company::addLine(Line l) {
-	lines.push_back(l);
+	lines[l.getId()] = l;
 }
 
 void Company::addDriver(Driver d){
-	drivers.push_back(d);
+	drivers[d.getId()] = d;
 }
