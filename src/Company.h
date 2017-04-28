@@ -10,24 +10,29 @@
 #include "Line.h"
 #include "Driver.h"
 
+  typedef map<int, Driver> DriverList;
+  typedef map<int, Line> LineList;
 
 using namespace std;
 
 class Company{
  private:
   string name;
-  vector<Driver> drivers;
-  vector<Line> lines;
+  DriverList drivers;
+  LineList lines;
  public:
   // CONSTRUCTORS
   Company(string nome, vector<Line> lines, vector<Driver> drivers);
   Company();
 
   // GET METHODS
-  vector<Driver> getLines() const; // returns lines vector
-  vector<Line> getDrivers() const; // returns drivers vector
-  Line getLine(int index) const; // returns line of lines vector at index
-  Driver getDriver(int index) const; // returns driver of drivers vector at index
+
+  LineList getLines() const; // returns lines map
+  DriverList getDrivers() const; // returns drivers map
+
+//  Line getLine(int index) const; // returns line of lines vector at index
+//  Driver getDriver(int index) const; // returns driver of drivers vector at index
+
   string getName() const; // returns company name
 
   // metodos set
