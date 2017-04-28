@@ -6,13 +6,12 @@ using namespace std;
 
 // CONSTRUCTORS
 
-Company::Company(string name, vector<Line> lines , vector<Driver> drivers){
+Company::Company(string name, LineList lines , DriverList drivers){
 	this->name = name;
 	this->lines = lines;
 	this->drivers = drivers;
 }
 
-Company::Company();
 
 // GET METHODS
 
