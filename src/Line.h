@@ -17,6 +17,7 @@ class Line{
   vector<int> times;
 
  public:
+  Line();
   Line(string textLine);
   Line (unsigned int id, unsigned int freq, vector<string> stops, vector<int> times);
 

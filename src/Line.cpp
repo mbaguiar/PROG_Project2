@@ -2,8 +2,6 @@
 
 
 Line::Line(string textLIne){
-
-  // INITIALISATION CODE GOES IN HERE
   
 
 }
