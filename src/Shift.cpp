@@ -1,11 +1,6 @@
 #include "Shift.h"
 
-Shift::Shift(  unsigned int linha, unsigned int condutor, unsigned int autocarro, unsigned int inicio, unsigned int fim){
-  
-  // INITIALISATION CODE GOES IN HERE
-  
-
-}
+Shift::Shift(  unsigned int linha, unsigned int condutor, unsigned int autocarro, unsigned int inicio, unsigned int fim){}
 
 // metodos get
 unsigned int Shift::getBusLineId() const{
