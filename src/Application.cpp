@@ -104,13 +104,13 @@ void Application::setupMenu(){
 
 void Application::displayMenu(){
 	cout << "\n";
-		cout << "Lines" << endl;
-		cout << "     Show, Create, Update, Delete" << endl;
-		cout << "     Schedules, Travel time" << endl;
-		cout << "     Stop Lines, Stop Timetable" << endl;
-		cout << "Drivers" << endl;
-		cout << "     Show, Create, Update, Delete" << endl;
-		cout << "Exit" << endl;
+	cout << "Lines" << endl;
+	cout << "     Show, Create, Update, Delete" << endl;
+	cout << "     Schedules, Travel time" << endl;
+	cout << "     Stop Lines, Stop Timetable" << endl;
+	cout << "Drivers" << endl;
+	cout << "     Show, Create, Update, Delete" << endl;
+	cout << "Exit" << endl;
 }
 
 Application::~Application() {

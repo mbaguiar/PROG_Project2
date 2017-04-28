@@ -6,7 +6,7 @@ Line::Line(){
 	vector<string> s;
 	stops = s;
 	vector<int> t;
-	times = t;
+	times = t;5
 }
 
 Line::Line(string textLIne){}
