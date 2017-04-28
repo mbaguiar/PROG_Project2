@@ -1,8 +1,7 @@
 #include "Driver.h"
 
-Driver::Driver(string textLine){
+Driver::Driver(string textLine){ }
 
-}
 
 Driver::Driver(int id, string name, unsigned int max_shift, unsigned int max_week, unsigned int min_rest, vector<Shift> shifts) {
 	this->id = id;

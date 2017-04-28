@@ -1,10 +1,7 @@
 #include "Line.h"
 
 
-Line::Line(string textLIne){
-  
-
-}
+Line::Line(string textLIne){}
 
 Line::Line (unsigned int id, unsigned int freq, vector<string> stops, vector<int> times) {
 	this->id = id;
