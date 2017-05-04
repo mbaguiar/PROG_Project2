@@ -165,7 +165,7 @@ void Application::linesSummaryShow(){
 		for (auto& x: lines) {
 		    Line l = x.second;
 		    cout << setw(5) << l.getId() << setw(3) << " " << setw(5) << l.getFreq() << setw(3) << " ";
-		    cout << l.getStops().at(0) << " <--> " << l.getStops().at(l.stops.size() - 1) << endl;
+		    cout << l.getStops().at(0) << " <--> " << l.getStops().at(l.getStops().size() - 1) << endl;
 		  }
 		cout << endl;
 }
