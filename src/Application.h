@@ -33,8 +33,7 @@ private:
 
 public:
 	Application();
-	void validIdLines(int);
-	void validIdDrivers(int);
+	bool validIdLines(int id_number);
 	void loadFiles();
 	void setupMenu();
 	void displayMenu();
