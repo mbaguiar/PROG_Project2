@@ -10,8 +10,8 @@
 #include "Line.h"
 #include "Driver.h"
 
-typedef map<int, Driver> DriverList;
-typedef map<int, Line> LineList;
+  typedef map<int, Driver> DriverList;
+  typedef map<int, Line> LineList;
 
 
 Application::Application() {
@@ -149,25 +149,25 @@ void Application::loadFiles(){
 }
 
 void Application::linesShow(){
-	linesSummaryShow();
+linesSummaryShow();
 
 }
 
 void Application::linesSummaryShow(){
 	LineList lines = company.getLines();
 	cout << "LINE SUMMARY\n\n";
-	cout << std::left << setw(5) << "ID" << setw(3) << " " << setw(5) << "FREQ" << setw(3) << " " << "ROUTE" << endl;
-	//		for (LineList::iterator it  = lines.begin(); it < lines.end(); it++) {
-	//			Line l1 = lines.at(i);
-	//			cout << setw(5) << l1.id << setw(3) << " " << setw(5) << l1.freq << setw(3) << " ";
-	//			cout << l1.stops.at(0) << " <--> " << l1.stops.at(l1.stops.size() - 1) << endl;
-	//		}
-	for (auto& x: lines) {
-		Line l = x.second;
-		cout << setw(5) << l.getId() << setw(3) << " " << setw(5) << l.getFreq() << setw(3) << " ";
-		cout << l.getStops().at(0) << " <--> " << l.getStops().at(l.stops.size() - 1) << endl;
-	}
-	cout << endl;
+		cout << std::left << setw(5) << "ID" << setw(3) << " " << setw(5) << "FREQ" << setw(3) << " " << "ROUTE" << endl;
+//		for (LineList::iterator it  = lines.begin(); it < lines.end(); it++) {
+//			Line l1 = lines.at(i);
+//			cout << setw(5) << l1.id << setw(3) << " " << setw(5) << l1.freq << setw(3) << " ";
+//			cout << l1.stops.at(0) << " <--> " << l1.stops.at(l1.stops.size() - 1) << endl;
+//		}
+		for (auto& x: lines) {
+		    Line l = x.second;
+		    cout << setw(5) << l.getId() << setw(3) << " " << setw(5) << l.getFreq() << setw(3) << " ";
+		    cout << l.getStops().at(0) << " <--> " << l.getStops().at(l.getStops().size() - 1) << endl;
+		  }
+		cout << endl;
 }
 
 void Application::linesCreate(){
