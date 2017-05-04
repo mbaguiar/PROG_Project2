@@ -1,24 +1,17 @@
-/*
- * PROG_Project2.cpp
- *
- *  Created on: Apr 28, 2017
- *      Author: mariana
- */
-
+//============================================================================
+// Name        : PROG_Project2.cpp
+// Author      : 
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
 
 #include <iostream>
+#include "Application.h"
 using namespace std;
 
-#include "Application.h"
-#include "Driver.h"
-#include "Line.h"
-#include "Company.h"
-
 int main() {
-//	Application app;
-//	app.setupMenu();
-//	app.displayMenu();
-return 0;
+	Application app;
+	app.setupMenu();
+	return 0;
 }
-
-
