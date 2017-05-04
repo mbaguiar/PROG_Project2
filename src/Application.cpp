@@ -126,8 +126,14 @@ Driver readDriver(string &d){
 
 bool Application::validIdLines(int id_number){
 	LineList lines = company.getLines();
-		if (lines.find(id_number) != lines.end()) return true;
-		else return false;
+	if (lines.find(id_number) != lines.end()) return true;
+	else return false;
+}
+
+bool Application::validIdDrivers(int id_number){
+	DriverList drivers = company.getDrivers();
+	if (drivers.find(id_number) != drivers.end()) return true;
+	else return false;
 }
 
 void Application::loadFiles(){
@@ -245,7 +251,16 @@ void Application::linesCreate(){
 		time = 0;
 		getline(cin,foo);
 		if(foo == "") break;
-		validArg(time);
+		while(true){
+			time = 0;
+			try{
+				time = stoi(foo, nullptr);
+			}
+			catch(const std::invalid_argument& ia){
+				cout << "Invalid. Reenter." << endl; getline(cin,foo);
+			}
+			if(time) break;
+		}
 		times.push_back(time);
 	}
 	newline.setId(id_number);
@@ -297,23 +312,42 @@ void Application::linesStopTimetable(){
 }
 
 void Application::driversSummaryShow(){
-//	DriverList company.
-//	cout << "DRIVER SUMMARY\n\n";
-//		cout << std::left << setw(4) << "ID" << setw(3) << " " << setw(30) << "NAME" << setw(3) << " " << setw(7) << "H/SHIFT"
-//			<< setw(3) << " " << setw(6) << "H/WEEK" << setw(3) << " " << setw(6) << "H/REST" << endl;
-//		for (int i = 0; i < drivers.size(); i++) {
-//			Driver d1 = drivers.at(i);
-//			cout << std::left << setw(4) << d1.id << setw(3) << " ";
-//			cout << setw(30) << d1.name << setw(3) << " ";
-//			cout << std::right << setw(7) << d1.max_hours_day << setw(3) << " ";
-//			cout << setw(6) << d1.max_hours_week << setw(3) << " ";
-//			cout << setw(6) << d1.min_rest << endl;
-//		}
-//		cout << endl;
+	DriverList drivers = company.getDrivers();
+	cout << std::left << setw(4) << "ID" << setw(3) << " " << setw(30) << "NAME" << setw(3) << " " << setw(7) << "H/SHIFT"			<< setw(3) << " " << setw(6) << "H/WEEK" << setw(3) << " " << setw(6) << "H/REST" << endl;
+	for (auto& x: drivers) {
+		Driver d = x.second;
+		cout << std::left << setw(4) << d.getId() << setw(3) << " ";
+		cout << setw(30) << d.getName() << setw(3) << " ";
+		cout << std::right << setw(7) << d.getShiftMaxDuration() << setw(3) << " ";
+		cout << setw(6) << d.getMaxWeekWorkingTime() << setw(3) << " ";
+		cout << setw(6) << d.getMinRestTime()<< endl;
+	}
+	cout << endl;
 }
 
 void Application::driversShow(){
-
+	driversSummaryShow();
+	int id;
+	do {
+		cout << "Driver's id:";
+		validArg(id);
+		if (validIdDrivers(id)) break;
+		else {
+			cout << "Invalid id. Reenter." << endl;
+		}
+	} while (true);
+	Driver driver = company.getDrivers()[id];
+	cout << std::left;
+	cout << setw(15) << "ID: ";
+	cout << driver.getId() << endl;
+	cout << setw(15) << "Name: ";
+	cout << driver.getName() << endl;
+	cout << setw(15) << "Daily shift: ";
+	cout << driver.getMaxWeekWorkingTime() << "h\n";
+	cout << setw(15) << "Weekly shift: ";
+	cout << driver.getShiftMaxDuration() << "h\n";
+	cout << setw(15) << "Resting hours: ";
+	cout << driver.getMinRestTime() << "h\n\n";
 }
 
 void Application::driversCreate(){
@@ -325,13 +359,27 @@ void Application::driversUpdate(){
 }
 
 void Application::driversDelete(){
-
+	driversSummaryShow();
+	int id;
+	do {
+		cout << "Driver's id:";
+		validArg(id);
+		if (validIdLines(id)) break;
+		else {
+			cout << "Invalid id. Reenter." << endl;
+		}
+	} while (true);
+	validIdDrivers(id);
+	company.eraseDriver(id);
+	cout << "Driver " << id << " deleted successfully.\n";
+	driversChanged = true;
 }
 
 void Application::exitMenu(){
 	cout << "bye bye";
 	exit(0);
 }
+
 void Application::setupMenu(){
 	menu["lines show"] = &Application::linesShow;
 	menu["lines create"] = &Application::linesCreate;
