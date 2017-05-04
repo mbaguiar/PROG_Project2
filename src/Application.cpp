@@ -167,6 +167,7 @@ void Application::linesSummaryShow(){
 
 void Application::linesCreate(){
 
+
 }
 
 void Application::linesUpdate(){
@@ -174,6 +175,11 @@ void Application::linesUpdate(){
 }
 
 void Application::linesDelete(){
+	LineList::iterator lineId;
+	// input -> lineId = id para remover
+	Line
+
+
 
 }
 
