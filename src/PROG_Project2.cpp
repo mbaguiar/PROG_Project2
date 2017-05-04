@@ -13,5 +13,6 @@ using namespace std;
 int main() {
 	Application app;
 	app.setupMenu();
+	app.displayMenu();
 	return 0;
 }
