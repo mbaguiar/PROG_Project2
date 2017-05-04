@@ -149,7 +149,7 @@ void Application::loadFiles(){
 }
 
 void Application::linesShow(){
-
+linesSummaryShow();
 
 }
 
