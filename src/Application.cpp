@@ -194,7 +194,8 @@ void Application::driversDelete(){
 }
 
 void Application::exitMenu(){
-
+	cout << "bye bye";
+	exit(0);
 }
 void Application::setupMenu(){
 	menu["lines show"] = &Application::linesShow;
@@ -238,7 +239,19 @@ void Application::displayMenu(){
 }
 
 void Application::inputMenu(){
-
+	string command;
+	string foo;
+	while(true){
+		displayMenu();
+		cout << "Command:";
+		getline(cin,command);
+		normalize(command);
+		if(menu.find(command) != menu.end()){
+			(this->*menu[command])();
+		}else cout << "Invalid";
+		cout << "\nPress enter to continue";
+		getline(cin,foo);
+	}
 }
 Application::~Application() {
 	// TODO Auto-generated destructor stub
