@@ -23,6 +23,8 @@ class Application {
 typedef void(Application::*MenuOption)(void);
 private:
 	Company company;
+	bool linesChanged;
+	bool driversChanged;
 	int day_start;
 	int day_end;
 	map<string,MenuOption> menu;
@@ -31,6 +33,7 @@ private:
 
 public:
 	Application();
+	void validIdLines(int);
 	void loadFiles();
 	void setupMenu();
 	void displayMenu();

@@ -10,19 +10,36 @@
 #include "Line.h"
 #include "Driver.h"
 
-  typedef map<int, Driver> DriverList;
-  typedef map<int, Line> LineList;
+typedef map<int, Driver> DriverList;
+typedef map<int, Line> LineList;
 
 
 Application::Application() {
 	day_start = 7;
 	day_end = 23;
+	linesChanged = false;
+	driversChanged = false;
 	LineList l;
 	DriverList d;
 	Company c = Company("semprarrolar",l, d) ;
 	company = c;
 	linesFilepath = "";
 	driversFilepath= "";
+}
+
+void validArg(int &variable){
+	variable = 0;
+	string foo;
+	while(true){
+		getline(cin,foo);
+		try{
+			variable = stoi(foo,nullptr);
+		}
+		catch(const std::invalid_argument& ia){
+			cout << "Invalid. Reenter." << endl;
+		}
+		if(variable) break;
+	}
 }
 
 // Helpers for string processing
@@ -107,6 +124,13 @@ Driver readDriver(string &d){
 	return newdriver;
 }
 
+void Application::validIdLines(int id){
+	while(true){
+		if(company.getLines().find(id) != company.getLines().end()){
+			break;
+		}else cout << "No found! Reenter." << endl;
+	}
+}
 
 void Application::loadFiles(){
 	ifstream linesfile;
@@ -149,25 +173,74 @@ void Application::loadFiles(){
 }
 
 void Application::linesShow(){
-linesSummaryShow();
+	linesSummaryShow();
+	int id;
+	cout << "Line's id:";
+	validArg(id);
+	validIdLines(id);
+	Line line = company.getLines()[id];
+	cout << setw(12) << "ID: ";
+	cout << line.getId() << endl;
+	cout << setw(12) << "Frequency: ";
+	cout << line.getFreq() << "min\n";
+	cout << setw(12) << "Stops: ";
+	for (int i = 0; i < line.getStops().size(); i++) {
+		cout << line.getStops().at(i);
+		if (i != (line.getStops().size() - 1)) cout << ", ";
+		else cout << endl;
+	}
+	cout << setw(12) << "Times: ";
+	for (int i = 0; i < line.getTimes().size(); i++) {
+		cout << line.getTimes().at(i);
+		if (i != (line.getTimes().size() - 1)) cout << ", ";
+		else cout << endl << endl;
+	}
 
 }
 
 void Application::linesSummaryShow(){
 	LineList lines = company.getLines();
 	cout << "LINE SUMMARY\n\n";
-		cout << std::left << setw(5) << "ID" << setw(3) << " " << setw(5) << "FREQ" << setw(3) << " " << "ROUTE" << endl;
-		for (auto& x: lines) {
-		    Line l = x.second;
-		    cout << setw(5) << l.getId() << setw(3) << " " << setw(5) << l.getFreq() << setw(3) << " ";
-		    cout << l.getStops().at(0) << " <--> " << l.getStops().at(l.getStops().size() - 1) << endl;
-		  }
-		cout << endl;
+	cout << std::left << setw(5) << "ID" << setw(3) << " " << setw(5) << "FREQ" << setw(3) << " " << "ROUTE" << endl;
+	for (auto& x: lines) {
+		Line l = x.second;
+		cout << setw(5) << l.getId() << setw(3) << " " << setw(5) << l.getFreq() << setw(3) << " ";
+		cout << l.getStops().at(0) << " <--> " << l.getStops().at(l.getStops().size() - 1) << endl;
+	}
+	cout << endl;
 }
 
 void Application::linesCreate(){
+	Line newline;
+	string foo;
+	int id_number, freq, time;
+	string stop;
+	vector<string> stops;
+	vector<int> times;
 
-
+	cout << "Insert the new line information: \n\n";
+	cout << "Insert id_number: "; validArg(id_number);
+	cout << "Insert frequency: "; validArg(freq);
+	cout << "Insert the stops:(Press enter to stop) ";
+	while(true){
+		getline(cin,stop);
+		if(stop == "") break;
+		stops.push_back(stop);
+	}
+	cout << "Insert the times:(Press enter to stop) ";
+	while(true){
+		time = 0;
+		getline(cin,foo);
+		if(foo == "") break;
+		validArg(time);
+		times.push_back(time);
+	}
+	newline.setId(id_number);
+	newline.setFreq(freq);
+	newline.setStops(stops);
+	newline.setTimes(times);
+	company.addLine(newline);
+	linesChanged = true;
 }
 
 void Application::linesUpdate(){
@@ -175,11 +248,6 @@ void Application::linesUpdate(){
 }
 
 void Application::linesDelete(){
-	LineList::iterator lineId;
-	// input -> lineId = id para remover
-	Line
-
-
 
 }
 
