@@ -36,7 +36,7 @@ void validArg(int &variable){
 			variable = stoi(foo,nullptr);
 		}
 		catch(const std::invalid_argument& ia){
-			cout << "Invalid. Reenter." << endl;
+			cout << "Invalid input. Reenter." << endl;
 		}
 		if(variable) break;
 	}
@@ -124,12 +124,10 @@ Driver readDriver(string &d){
 	return newdriver;
 }
 
-void Application::validIdLines(int id){
-	while(true){
-		if(company.getLines().find(id) != company.getLines().end()){
-			break;
-		}else cout << "No found! Reenter." << endl;
-	}
+bool Application::validIdLines(int id_number){
+	LineList lines = company.getLines();
+		if (lines.find(id_number) != lines.end()) return true;
+		else return false;
 }
 
 void Application::loadFiles(){
@@ -175,9 +173,15 @@ void Application::loadFiles(){
 void Application::linesShow(){
 	linesSummaryShow();
 	int id;
-	cout << "Line's id:";
-	validArg(id);
-	validIdLines(id);
+	do {
+		cout << "Line's id:";
+		validArg(id);
+		if (validIdLines(id)) break;
+		else {
+			cout << "Invalid id. Reenter." << endl;
+		}
+	} while (true);
+	cout << endl;
 	Line line = company.getLines()[id];
 	cout << setw(12) << "ID: ";
 	cout << line.getId() << endl;
@@ -217,9 +221,18 @@ void Application::linesCreate(){
 	string stop;
 	vector<string> stops;
 	vector<int> times;
+	LineList lines = company.getLines();
 
 	cout << "Insert the new line information: \n\n";
-	cout << "Insert id_number: "; validArg(id_number);
+	do {
+		cout << "Insert id_number: "; validArg(id_number);
+		if (validIdLines(id_number)) {
+			cout << "The line already exists. Please insert another id or delete the line." << endl;
+		} else {
+			break;
+		}
+	} while (true);
+
 	cout << "Insert frequency: "; validArg(freq);
 	cout << "Insert the stops:(Press enter to stop) ";
 	while(true){
@@ -245,13 +258,22 @@ void Application::linesCreate(){
 
 void Application::linesUpdate(){
 
+	cout << "Insert the line to change: ";
+	//input
+
 }
 
 void Application::linesDelete(){
 	linesSummaryShow();
-	cout << "Insert line's id:";
 	int id;
-	validArg(id);
+	do {
+		cout << "Line's id:";
+		validArg(id);
+		if (validIdLines(id)) break;
+		else {
+			cout << "Invalid id. Reenter." << endl;
+		}
+	} while (true);
 	validIdLines(id);
 	company.eraseLine(id);
 	cout << "Line " << id << " deleted successfully.\n";
@@ -275,19 +297,19 @@ void Application::linesStopTimetable(){
 }
 
 void Application::driversSummaryShow(){
-	DriverList company.
-	cout << "DRIVER SUMMARY\n\n";
-		cout << std::left << setw(4) << "ID" << setw(3) << " " << setw(30) << "NAME" << setw(3) << " " << setw(7) << "H/SHIFT"
-			<< setw(3) << " " << setw(6) << "H/WEEK" << setw(3) << " " << setw(6) << "H/REST" << endl;
-		for (int i = 0; i < drivers.size(); i++) {
-			Driver d1 = drivers.at(i);
-			cout << std::left << setw(4) << d1.id << setw(3) << " ";
-			cout << setw(30) << d1.name << setw(3) << " ";
-			cout << std::right << setw(7) << d1.max_hours_day << setw(3) << " ";
-			cout << setw(6) << d1.max_hours_week << setw(3) << " ";
-			cout << setw(6) << d1.min_rest << endl;
-		}
-		cout << endl;
+//	DriverList company.
+//	cout << "DRIVER SUMMARY\n\n";
+//		cout << std::left << setw(4) << "ID" << setw(3) << " " << setw(30) << "NAME" << setw(3) << " " << setw(7) << "H/SHIFT"
+//			<< setw(3) << " " << setw(6) << "H/WEEK" << setw(3) << " " << setw(6) << "H/REST" << endl;
+//		for (int i = 0; i < drivers.size(); i++) {
+//			Driver d1 = drivers.at(i);
+//			cout << std::left << setw(4) << d1.id << setw(3) << " ";
+//			cout << setw(30) << d1.name << setw(3) << " ";
+//			cout << std::right << setw(7) << d1.max_hours_day << setw(3) << " ";
+//			cout << setw(6) << d1.max_hours_week << setw(3) << " ";
+//			cout << setw(6) << d1.min_rest << endl;
+//		}
+//		cout << endl;
 }
 
 void Application::driversShow(){
