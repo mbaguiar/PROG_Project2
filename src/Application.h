@@ -10,8 +10,10 @@
 
 #include <string>
 #include <map>
-#include "Company.h"
 #include <iostream>
+#include <iomanip>
+#include <fstream>
+#include "Company.h"
 
 using namespace std;
 
@@ -23,10 +25,14 @@ private:
 	int day_start;
 	int day_end;
 	map<string,MenuOption> menu;
+	string linesFilepath;
+	string driversFilepath;
 public:
 	Application();
+	void loadFiles();
 	void setupMenu();
 	void displayMenu();
+	void inputMenu();
 	void linesShow();
 	void linesCreate();
 	void linesUpdate();
