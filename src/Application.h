@@ -13,6 +13,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <vector>
 #include "Company.h"
 
 using namespace std;
@@ -27,6 +28,7 @@ private:
 	map<string,MenuOption> menu;
 	string linesFilepath;
 	string driversFilepath;
+
 public:
 	Application();
 	void loadFiles();
@@ -34,6 +36,7 @@ public:
 	void displayMenu();
 	void inputMenu();
 	void linesShow();
+	void linesSummaryShow();
 	void linesCreate();
 	void linesUpdate();
 	void linesDelete();
