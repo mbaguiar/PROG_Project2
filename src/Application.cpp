@@ -248,7 +248,14 @@ void Application::linesUpdate(){
 }
 
 void Application::linesDelete(){
-
+	linesSummaryShow();
+	cout << "Insert line's id:";
+	int id;
+	validArg(id);
+	validIdLines(id);
+	company.eraseLine(id);
+	cout << "Line " << id << " deleted successfully.\n";
+	linesChanged= true;
 }
 
 void Application::linesSchedule(){
@@ -265,6 +272,22 @@ void Application::linesStopLines(){
 
 void Application::linesStopTimetable(){
 
+}
+
+void Application::driversSummaryShow(){
+	DriverList company.
+	cout << "DRIVER SUMMARY\n\n";
+		cout << std::left << setw(4) << "ID" << setw(3) << " " << setw(30) << "NAME" << setw(3) << " " << setw(7) << "H/SHIFT"
+			<< setw(3) << " " << setw(6) << "H/WEEK" << setw(3) << " " << setw(6) << "H/REST" << endl;
+		for (int i = 0; i < drivers.size(); i++) {
+			Driver d1 = drivers.at(i);
+			cout << std::left << setw(4) << d1.id << setw(3) << " ";
+			cout << setw(30) << d1.name << setw(3) << " ";
+			cout << std::right << setw(7) << d1.max_hours_day << setw(3) << " ";
+			cout << setw(6) << d1.max_hours_week << setw(3) << " ";
+			cout << setw(6) << d1.min_rest << endl;
+		}
+		cout << endl;
 }
 
 void Application::driversShow(){

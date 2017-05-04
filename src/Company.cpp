@@ -55,3 +55,11 @@ void Company::addLine(Line l) {
 void Company::addDriver(Driver d){
 	drivers[d.getId()] = d;
 }
+
+void Company::eraseLine(int id){
+	lines.erase(id);
+}
+
+void Company::eraseDriver(int id){
+	drivers.erase(id);
+}

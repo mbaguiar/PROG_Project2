@@ -47,6 +47,8 @@ class Company{
 
   void addLine(Line l);
   void addDriver(Driver d);
+  void eraseLine(int id);
+  void eraseDriver(int id);
 
   void distribuiServico();  // funcao que implementa a afectacao de servico
 };

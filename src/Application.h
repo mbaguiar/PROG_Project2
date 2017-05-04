@@ -47,6 +47,7 @@ public:
 	void linesTravelTimes();
 	void linesStopLines();
 	void linesStopTimetable();
+	void driversSummaryShow();
 	void driversShow();
 	void driversCreate();
 	void driversUpdate();
