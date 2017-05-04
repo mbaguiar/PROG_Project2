@@ -128,6 +128,14 @@ void Application::validIdLines(int id){
 	while(true){
 		if(company.getLines().find(id) != company.getLines().end()){
 			break;
+		}else cout << "Not found! Reenter." << endl;
+	}
+}
+
+void Application::validIdDrivers(int id){
+	while(true){
+		if(company.getDrivers().find(id) != company.getDrivers().end()){
+			break;
 		}else cout << "No found! Reenter." << endl;
 	}
 }
@@ -291,7 +299,22 @@ void Application::driversSummaryShow(){
 }
 
 void Application::driversShow(){
-
+	driversSummaryShow();
+	int id;
+	cout << "Driver's id:";
+	validArg(id);
+	validIdDrivers(id);
+	Driver driver = company.getDrivers()[id];
+	cout << setw(15) << "ID: ";
+	cout << driver.getId() << endl;
+	cout << setw(15) << "Name: ";
+	cout << driver.getName() << endl;
+	cout << setw(15) << "Daily shift: ";
+	cout << driver.getMaxWeekWorkingTime() << "h\n";
+	cout << setw(15) << "Weekly shift: ";
+	cout << driver.getShiftMaxDuration() << "h\n";
+	cout << setw(15) << "Resting hours: ";
+	cout << driver.getMinRestTime() << "h\n\n";
 }
 
 void Application::driversCreate(){
