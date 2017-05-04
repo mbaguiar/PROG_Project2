@@ -157,11 +157,6 @@ void Application::linesSummaryShow(){
 	LineList lines = company.getLines();
 	cout << "LINE SUMMARY\n\n";
 		cout << std::left << setw(5) << "ID" << setw(3) << " " << setw(5) << "FREQ" << setw(3) << " " << "ROUTE" << endl;
-//		for (LineList::iterator it  = lines.begin(); it < lines.end(); it++) {
-//			Line l1 = lines.at(i);
-//			cout << setw(5) << l1.id << setw(3) << " " << setw(5) << l1.freq << setw(3) << " ";
-//			cout << l1.stops.at(0) << " <--> " << l1.stops.at(l1.stops.size() - 1) << endl;
-//		}
 		for (auto& x: lines) {
 		    Line l = x.second;
 		    cout << setw(5) << l.getId() << setw(3) << " " << setw(5) << l.getFreq() << setw(3) << " ";
