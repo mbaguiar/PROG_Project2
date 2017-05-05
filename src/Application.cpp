@@ -351,6 +351,52 @@ void Application::driversShow(){
 }
 
 void Application::driversCreate(){
+	Driver newdriver;
+	string foo;
+	int id_number, max_shift, max_week, min_rest;
+	string name
+	DriverList drivers = company.getDRivers();
+
+	cout << "Insert the new line information: \n\n";
+	do {
+		cout << "Insert id_number: "; validArg(id_number);
+		if (validIdLines(id_number)) {
+			cout << "The line already exists. Please insert another id or delete the line." << endl;
+		} else {
+			break;
+		}
+	} while (true);
+
+	cout << "Insert frequency: "; validArg(freq);
+	cout << "Insert the stops:(Press enter to stop) ";
+	while(true){
+		getline(cin,stop);
+		if(stop == "") break;
+		stops.push_back(stop);
+	}
+	cout << "Insert the times:(Press enter to stop) ";
+	while(true){
+		time = 0;
+		getline(cin,foo);
+		if(foo == "") break;
+		while(true){
+			time = 0;
+			try{
+				time = stoi(foo, nullptr);
+			}
+			catch(const std::invalid_argument& ia){
+				cout << "Invalid. Reenter." << endl; getline(cin,foo);
+			}
+			if(time) break;
+		}
+		times.push_back(time);
+	}
+	newline.setId(id_number);
+	newline.setFreq(freq);
+	newline.setStops(stops);
+	newline.setTimes(times);
+	company.addLine(newline);
+	linesChanged = true;
 
 }
 
