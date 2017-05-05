@@ -376,49 +376,35 @@ void Application::driversCreate(){
 	Driver newdriver;
 	string foo;
 	int id_number, max_shift, max_week, min_rest;
-	string name
-	DriverList drivers = company.getDRivers();
+	string name;
+	DriverList drivers = company.getDrivers();
 
-	cout << "Insert the new line information: \n\n";
+	cout << "Insert the new driver information: \n\n";
 	do {
 		cout << "Insert id_number: "; validArg(id_number);
-		if (validIdLines(id_number)) {
-			cout << "The line already exists. Please insert another id or delete the line." << endl;
+		if (validIdDrivers(id_number)) {
+			cout << "This driver already exists. Please insert another id or delete the driver." << endl;
 		} else {
 			break;
 		}
 	} while (true);
 
-	cout << "Insert frequency: "; validArg(freq);
-	cout << "Insert the stops:(Press enter to stop) ";
-	while(true){
-		getline(cin,stop);
-		if(stop == "") break;
-		stops.push_back(stop);
-	}
-	cout << "Insert the times:(Press enter to stop) ";
-	while(true){
-		time = 0;
-		getline(cin,foo);
-		if(foo == "") break;
-		while(true){
-			time = 0;
-			try{
-				time = stoi(foo, nullptr);
-			}
-			catch(const std::invalid_argument& ia){
-				cout << "Invalid. Reenter." << endl; getline(cin,foo);
-			}
-			if(time) break;
-		}
-		times.push_back(time);
-	}
-	newline.setId(id_number);
-	newline.setFreq(freq);
-	newline.setStops(stops);
-	newline.setTimes(times);
-	company.addLine(newline);
-	linesChanged = true;
+	cout << "Name: ";
+	getline(cin, name);
+	cout << "Daily shift(h): ";
+	validArg(max_shift);
+	cout << "Weekly shift: ";
+	validArg(max_week);
+	cout << "Rest(h):";
+	validArg(min_rest);
+
+	newdriver.setId(id_number);
+	newdriver.setName(name);
+	newdriver.setMax_shift(max_shift);
+	newdriver.setMax_week(max_week);
+	newdriver.setMin_rest(min_rest);
+	company.addDriver(newdriver);
+	driversChanged = true;
 
 }
 
