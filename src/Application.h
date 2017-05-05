@@ -41,8 +41,12 @@ public:
 	void inputMenu();
 	void linesShow();
 	void linesSummaryShow();
+	void linesDetailShow(int id_number);
 	void linesCreate();
 	void linesUpdate();
+	void linesUpdateFreq(int id_number);
+	void linesUpdateStops(int id_number);
+	void linesUpdateTimes(int id_number);
 	void linesDelete();
 	void linesSchedule();
 	void linesTravelTimes();
@@ -52,6 +56,9 @@ public:
 	void driversShow();
 	void driversCreate();
 	void driversUpdate();
+	void driversUpdateMaxShift(int id_number);
+	void driversUpdateMaxWeek(int id_number);
+	void driversUpdateMinRest(int id_number);
 	void driversDelete();
 	void exitMenu();
 	virtual ~Application();

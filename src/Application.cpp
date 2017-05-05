@@ -188,23 +188,27 @@ void Application::linesShow(){
 		}
 	} while (true);
 	cout << endl;
-	Line line = company.getLines()[id];
-	cout << setw(12) << "ID: ";
-	cout << line.getId() << endl;
-	cout << setw(12) << "Frequency: ";
-	cout << line.getFreq() << "min\n";
-	cout << setw(12) << "Stops: ";
-	for (int i = 0; i < line.getStops().size(); i++) {
-		cout << line.getStops().at(i);
-		if (i != (line.getStops().size() - 1)) cout << ", ";
-		else cout << endl;
-	}
-	cout << setw(12) << "Times: ";
-	for (int i = 0; i < line.getTimes().size(); i++) {
-		cout << line.getTimes().at(i);
-		if (i != (line.getTimes().size() - 1)) cout << ", ";
-		else cout << endl << endl;
-	}
+	linesDetailShow(id);
+}
+
+void Application::linesDetailShow(int id_number) {
+	Line line = company.getLines()[id_number];
+		cout << setw(12) << "ID: ";
+		cout << line.getId() << endl;
+		cout << setw(12) << "Frequency: ";
+		cout << line.getFreq() << "min\n";
+		cout << setw(12) << "Stops: ";
+		for (int i = 0; i < line.getStops().size(); i++) {
+			cout << line.getStops().at(i);
+			if (i != (line.getStops().size() - 1)) cout << ", ";
+			else cout << endl;
+		}
+		cout << setw(12) << "Times: ";
+		for (int i = 0; i < line.getTimes().size(); i++) {
+			cout << line.getTimes().at(i);
+			if (i != (line.getTimes().size() - 1)) cout << ", ";
+			else cout << endl << endl;
+		}
 
 }
 
@@ -272,9 +276,28 @@ void Application::linesCreate(){
 }
 
 void Application::linesUpdate(){
-
+	int id;
 	cout << "Insert the line to change: ";
-	//input
+	do {
+			cout << "Line's id:";
+			validArg(id);
+			if (validIdLines(id)) break;
+			else {
+				cout << "Invalid id. Reenter." << endl;
+			}
+		} while (true);
+
+	cout << endl;
+
+	linesDetailShow(id);
+	cout << "Which field do you wish to update(id, freq, stops, times): ";
+	string cmd;
+	do {
+		getline(cin, cmd);
+
+	} while (true);
+
+
 
 }
 
@@ -289,7 +312,6 @@ void Application::linesDelete(){
 			cout << "Invalid id. Reenter." << endl;
 		}
 	} while (true);
-	validIdLines(id);
 	company.eraseLine(id);
 	cout << "Line " << id << " deleted successfully.\n";
 	linesChanged= true;
@@ -455,6 +477,7 @@ void Application::setupMenu(){
 	menu["dd"] = &Application::driversDelete;
 	menu["e"] = &Application::exitMenu;
 }
+
 
 void Application::displayMenu(){
 	cout << "\n";
