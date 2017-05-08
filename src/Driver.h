@@ -44,3 +44,28 @@ class Driver{
 };
 
 #endif
+
+
+//for (int x = 0; x < foundLines2.stopsInverse.size(); x++) {
+//	if (foundLines1.stopsInverse.at(i).lineID == foundLines2.stopsInverse.at(x).lineID) {
+//		if (foundLines1.stopsInverse.at(i).posInLine > foundLines2.stopsInverse.at(x).posInLine) {
+//			newRoute2.lineID = foundLines1.stopsInverse.at(i).lineID;
+//			newRoute2.linePos = foundLines1.stopsInverse.at(i).linePos;
+//			newRoute2.startingPos = foundLines1.stopsInverse.at(i).posInLine;
+//			newRoute2.endingPos = foundLines2.stopsInverse.at(x).posInLine;
+//			newRoute2.time = 0;
+//			newRoute2.direction = 1;
+//			for (int z = newRoute2.startingPos - 1; z >= newRoute2.endingPos; z--) {
+//				newRoute2.time += lines.at(newRoute2.linePos).times.at(z);
+//			}
+//			vector<string> stops;
+//			for (int z = newRoute2.startingPos; z >= newRoute2.endingPos; z--) {
+//				stops.push_back(lines.at(newRoute2.linePos).stops.at(z));
+//			}
+//			newRoute2.stops = stops;
+//			routes.push_back(newRoute2);
+//			break;
+//		}
+//	}
+//}
+//}
