@@ -9,10 +9,11 @@
 #include "Company.h"
 #include "Line.h"
 #include "Driver.h"
+#include "Stop.h"
+#include "helper.h"
 
 typedef map<int, Driver> DriverList;
 typedef map<int, Line> LineList;
-typedef void(Application::*MenuOption)(void);
 
 
 Application::Application() {
@@ -26,107 +27,8 @@ Application::Application() {
 	company = c;
 	linesFilepath = "";
 	driversFilepath= "";
-//	loadFiles();
-//	setupMenu();
-//	setupLineUpdateMenu();
 }
 
-void validArg(int &variable){
-	variable = 0;
-	string foo;
-	while(true){
-		getline(cin,foo);
-		try{
-			variable = stoi(foo,nullptr);
-		}
-		catch(const std::invalid_argument& ia){
-			cout << "Invalid input. Reenter." << endl;
-		}
-		if(variable) break;
-	}
-}
-
-// Helpers for string processing
-void trimstring(string &s){
-	s = s.substr(s.find_first_not_of(" "));
-	s = s.substr(0, s.find_last_not_of(" ")+1);
-}
-
-void normalize(string &s){
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	trimstring(s);
-}
-
-// Generic functions to process files
-void next(string &piece, string &line, string separator){
-	int temp = line.find_first_of(separator);
-	if(temp == string::npos){
-		piece = line;
-		line = "";
-	}else{
-		piece = line.substr(0,temp);
-		line=line.substr(temp+1, line.length() - 1);
-	}
-	trimstring(piece);
-}
-
-void next(string &piece, string &line){
-	next(piece,line,";");
-}
-
-void next(int &elem, string &piece, string separator){
-	string elemstring;
-	next(elemstring,piece,separator);
-	elem = stoi(elemstring,nullptr);
-}
-
-// Functions to process lines' file
-Line readLine(string &l){
-	Line newline;
-	string piece;
-
-	int foo;
-	next(foo,l,";");
-	newline.setId(foo);
-	next(foo,l,";");
-	newline.setFreq(foo);
-
-	next(piece,l);
-	vector<string> s;
-	while(piece!=""){
-		string elem;
-		next(elem,piece,",");
-		s.push_back(elem);
-	}
-	newline.setStops(s);
-	next(piece,l);
-	vector<int> t;
-	while(piece!=""){
-		int elem;
-		next(elem,piece,",");
-		t.push_back(elem);
-	}
-	newline.setTimes(t);
-	return newline;
-}
-
-Driver readDriver(string &d){
-	Driver newdriver;
-
-	int foo;
-	string foo2;
-	next(foo,d,";");
-	newdriver.setId(foo);
-	next(foo2,d);
-	newdriver.setName(foo2);
-	next(foo,d,";");
-	newdriver.setMax_shift(foo);
-	next(foo,d,";");
-	newdriver.setMax_week(foo);
-	next(foo,d,";");
-	newdriver.setMin_rest(foo);
-	return newdriver;
-}
 
 bool Application::validIdLines(int id_number){
 	LineList lines = company.getLines();
@@ -197,22 +99,22 @@ void Application::linesShow(){
 
 void Application::linesDetailShow(int id_number) {
 	Line line = company.getLines()[id_number];
-		cout << setw(12) << "ID: ";
-		cout << line.getId() << endl;
-		cout << setw(12) << "Frequency: ";
-		cout << line.getFreq() << "min\n";
-		cout << setw(12) << "Stops: ";
-		for (int i = 0; i < line.getStops().size(); i++) {
-			cout << line.getStops().at(i);
-			if (i != (line.getStops().size() - 1)) cout << ", ";
-			else cout << endl;
-		}
-		cout << setw(12) << "Times: ";
-		for (int i = 0; i < line.getTimes().size(); i++) {
-			cout << line.getTimes().at(i);
-			if (i != (line.getTimes().size() - 1)) cout << ", ";
-			else cout << endl << endl;
-		}
+	cout << setw(12) << "ID: ";
+	cout << line.getId() << endl;
+	cout << setw(12) << "Frequency: ";
+	cout << line.getFreq() << "min\n";
+	cout << setw(12) << "Stops: ";
+	for (int i = 0; i < line.getStops().size(); i++) {
+		cout << line.getStops().at(i);
+		if (i != (line.getStops().size() - 1)) cout << ", ";
+		else cout << endl;
+	}
+	cout << setw(12) << "Times: ";
+	for (int i = 0; i < line.getTimes().size(); i++) {
+		cout << line.getTimes().at(i);
+		if (i != (line.getTimes().size() - 1)) cout << ", ";
+		else cout << endl << endl;
+	}
 
 }
 
@@ -283,53 +185,23 @@ void Application::linesUpdate(){
 	int id;
 	cout << "Insert the line to change: ";
 	do {
-			cout << "Line's id:";
-			validArg(id);
-			if (validIdLines(id)) break;
-			else {
-				cout << "Invalid id. Reenter." << endl;
-			}
-		} while (true);
+		cout << "Line's id:";
+		validArg(id);
+		if (validIdLines(id)) break;
+		else {
+			cout << "Invalid id. Reenter." << endl;
+		}
+	} while (true);
 
 	cout << endl;
 
 	linesDetailShow(id);
-	cout << "Which field do you wish to update(freq, stops, times): ";
+	cout << "Which field do you wish to update(id, freq, stops, times): ";
 	string cmd;
 	do {
 		getline(cin, cmd);
 
 	} while (true);
-
-
-
-}
-
-void Application::linesUpdateFreq(int id_number) {
-	string foo;
-	int freq;
-	Line l = company.getLines()[id_number];
-	cout << "The current frequency for line " << id_number << " is " << l.getFreq() << "min\n";
-	do {
-		cout << "Insert the new frequency: ";
-		getline(cin, foo);
-		if (foo == "") continue;
-		try{
-			freq = stoi(foo, nullptr);
-		}
-		catch(const std::invalid_argument& ia){
-			cout << "Invalid input. Reenter." << endl; getline(cin,foo);
-		}
-		if(freq) break;
-	} while (true);
-	l.setFreq(freq);
-	company.setLine(id_number, l);
-}
-void Application::linesUpdateStops(int id_number) {
-	string foo;
-}
-void Application::linesUpdateTimes(int id_number) {
-
 }
 
 void Application::linesDelete(){
@@ -348,6 +220,55 @@ void Application::linesDelete(){
 	linesChanged= true;
 }
 
+void Application::searchStops(string stop, vector<Stop> &stopsDirect, vector<Stop> &stopsInverse){
+	vector<Stop> stopsD;
+	vector<Stop> stopsI;
+	LineList lines = company.getLines();
+	for (auto& x: lines) {
+		Line l = x.second;
+		for (size_t x = 0; x < l.getStops().size(); x++) {
+			if (l.getStops().at(x) == stop) {
+
+				// SENTIDO DIRETO
+
+				Stop newStop;
+				newStop.setName(stop);
+				newStop.setPosInLine(x);
+				newStop.setLineId(l.getId());
+				newStop.setFreq(l.getFreq());
+				newStop.setTimeFromStart(0);
+				newStop.setDirection(0);
+				for (int z = 0; z < x; z++) {
+					newStop.setTimeFromStart(newStop.getTimeFromStart() + l.getTimes().at(z));
+				}
+				newStop.setStopH(day_start);
+				newStop.setStopM(newStop.getTimeFromStart());
+				stopsD.push_back(newStop);
+
+				//SENTIDO INVRSO
+
+				Stop newStop2;
+				newStop2.setName(stop);
+				newStop2.setPosInLine(x);
+				newStop2.setLineId(l.getId());
+				newStop2.setFreq(l.getFreq());
+				newStop2.setTimeFromStart(0);
+				newStop2.setDirection(1);
+				for (int z = l.getTimes().size() - 1; z >= x; z--) {
+					if (z < 0) break;
+					newStop2.setTimeFromStart(newStop2.getTimeFromStart() + l.getTimes().at(z));
+				}
+				newStop2.setStopH(day_start);
+				newStop2.setStopM(newStop.getTimeFromStart());
+				stopsI.push_back(newStop2);
+				break;
+			}
+		}
+	}
+	stopsDirect = stopsD;
+	stopsInverse = stopsI;
+}
+
 void Application::linesSchedule(){
 
 }
@@ -357,7 +278,34 @@ void Application::linesTravelTimes(){
 }
 
 void Application::linesStopLines(){
+	string stop;
+	vector<Stop> stopsDirect;
+	vector<Stop> stopsInverse;
+	do {
+		cout << "Insert the stop name to search for (CTRL-Z to cancel): ";
+		getline(cin, stop);
+		if (cin.eof()) {
+			cin.clear();
+			return;
+		}
+		searchStops(stop, stopsDirect, stopsInverse);
 
+		if (stopsDirect.empty() && stopsInverse.empty()) {
+			cout << "Invalid stop name.\n";
+		}
+		else break;
+	} while (true);
+	cout << "The stop '" << stop << "' belongs to the following lines: ";
+	for (size_t i = 0; i < stopsDirect.size(); i++) {
+		cout << stopsDirect.at(i).getLineId();
+		if (i != stopsDirect.size() - 1) {
+			cout << ", ";
+		}
+		else {
+			cout << ".\n";
+		}
+
+	}
 }
 
 void Application::linesStopTimetable(){
@@ -436,7 +384,6 @@ void Application::driversCreate(){
 	newdriver.setMin_rest(min_rest);
 	company.addDriver(newdriver);
 	driversChanged = true;
-
 }
 
 void Application::driversUpdate(){
@@ -466,46 +413,36 @@ void Application::exitMenu(){
 }
 
 void Application::setupMenu(){
-	mainMenu["lines show"] = &Application::linesShow;
-	mainMenu["lines create"] = &Application::linesCreate;
-	mainMenu["lines update"] = &Application::linesUpdate;
-	mainMenu["lines delete"] = &Application::linesDelete;
-	mainMenu["lines schedules"] = &Application::linesSchedule;
-	mainMenu["lines travel time"] = &Application::linesTravelTimes;
-	mainMenu["lines stop lines"] = &Application::linesStopLines;
-	mainMenu["lines stop timetable"] = &Application::linesStopTimetable;
-	mainMenu["drivers show"] = &Application::driversShow;
-	mainMenu["drivers create"] = &Application::driversCreate;
-	mainMenu["drivers update"] = &Application::driversUpdate;
-	mainMenu["drivers delete"] = &Application::driversDelete;
-	mainMenu["exit"] = &Application::exitMenu;
+	menu["lines show"] = &Application::linesShow;
+	menu["lines create"] = &Application::linesCreate;
+	menu["lines update"] = &Application::linesUpdate;
+	menu["lines delete"] = &Application::linesDelete;
+	menu["lines schedules"] = &Application::linesSchedule;
+	menu["lines travel time"] = &Application::linesTravelTimes;
+	menu["lines stop lines"] = &Application::linesStopLines;
+	menu["lines stop timetable"] = &Application::linesStopTimetable;
+	menu["drivers show"] = &Application::driversShow;
+	menu["drivers create"] = &Application::driversCreate;
+	menu["drivers update"] = &Application::driversUpdate;
+	menu["drivers delete"] = &Application::driversDelete;
+	menu["exit"] = &Application::exitMenu;
 	//shortcuts
-	mainMenu["ls"] = &Application::linesShow;
-	mainMenu["lc"] = &Application::linesCreate;
-	mainMenu["lu"] = &Application::linesUpdate;
-	mainMenu["ld"] = &Application::linesDelete;
-	mainMenu["lsch"] = &Application::linesSchedule;
-	mainMenu["ltt"] = &Application::linesTravelTimes;
-	mainMenu["lsl"] = &Application::linesStopLines;
-	mainMenu["lst"] = &Application::linesStopTimetable;
-	mainMenu["ds"] = &Application::driversShow;
-	mainMenu["dc"] = &Application::driversCreate;
-	mainMenu["du"] = &Application::driversUpdate;
-	mainMenu["dd"] = &Application::driversDelete;
-	mainMenu["e"] = &Application::exitMenu;
+	menu["ls"] = &Application::linesShow;
+	menu["lc"] = &Application::linesCreate;
+	menu["lu"] = &Application::linesUpdate;
+	menu["ld"] = &Application::linesDelete;
+	menu["lsch"] = &Application::linesSchedule;
+	menu["ltt"] = &Application::linesTravelTimes;
+	menu["lsl"] = &Application::linesStopLines;
+	menu["lst"] = &Application::linesStopTimetable;
+	menu["ds"] = &Application::driversShow;
+	menu["dc"] = &Application::driversCreate;
+	menu["du"] = &Application::driversUpdate;
+	menu["dd"] = &Application::driversDelete;
+	menu["e"] = &Application::exitMenu;
 }
 
-//void Application::setupLineUpdateMenu(){
-//	lineUpdateMenu["freq"] = &Application::linesUpdateFreq;
-//	lineUpdateMenu["stops"] = &Application::linesUpdateStops;
-//	lineUpdateMenu["times"] = &Application::linesUpdateTimes;
-//}
-
-map<string,MenuOption> Application::getMainMenu(){
-	return mainMenu;
-}
-
-void Application::displayMainMenu(){
+void Application::displayMenu(){
 	cout << "\n";
 	cout << "Lines" << endl;
 	cout << "     Show, Create, Update, Delete" << endl;
@@ -516,10 +453,11 @@ void Application::displayMainMenu(){
 	cout << "Exit" << endl;
 }
 
-void Application::inputMenu(map<string,MenuOption> menu){
+void Application::inputMenu(){
 	string command;
 	string foo;
 	while(true){
+		displayMenu();
 		cout << "Command:";
 		getline(cin,command);
 		normalize(command);

@@ -9,6 +9,7 @@
 
 #include "Line.h"
 #include "Driver.h"
+#include "Stop.h"
 
   typedef map<int, Driver> DriverList;
   typedef map<int, Line> LineList;

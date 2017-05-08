@@ -51,6 +51,7 @@ public:
 	void linesUpdateStops(int id_number);
 	void linesUpdateTimes(int id_number);
 	void linesDelete();
+	void searchStops(string stop, vector<Stop> &stopsDirect, vector<Stop> &stopsInverse);
 	void linesSchedule();
 	void linesTravelTimes();
 	void linesStopLines();
