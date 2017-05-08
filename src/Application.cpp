@@ -12,6 +12,7 @@
 
 typedef map<int, Driver> DriverList;
 typedef map<int, Line> LineList;
+typedef void(Application::*MenuOption)(void);
 
 
 Application::Application() {
@@ -25,6 +26,9 @@ Application::Application() {
 	company = c;
 	linesFilepath = "";
 	driversFilepath= "";
+//	loadFiles();
+//	setupMenu();
+//	setupLineUpdateMenu();
 }
 
 void validArg(int &variable){
@@ -290,7 +294,7 @@ void Application::linesUpdate(){
 	cout << endl;
 
 	linesDetailShow(id);
-	cout << "Which field do you wish to update(id, freq, stops, times): ";
+	cout << "Which field do you wish to update(freq, stops, times): ";
 	string cmd;
 	do {
 		getline(cin, cmd);
@@ -298,6 +302,33 @@ void Application::linesUpdate(){
 	} while (true);
 
 
+
+}
+
+void Application::linesUpdateFreq(int id_number) {
+	string foo;
+	int freq;
+	Line l = company.getLines()[id_number];
+	cout << "The current frequency for line " << id_number << " is " << l.getFreq() << "min\n";
+	do {
+		cout << "Insert the new frequency: ";
+		getline(cin, foo);
+		if (foo == "") continue;
+		try{
+			freq = stoi(foo, nullptr);
+		}
+		catch(const std::invalid_argument& ia){
+			cout << "Invalid input. Reenter." << endl; getline(cin,foo);
+		}
+		if(freq) break;
+	} while (true);
+	l.setFreq(freq);
+	company.setLine(id_number, l);
+}
+void Application::linesUpdateStops(int id_number) {
+	string foo;
+}
+void Application::linesUpdateTimes(int id_number) {
 
 }
 
@@ -435,37 +466,46 @@ void Application::exitMenu(){
 }
 
 void Application::setupMenu(){
-	menu["lines show"] = &Application::linesShow;
-	menu["lines create"] = &Application::linesCreate;
-	menu["lines update"] = &Application::linesUpdate;
-	menu["lines delete"] = &Application::linesDelete;
-	menu["lines schedules"] = &Application::linesSchedule;
-	menu["lines travel time"] = &Application::linesTravelTimes;
-	menu["lines stop lines"] = &Application::linesStopLines;
-	menu["lines stop timetable"] = &Application::linesStopTimetable;
-	menu["drivers show"] = &Application::driversShow;
-	menu["drivers create"] = &Application::driversCreate;
-	menu["drivers update"] = &Application::driversUpdate;
-	menu["drivers delete"] = &Application::driversDelete;
-	menu["exit"] = &Application::exitMenu;
+	mainMenu["lines show"] = &Application::linesShow;
+	mainMenu["lines create"] = &Application::linesCreate;
+	mainMenu["lines update"] = &Application::linesUpdate;
+	mainMenu["lines delete"] = &Application::linesDelete;
+	mainMenu["lines schedules"] = &Application::linesSchedule;
+	mainMenu["lines travel time"] = &Application::linesTravelTimes;
+	mainMenu["lines stop lines"] = &Application::linesStopLines;
+	mainMenu["lines stop timetable"] = &Application::linesStopTimetable;
+	mainMenu["drivers show"] = &Application::driversShow;
+	mainMenu["drivers create"] = &Application::driversCreate;
+	mainMenu["drivers update"] = &Application::driversUpdate;
+	mainMenu["drivers delete"] = &Application::driversDelete;
+	mainMenu["exit"] = &Application::exitMenu;
 	//shortcuts
-	menu["ls"] = &Application::linesShow;
-	menu["lc"] = &Application::linesCreate;
-	menu["lu"] = &Application::linesUpdate;
-	menu["ld"] = &Application::linesDelete;
-	menu["lsch"] = &Application::linesSchedule;
-	menu["ltt"] = &Application::linesTravelTimes;
-	menu["lsl"] = &Application::linesStopLines;
-	menu["lst"] = &Application::linesStopTimetable;
-	menu["ds"] = &Application::driversShow;
-	menu["dc"] = &Application::driversCreate;
-	menu["du"] = &Application::driversUpdate;
-	menu["dd"] = &Application::driversDelete;
-	menu["e"] = &Application::exitMenu;
+	mainMenu["ls"] = &Application::linesShow;
+	mainMenu["lc"] = &Application::linesCreate;
+	mainMenu["lu"] = &Application::linesUpdate;
+	mainMenu["ld"] = &Application::linesDelete;
+	mainMenu["lsch"] = &Application::linesSchedule;
+	mainMenu["ltt"] = &Application::linesTravelTimes;
+	mainMenu["lsl"] = &Application::linesStopLines;
+	mainMenu["lst"] = &Application::linesStopTimetable;
+	mainMenu["ds"] = &Application::driversShow;
+	mainMenu["dc"] = &Application::driversCreate;
+	mainMenu["du"] = &Application::driversUpdate;
+	mainMenu["dd"] = &Application::driversDelete;
+	mainMenu["e"] = &Application::exitMenu;
 }
 
+//void Application::setupLineUpdateMenu(){
+//	lineUpdateMenu["freq"] = &Application::linesUpdateFreq;
+//	lineUpdateMenu["stops"] = &Application::linesUpdateStops;
+//	lineUpdateMenu["times"] = &Application::linesUpdateTimes;
+//}
 
-void Application::displayMenu(){
+map<string,MenuOption> Application::getMainMenu(){
+	return mainMenu;
+}
+
+void Application::displayMainMenu(){
 	cout << "\n";
 	cout << "Lines" << endl;
 	cout << "     Show, Create, Update, Delete" << endl;
@@ -476,11 +516,10 @@ void Application::displayMenu(){
 	cout << "Exit" << endl;
 }
 
-void Application::inputMenu(){
+void Application::inputMenu(map<string,MenuOption> menu){
 	string command;
 	string foo;
 	while(true){
-		displayMenu();
 		cout << "Command:";
 		getline(cin,command);
 		normalize(command);
