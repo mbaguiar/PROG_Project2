@@ -9,6 +9,7 @@
 #include "Company.h"
 #include "Line.h"
 #include "Driver.h"
+#include "Stop.h"
 
 typedef map<int, Driver> DriverList;
 typedef map<int, Line> LineList;
@@ -193,22 +194,22 @@ void Application::linesShow(){
 
 void Application::linesDetailShow(int id_number) {
 	Line line = company.getLines()[id_number];
-		cout << setw(12) << "ID: ";
-		cout << line.getId() << endl;
-		cout << setw(12) << "Frequency: ";
-		cout << line.getFreq() << "min\n";
-		cout << setw(12) << "Stops: ";
-		for (int i = 0; i < line.getStops().size(); i++) {
-			cout << line.getStops().at(i);
-			if (i != (line.getStops().size() - 1)) cout << ", ";
-			else cout << endl;
-		}
-		cout << setw(12) << "Times: ";
-		for (int i = 0; i < line.getTimes().size(); i++) {
-			cout << line.getTimes().at(i);
-			if (i != (line.getTimes().size() - 1)) cout << ", ";
-			else cout << endl << endl;
-		}
+	cout << setw(12) << "ID: ";
+	cout << line.getId() << endl;
+	cout << setw(12) << "Frequency: ";
+	cout << line.getFreq() << "min\n";
+	cout << setw(12) << "Stops: ";
+	for (int i = 0; i < line.getStops().size(); i++) {
+		cout << line.getStops().at(i);
+		if (i != (line.getStops().size() - 1)) cout << ", ";
+		else cout << endl;
+	}
+	cout << setw(12) << "Times: ";
+	for (int i = 0; i < line.getTimes().size(); i++) {
+		cout << line.getTimes().at(i);
+		if (i != (line.getTimes().size() - 1)) cout << ", ";
+		else cout << endl << endl;
+	}
 
 }
 
@@ -279,13 +280,13 @@ void Application::linesUpdate(){
 	int id;
 	cout << "Insert the line to change: ";
 	do {
-			cout << "Line's id:";
-			validArg(id);
-			if (validIdLines(id)) break;
-			else {
-				cout << "Invalid id. Reenter." << endl;
-			}
-		} while (true);
+		cout << "Line's id:";
+		validArg(id);
+		if (validIdLines(id)) break;
+		else {
+			cout << "Invalid id. Reenter." << endl;
+		}
+	} while (true);
 
 	cout << endl;
 
@@ -296,9 +297,6 @@ void Application::linesUpdate(){
 		getline(cin, cmd);
 
 	} while (true);
-
-
-
 }
 
 void Application::linesDelete(){
@@ -317,6 +315,55 @@ void Application::linesDelete(){
 	linesChanged= true;
 }
 
+void Application::searchStops(string stop, vector<Stop> &stopsDirect, vector<Stop> &stopsInverse){
+	vector<Stop> stopsD;
+	vector<Stop> stopsI;
+	LineList lines = company.getLines();
+	for (auto& x: lines) {
+		Line l = x.second;
+		for (size_t x = 0; x < l.getStops().size(); x++) {
+			if (l.getStops().at(x) == stop) {
+
+				// SENTIDO DIRETO
+
+				Stop newStop;
+				newStop.setName(stop);
+				newStop.setPosInLine(x);
+				newStop.setLineId(l.getId());
+				newStop.setFreq(l.getFreq());
+				newStop.setTimeFromStart(0);
+				newStop.setDirection(0);
+				for (int z = 0; z < x; z++) {
+					newStop.setTimeFromStart(newStop.getTimeFromStart() + l.getTimes().at(z));
+				}
+				newStop.setStopH(day_start);
+				newStop.setStopM(newStop.getTimeFromStart());
+				stopsD.push_back(newStop);
+
+				//SENTIDO INVRSO
+
+				Stop newStop2;
+				newStop2.setName(stop);
+				newStop2.setPosInLine(x);
+				newStop2.setLineId(l.getId());
+				newStop2.setFreq(l.getFreq());
+				newStop2.setTimeFromStart(0);
+				newStop2.setDirection(1);
+				for (int z = l.getTimes().size() - 1; z >= x; z--) {
+					if (z < 0) break;
+					newStop2.setTimeFromStart(newStop2.getTimeFromStart() + l.getTimes().at(z));
+				}
+				newStop2.setStopH(day_start);
+				newStop2.setStopM(newStop.getTimeFromStart());
+				stopsI.push_back(newStop2);
+				break;
+			}
+		}
+	}
+	stopsDirect = stopsD;
+	stopsInverse = stopsI;
+}
+
 void Application::linesSchedule(){
 
 }
@@ -326,7 +373,34 @@ void Application::linesTravelTimes(){
 }
 
 void Application::linesStopLines(){
+	string stop;
+	vector<Stop> stopsDirect;
+	vector<Stop> stopsInverse;
+	do {
+		cout << "Insert the stop name to search for (CTRL-Z to cancel): ";
+		getline(cin, stop);
+		if (cin.eof()) {
+			cin.clear();
+			return;
+		}
+		searchStops(stop, stopsDirect, stopsInverse);
 
+		if (stopsDirect.empty() && stopsInverse.empty()) {
+			cout << "Invalid stop name.\n";
+		}
+		else break;
+	} while (true);
+	cout << "The stop '" << stop << "' belongs to the following lines: ";
+	for (size_t i = 0; i < stopsDirect.size(); i++) {
+		cout << stopsDirect.at(i).getLineId();
+		if (i != stopsDirect.size() - 1) {
+			cout << ", ";
+		}
+		else {
+			cout << ".\n";
+		}
+
+	}
 }
 
 void Application::linesStopTimetable(){
@@ -405,7 +479,6 @@ void Application::driversCreate(){
 	newdriver.setMin_rest(min_rest);
 	company.addDriver(newdriver);
 	driversChanged = true;
-
 }
 
 void Application::driversUpdate(){
@@ -463,7 +536,6 @@ void Application::setupMenu(){
 	menu["dd"] = &Application::driversDelete;
 	menu["e"] = &Application::exitMenu;
 }
-
 
 void Application::displayMenu(){
 	cout << "\n";
