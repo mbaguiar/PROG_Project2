@@ -109,5 +109,17 @@ Driver readDriver(string &d){
 	return newdriver;
 }
 
-
+Clock addTime(int min, Clock time){
+	Clock result;
+	result.hours = time.hours;
+	result.mins= time.mins + min;
+	while(result.mins >= 60){
+		result.mins = result.mins - 60;
+		result.hours = result.hours + 1;
+	}
+	if (result.hours >= 24){
+		result.hours = result.hours -24;
+	}
+	return result ;
+}
 

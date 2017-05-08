@@ -8,6 +8,11 @@
 #ifndef SRC_HELPER_H_
 #define SRC_HELPER_H_
 
+struct Clock{
+	int hours;
+	int mins;
+};
+
 void validArg(int &variable);
 void trimstring(string &s);
 void normalize(string &s);
@@ -16,6 +21,7 @@ void next(string &piece, string &line);
 void next(int &elem, string &piece, string separator);
 Line readLine(string &l);
 Driver readDriver(string &d);
+Clock addTime(int min, Clock time);
 
 
 #endif /* SRC_HELPER_H_ */

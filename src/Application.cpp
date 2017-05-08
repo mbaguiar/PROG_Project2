@@ -269,7 +269,127 @@ void Application::searchStops(string stop, vector<Stop> &stopsDirect, vector<Sto
 	stopsInverse = stopsI;
 }
 
+int Application::chooseLine() {
+	int lineID;
+	LineList lines = company.getLines();
+	if (!lines.empty()) {
+		cout << "Available line IDs: ";
+		for (auto& x:lines) {
+			Line l = x.second;
+			cout << l.getId() << " ";
+		}
+	}
+	do {
+		cout << "Choose line:";
+		validArg(lineID);
+		if (validIdLines(lineID)) break;
+		else {
+			cout << "Invalid id. Reenter." << endl;
+		}
+	} while (true);
+	return lineID;
+}
+
+int Application::printTimes(vector<Clock> time, int freq, int n, int d){
+	bool end = false;
+	while(!end){
+		for (int i = 0; i < time.size(); i++) {
+			string v;
+			if (time.at(i).hours< 10) {
+				v = "0" + to_string(time.at(i).hours) + ":";
+			} else
+				v = to_string(time.at(i).hours) + ":";
+
+			if (time.at(i).mins < 10) {
+				v = v + "0" + to_string(time.at(i).mins);
+			} else
+				v = v + to_string(time.at(i).mins);
+
+			cout << setw(12) << v;
+		}
+		cout << endl;
+		for(int i=0; i< time.size(); i++){
+			time.at(i) = addTime(freq, time.at(i));
+		}
+		if(d==1){
+			n++;
+			if(time.at(0).hours >= day_end) end =true;
+		}
+		if(d == -1){
+			n--;
+			if(n == 0) end = true;
+		}
+	}
+	return n;
+}
+
+void Application::printStops(int id_number, Line& line) {
+	for (int i = 1; i <= line.getStops().size(); i++) {
+		cout << id_number << "." << i << " " << line.getStops().at(i - 1) << " | ";
+	}
+	cout << endl << endl;
+}
+
+void Application::printStopsHeader(const Line& line, int id_number, int direction) {
+	string s;
+	int start, end;
+	if (direction == 1) {
+		start = 1;
+		end = line.getStops().size()+1;
+	} else {
+		start = line.getStops().size();
+		end = 0;
+	}
+	for (int i = start; i != end; i=i+direction) {
+		s = to_string(id_number) + "." + to_string(i);
+		cout << setw(12) << s;
+	}
+	cout << endl;
+	for(int i=1; i<=line.getStops().size(); i++){
+		cout << setw(12) << "-----";
+	}
+	cout << endl;
+}
+
+
+
 void Application::linesSchedule(){
+	int sum;
+	Clock start_time;
+	start_time.hours = day_start;
+	start_time.mins = 0;
+	string s;
+	vector<Clock> time;
+	vector <Clock> time2;
+
+	Line line = company.getLines()[chooseLine()];
+	printStops(line.getId(), line);
+	int freq = line.getFreq();
+
+	cout << "Direction: " << line.getStops().at(0);
+	cout << " to " << line.getStops().at(line.getStops().size()-1) << endl << endl;
+	printStopsHeader(line, line.getId(), 1);
+
+	time.push_back(start_time);
+	sum = 0;
+	for(int i=0; i<line.getTimes().size(); i++){
+		sum = sum + line.getTimes().at(i);
+		time.push_back(addTime(sum , start_time));
+	}
+	int n= printTimes(time, freq, n, 1);
+	cout << endl << endl;
+
+	cout << "Direction: " << line.getStops().at(line.getStops().size()-1);
+	cout << " to " << line.getStops().at(0) << endl << endl;
+	printStopsHeader(line, line.getId(), -1);
+	start_time = addTime(sum, start_time);
+	time2.push_back(start_time);
+	sum = 0;
+	for(int i=line.getTimes().size()-1 ; i>=0; i--){
+		sum = sum + line.getTimes().at(i);
+		time2.push_back(addTime(sum , start_time));
+	}
+	printTimes(time2, freq, n, -1);
 
 }
 
@@ -277,12 +397,8 @@ void Application::linesTravelTimes(){
 	string stop1, stop2;
 	vector<Stop> stopsDirect1, stopsDirect2, stopsInverse1, stopsInverse2;
 	do {
-		cout << "Insert the first stop name (CTRL-Z to cancel): ";
+		cout << "Insert the first stop name: ";
 		getline(cin, stop1);
-		if (cin.eof()) {
-			cin.clear();
-			return;
-		}
 		searchStops(stop1, stopsDirect1,  stopsInverse1);
 
 		if (stopsDirect1.empty() && stopsInverse1.empty()) {
@@ -292,14 +408,9 @@ void Application::linesTravelTimes(){
 	} while (true);
 
 	do {
-		cout << "Insert the second stop name (CTRL-Z to cancel): ";
+		cout << "Insert the second stop name: ";
 		getline(cin, stop2);
-		if (cin.eof()) {
-			cin.clear();
-			return;
-		}
 		searchStops(stop2, stopsDirect2, stopsInverse2);
-
 		if (stopsDirect2.empty() && stopsInverse2.empty()) {
 			cout << "Invalid stop name.\n";
 		}
@@ -357,6 +468,7 @@ void Application::linesTravelTimes(){
 	if (!IDs.empty()) {
 		cout << "There are " << IDs.size() << " direct routes from " << stop1 << " to " << stop2 << ":\n";
 		for (int i = 0; i < IDs.size(); i++) {
+			cout << endl;
 			cout << "Line " << IDs.at(i);
 			cout << " - ";
 			if (directions.at(i) == 0) cout << "MAIN DIRECTION";
@@ -417,7 +529,6 @@ void Application::linesStopLines(){
 		else {
 			cout << ".\n";
 		}
-
 	}
 }
 
@@ -427,7 +538,8 @@ void Application::linesStopTimetable(){
 
 void Application::driversSummaryShow(){
 	DriverList drivers = company.getDrivers();
-	cout << std::left << setw(4) << "ID" << setw(3) << " " << setw(30) << "NAME" << setw(3) << " " << setw(7) << "H/SHIFT"			<< setw(3) << " " << setw(6) << "H/WEEK" << setw(3) << " " << setw(6) << "H/REST" << endl;
+	cout << std::left << setw(4) << "ID" << setw(3) << " " << setw(30) << "NAME" << setw(3) << " " << setw(7);
+	cout << "H/SHIFT" << setw(3) << " " << setw(6) << "H/WEEK" << setw(3) << " " << setw(6) << "H/REST" << endl;
 	for (auto& x: drivers) {
 		Driver d = x.second;
 		cout << std::left << setw(4) << d.getId() << setw(3) << " ";
@@ -526,36 +638,36 @@ void Application::exitMenu(){
 }
 
 void Application::setupMenu(){
-	menu["lines show"] = &Application::linesShow;
-	menu["lines create"] = &Application::linesCreate;
-	menu["lines update"] = &Application::linesUpdate;
-	menu["lines delete"] = &Application::linesDelete;
-	menu["lines schedules"] = &Application::linesSchedule;
-	menu["lines travel time"] = &Application::linesTravelTimes;
-	menu["lines stop lines"] = &Application::linesStopLines;
-	menu["lines stop timetable"] = &Application::linesStopTimetable;
-	menu["drivers show"] = &Application::driversShow;
-	menu["drivers create"] = &Application::driversCreate;
-	menu["drivers update"] = &Application::driversUpdate;
-	menu["drivers delete"] = &Application::driversDelete;
-	menu["exit"] = &Application::exitMenu;
+	mainMenu["lines show"] = &Application::linesShow;
+	mainMenu["lines create"] = &Application::linesCreate;
+	mainMenu["lines update"] = &Application::linesUpdate;
+	mainMenu["lines delete"] = &Application::linesDelete;
+	mainMenu["lines schedules"] = &Application::linesSchedule;
+	mainMenu["lines travel time"] = &Application::linesTravelTimes;
+	mainMenu["lines stop lines"] = &Application::linesStopLines;
+	mainMenu["lines stop timetable"] = &Application::linesStopTimetable;
+	mainMenu["drivers show"] = &Application::driversShow;
+	mainMenu["drivers create"] = &Application::driversCreate;
+	mainMenu["drivers update"] = &Application::driversUpdate;
+	mainMenu["drivers delete"] = &Application::driversDelete;
+	mainMenu["exit"] = &Application::exitMenu;
 	//shortcuts
-	menu["ls"] = &Application::linesShow;
-	menu["lc"] = &Application::linesCreate;
-	menu["lu"] = &Application::linesUpdate;
-	menu["ld"] = &Application::linesDelete;
-	menu["lsch"] = &Application::linesSchedule;
-	menu["ltt"] = &Application::linesTravelTimes;
-	menu["lsl"] = &Application::linesStopLines;
-	menu["lst"] = &Application::linesStopTimetable;
-	menu["ds"] = &Application::driversShow;
-	menu["dc"] = &Application::driversCreate;
-	menu["du"] = &Application::driversUpdate;
-	menu["dd"] = &Application::driversDelete;
-	menu["e"] = &Application::exitMenu;
+	mainMenu["ls"] = &Application::linesShow;
+	mainMenu["lc"] = &Application::linesCreate;
+	mainMenu["lu"] = &Application::linesUpdate;
+	mainMenu["ld"] = &Application::linesDelete;
+	mainMenu["lsch"] = &Application::linesSchedule;
+	mainMenu["ltt"] = &Application::linesTravelTimes;
+	mainMenu["lsl"] = &Application::linesStopLines;
+	mainMenu["lst"] = &Application::linesStopTimetable;
+	mainMenu["ds"] = &Application::driversShow;
+	mainMenu["dc"] = &Application::driversCreate;
+	mainMenu["du"] = &Application::driversUpdate;
+	mainMenu["dd"] = &Application::driversDelete;
+	mainMenu["e"] = &Application::exitMenu;
 }
 
-void Application::displayMenu(){
+void Application::displayMainMenu(){
 	cout << "\n";
 	cout << "Lines" << endl;
 	cout << "     Show, Create, Update, Delete" << endl;
@@ -570,12 +682,12 @@ void Application::inputMenu(){
 	string command;
 	string foo;
 	while(true){
-		displayMenu();
+		displayMainMenu();
 		cout << "Command:";
 		getline(cin,command);
 		normalize(command);
-		if(menu.find(command) != menu.end()){
-			(this->*menu[command])();
+		if(mainMenu.find(command) != mainMenu.end()){
+			(this->*mainMenu[command])();
 		}else cout << "Invalid";
 		cout << "\nPress enter to continue";
 		getline(cin,foo);

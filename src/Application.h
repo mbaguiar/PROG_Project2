@@ -15,6 +15,7 @@
 #include <fstream>
 #include <vector>
 #include "Company.h"
+#include "helper.h"
 
 using namespace std;
 
@@ -41,7 +42,7 @@ public:
 	void displayMainMenu();
 	map<string, MenuOption> getMainMenu();
 	void setupLineUpdateMenu();
-	void inputMenu(map<string,MenuOption> menu);
+	void inputMenu();
 	void linesShow();
 	void linesSummaryShow();
 	void linesDetailShow(int id_number);
@@ -52,6 +53,10 @@ public:
 	void linesUpdateTimes(int id_number);
 	void linesDelete();
 	void searchStops(string stop, vector<Stop> &stopsDirect, vector<Stop> &stopsInverse);
+	int chooseLine();
+	int printTimes(vector<Clock> time, int freq, int n, int d);
+	void printStops(int id_number, Line& line);
+	void printStopsHeader(const Line& line, int id_number, int direction);
 	void linesSchedule();
 	void linesTravelTimes();
 	void linesStopLines();

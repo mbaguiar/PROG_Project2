@@ -12,7 +12,8 @@ using namespace std;
 
 int main() {
 	Application app;
-	app.displayMainMenu();
-	app.inputMenu(app.getMainMenu());
+	app.setupMenu();
+	app.loadFiles();
+	app.inputMenu();
 	return 0;
 }
