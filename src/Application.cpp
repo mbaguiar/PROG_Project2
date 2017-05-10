@@ -167,7 +167,7 @@ void Application::linesCreate(){
 				time = stoi(foo, nullptr);
 			}
 			catch(const std::invalid_argument& ia){
-				cout << "Invalid. Reenter." << endl; getline(cin,foo);
+				cout << "Invalid input. Reenter." << endl; getline(cin,foo);
 			}
 			if(time) break;
 		}
@@ -202,6 +202,78 @@ void Application::linesUpdate(){
 		getline(cin, cmd);
 
 	} while (true);
+}
+
+void Application::linesUpdateFreq(int id_number) {
+	Line l = company.getLines()[id_number];
+	cout << "The current frequeny for line " << id_number << " is " << l.getFreq() << "min,\n";
+	string foo;
+	int freq;
+	do {
+		cout << "Insert the new frequency: ";
+		getline(cin,foo);
+		try{
+			freq = stoi(foo, nullptr);
+		}
+		catch(const std::invalid_argument& ia){
+			cout << "Invalid input. Reenter." << endl;
+		}
+		if(freq) break;
+	} while (true);
+	l.setFreq(freq);
+	company.setLine(id_number, l);
+}
+
+void Application::linesUpdateStops(int id_number) {
+	Line l = company.getLines()[id_number];
+		cout << "The current stops for line " << id_number << " are ";
+		for (int i = 0; i < l.getStops().size(); i++){
+				cout << l.getStops().at(i);
+				if (i != l.getStops().size() - 1) cout << ", ";
+				else cout << ".\n";
+		}
+		string foo;
+		vector<string> stops;
+		do {
+			cout << "Insert the new stops (Press enter twice to stop): ";
+			getline(cin, foo);
+			if(foo == "") break;
+			stops.push_back(foo);
+		} while (true);
+		l.setStops(stops);
+		company.setLine(id_number, l);
+}
+void Application::linesUpdateTimes(int id_number) {
+	Line l = company.getLines()[id_number];
+	cout << "The current times for line " << id_number << " are ";
+	for (int i = 0; i < l.getTimes().size(); i++){
+		cout << l.getTimes().at(i);
+		if (i != l.getTimes().size() - 1) cout << ", ";
+		else cout << ".\n";
+	}
+	string foo;
+	vector<int> times;
+	do {
+		int time;
+		cout << "Insert the new times (Press enter twice to stop): ";
+		do {
+			bool success = true;
+			getline(cin, foo);
+			try {
+				time = stoi(foo, nullptr);
+			}
+			catch(const std::invalid_argument& ia) {
+				cout << "Invalid input. Reenter.\n";
+				success = false;
+			}
+			if (success) break;
+		} while (true);
+		times.push_back(time);
+		if (foo == "") break;
+	} while (true);
+	l.setTimes(times);
+	company.setLine(id_number, l);
+
 }
 
 void Application::linesDelete(){
