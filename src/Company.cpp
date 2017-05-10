@@ -63,3 +63,11 @@ void Company::eraseLine(int id){
 void Company::eraseDriver(int id){
 	drivers.erase(id);
 }
+
+void Company::setLine(int index, Line newLine) {
+	lines[index] = newLine;
+}
+
+void Company::setDriver(int index, Driver newDriver) {
+	drivers[index] = newDriver;
+}

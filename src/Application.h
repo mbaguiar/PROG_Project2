@@ -22,6 +22,7 @@ using namespace std;
 
 class Application {
 typedef void(Application::*MenuOption)(void);
+typedef void(Application::*UpdateMenuOption)(int id);
 private:
 	Company company;
 	bool linesChanged;
@@ -29,7 +30,7 @@ private:
 	int day_start;
 	int day_end;
 	map<string,MenuOption> mainMenu;
-	map<string,MenuOption> lineUpdateMenu;
+	map<string,UpdateMenuOption> lineUpdateMenu;
 	string linesFilepath;
 	string driversFilepath;
 
@@ -40,9 +41,11 @@ public:
 	void loadFiles();
 	void setupMenu();
 	void displayMainMenu();
+	void displayUpdateMenu();
 	map<string, MenuOption> getMainMenu();
 	void setupLineUpdateMenu();
 	void inputMenu();
+	void updateMenu(int id_number);
 	void linesShow();
 	void linesSummaryShow();
 	void linesDetailShow(int id_number);

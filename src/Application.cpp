@@ -113,7 +113,7 @@ void Application::linesDetailShow(int id_number) {
 	for (int i = 0; i < line.getTimes().size(); i++) {
 		cout << line.getTimes().at(i);
 		if (i != (line.getTimes().size() - 1)) cout << ", ";
-		else cout << endl << endl;
+		else cout << endl;
 	}
 
 }
@@ -183,9 +183,8 @@ void Application::linesCreate(){
 
 void Application::linesUpdate(){
 	int id;
-	cout << "Insert the line to change: ";
 	do {
-		cout << "Line's id:";
+		cout << "Insert the line to change: ";
 		validArg(id);
 		if (validIdLines(id)) break;
 		else {
@@ -196,20 +195,19 @@ void Application::linesUpdate(){
 	cout << endl;
 
 	linesDetailShow(id);
-	cout << "Which field do you wish to update(id, freq, stops, times): ";
-	string cmd;
 	do {
-		getline(cin, cmd);
-
+		displayUpdateMenu();
+		updateMenu(id);
 	} while (true);
 }
 
 void Application::linesUpdateFreq(int id_number) {
 	Line l = company.getLines()[id_number];
-	cout << "The current frequeny for line " << id_number << " is " << l.getFreq() << "min,\n";
+	cout << "The current frequeny for line " << id_number << " is " << l.getFreq() << "min.\n";
 	string foo;
 	int freq;
 	do {
+		bool success = true;
 		cout << "Insert the new frequency: ";
 		getline(cin,foo);
 		try{
@@ -217,11 +215,14 @@ void Application::linesUpdateFreq(int id_number) {
 		}
 		catch(const std::invalid_argument& ia){
 			cout << "Invalid input. Reenter." << endl;
+			success = false;
 		}
-		if(freq) break;
+		if(success) break;
 	} while (true);
 	l.setFreq(freq);
 	company.setLine(id_number, l);
+	cout << "Press any key to continue...";
+	getchar();
 }
 
 void Application::linesUpdateStops(int id_number) {
@@ -737,6 +738,10 @@ void Application::setupMenu(){
 	mainMenu["du"] = &Application::driversUpdate;
 	mainMenu["dd"] = &Application::driversDelete;
 	mainMenu["e"] = &Application::exitMenu;
+	//update menu
+	lineUpdateMenu["frequency"] = &Application::linesUpdateFreq;
+	lineUpdateMenu["stops"] = &Application::linesUpdateStops;
+	lineUpdateMenu["times"] = &Application::linesUpdateTimes;
 }
 
 void Application::displayMainMenu(){
@@ -750,21 +755,39 @@ void Application::displayMainMenu(){
 	cout << "Exit" << endl;
 }
 
+void Application::displayUpdateMenu(){
+	cout << "\n";
+	cout << "Lines Update" << endl;
+	cout << "     Frequency, Stops, Times" << endl;
+	cout << "     Back" << endl;
+}
+
 void Application::inputMenu(){
 	string command;
-	string foo;
-	while(true){
-		displayMainMenu();
+	displayMainMenu();
+	do {
 		cout << "Command:";
 		getline(cin,command);
 		normalize(command);
 		if(mainMenu.find(command) != mainMenu.end()){
 			(this->*mainMenu[command])();
-		}else cout << "Invalid";
-		cout << "\nPress enter to continue";
-		getline(cin,foo);
-	}
+		} else cout << "Invalid command.\n";
+	} while(true);
 }
+
+void Application::updateMenu(int id_number){
+	string command;
+	do {
+		cout << "Command:";
+		getline(cin,command);
+		normalize(command);
+		if (command == "back") break;
+		else if(lineUpdateMenu.find(command) != lineUpdateMenu.end()){
+			(this->*lineUpdateMenu[command])(id_number);
+		} else cout << "Invalid command.\n";
+	} while(true);
+}
+
 Application::~Application() {
 	// TODO Auto-generated destructor stub
 }
