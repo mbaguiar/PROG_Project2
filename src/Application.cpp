@@ -617,22 +617,26 @@ void Application::linesStopTimetable(){
 }
 
 void Application::driversShow(){
-	DriverList drivers = company.getDrivers();
-	cout << std::left << setw(4) << "ID" << setw(3) << " " << setw(30) << "NAME" << setw(3) << " " << setw(7);
-	cout << "H/SHIFT" << setw(3) << " " << setw(6) << "H/WEEK" << setw(3) << " " << setw(6) << "H/REST" << endl;
-	for (auto& x: drivers) {
-		Driver d = x.second;
-		cout << std::left << setw(4) << d.getId() << setw(3) << " ";
-		cout << setw(30) << d.getName() << setw(3) << " ";
-		cout << std::right << setw(7) << d.getMaxShift() << setw(3) << " ";
-		cout << setw(6) << d.getMaxWeek() << setw(3) << " ";
-		cout << setw(6) << d.getMinRest()<< endl;
-	}
+	printDrivers();
 	cout << endl << endl;
 	cout << "Press any key to continue.";
 	getchar();
+
 }
 
+void Application::printDrivers() {
+	DriverList drivers = company.getDrivers();
+		cout << std::left << setw(4) << "ID" << setw(3) << " " << setw(30) << "NAME" << setw(3) << " " << setw(7);
+		cout << "H/SHIFT" << setw(3) << " " << setw(6) << "H/WEEK" << setw(3) << " " << setw(6) << "H/REST" << endl;
+		for (auto& x: drivers) {
+			Driver d = x.second;
+			cout << std::left << setw(4) << d.getId() << setw(3) << " ";
+			cout << setw(30) << d.getName() << setw(3) << " ";
+			cout << std::right << setw(7) << d.getMaxShift() << setw(3) << " ";
+			cout << setw(6) << d.getMaxWeek() << setw(3) << " ";
+			cout << setw(6) << d.getMinRest()<< endl;
+		}
+}
 void Application::driversDetailShow(int id_number){
 	Driver driver = company.getDrivers()[id_number];
 	cout << std::left;
@@ -685,7 +689,7 @@ void Application::driversCreate(){
 
 void Application::driversUpdate(){
 	int id;
-	driversShow();
+	printDrivers();
 	do {
 		cout << "Insert the driver to change: ";
 		validArg(id);

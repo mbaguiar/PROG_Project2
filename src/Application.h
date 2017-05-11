@@ -68,6 +68,7 @@ public:
 	void linesStopLines();
 	void linesStopTimetable();
 	void driversDetailShow(int id_number);
+	void printDrivers();
 	void driversShow();
 	void driversCreate();
 	void driversUpdate();
