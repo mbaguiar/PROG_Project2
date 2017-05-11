@@ -64,6 +64,7 @@ public:
 	void linesSchedule();
 	void linesTravelTimes();
 	void linesStopLines();
+	void printTable(Stop stop, int duration, Clock start, string begin, string end, int &n);
 	void linesStopTimetable();
 	void driversDetailShow(int id_number);
 	void printDrivers();

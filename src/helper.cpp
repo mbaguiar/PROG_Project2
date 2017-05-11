@@ -120,7 +120,21 @@ Clock addTime(int min, Clock time){
 	}
 	if (result.hours >= 24){
 		result.hours = result.hours -24;
+		result.am = true;
 	}
 	return result ;
 }
 
+Clock subTime(int min, Clock time){
+	Clock result;
+	result.hours = time.hours;
+	result.mins = time.mins - min;
+	while(result.mins < 0){
+		result.mins = result.mins + 60;
+		result.hours = result.hours -1;
+	}
+	if(result.hours < 0){
+		result.hours = result.hours + 24;
+	}
+	return result;
+}

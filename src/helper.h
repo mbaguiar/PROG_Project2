@@ -11,6 +11,7 @@
 struct Clock{
 	int hours;
 	int mins;
+	bool am;
 };
 
 void validArg(int &variable);
@@ -22,6 +23,7 @@ void next(int &elem, string &piece, string separator);
 Line readLine(string &l);
 Driver readDriver(string &d);
 Clock addTime(int min, Clock time);
+Clock subTime(int min, Clock time);
 
 
 #endif /* SRC_HELPER_H_ */

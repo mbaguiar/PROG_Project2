@@ -609,8 +609,132 @@ void Application::linesStopLines(){
 	}
 }
 
-void Application::linesStopTimetable(){
+void Application::printTable(Stop stop, int duration, Clock start, string begin, string end, int &n){
+	Clock time = start;
+	int direction = stop.getDirection();
+	string stopName = stop.getName();
+	int travel = stop.getTimeFromStart();
+	int freq = stop.getFreq();
+	vector<Clock> empty;
+	vector<Clock> temp;
+	vector < vector < Clock > > hours;
+	time = addTime(travel, time);
+	temp.push_back(time);
+	if(!direction){
+		while(true){
+			int foo = time.hours;
+			time = addTime(freq,time);
+			Clock foo2 = subTime(travel,time);
+			if(foo2.hours >= day_end){
+				hours.push_back(temp);
+				break;
+			}
+			else if(time.hours > foo){
+				hours.push_back(temp);
+				temp.resize(0);
+				temp.push_back(time);
+				n++;
+			}else{
+				temp.push_back(time);
+				n++;
+			}
+		}
+	}else{
+		while(true){
+			int foo = time.hours;
+			time = addTime(freq, time);
+			if(n == 0){
+				hours.push_back(temp);
+				break;
+			}
+			else if(time.hours > foo){
+				hours.push_back(temp);
+				temp.resize(0);
+				temp.push_back(time);
+				n--;
+			}else if(foo == 23 && time.hours == 0){
+				hours.push_back(temp);
+				temp.resize(0);
+				temp.push_back(time);
+				n--;
+			}else{
+				temp.push_back(time);
+				n--;
+			}
+		}
+	}
+	int id = stop.getLineId();
+	cout << "Line: " << id << " - " << stop.getName() << endl;
+	cout << "Direction: " << begin;
+	cout << " to " << end << endl << endl;
+	for(int i=0; i<hours.size(); i++){
+		cout << setw(6) << hours.at(i).at(0).hours;
+	}
+	cout << endl;
+	for(int i=0; i< hours.size(); i++){
+		cout << setw(6) << "--";
+	}
+	int size = 0;
+	for(int i = 0; i < hours.size(); i++){
+		size = size + hours.at(i).size();
+	}
+	cout << endl;
+	int t=0;
+	while(size>0){
+		for(int i=0; i<hours.size(); i++){
+			string s;
+			if(t>=hours.at(i).size()){
+				cout << setw(6) << " ";
+			}
+			else if(hours.at(i).at(t).mins < 10){
+				s = "0" + to_string(hours.at(i).at(t).mins);
+				cout << setw(6) << s;
+				size--;
+			}else{
+				s = to_string(hours.at(i).at(t).mins);
+				cout << setw(6) << s;
+				size--;
+			}
+		}
+		cout << endl;
+		t++;
+	}
+	cout << endl;
+}
 
+void Application::linesStopTimetable(){
+	string stop;
+	int n=0;
+	int duration= 0;
+	int travel;
+	vector<Stop> stopsDirect, stopsInverse;
+	do {
+		cout << "Insert the stop name: ";
+		getline(cin, stop);
+		searchStops(stop, stopsDirect,  stopsInverse);
+
+		if (stopsDirect.empty() && stopsInverse.empty()) {
+			cout << "Invalid stop name.\n\n";
+		}
+		else break;
+	} while (true);
+	Clock start;
+	start.hours = day_start;
+	start.mins = 0;
+	for(int i = 0; i<stopsDirect.size(); i++){
+		travel  = stopsDirect.at(i).getTimeFromStart();
+		Line line = company.getLines()[stopsDirect.at(i).getLineId()];
+		for(int t=0; t<line.getTimes().size(); t++){
+			duration = duration + line.getTimes().at(t);
+		}
+		printTable(stopsDirect.at(i),duration, start, line.getStops().at(0), line.getStops().at(line.getStops().size()-1), n );
+	}
+	start = addTime(duration, start);
+	for(int i = 0; i<stopsInverse.size(); i++){
+		travel = stopsInverse.at(i).getTimeFromStart();
+		Line line = company.getLines()[stopsInverse.at(i).getLineId()];
+		printTable(stopsInverse.at(i), duration, start, line.getStops().at(line.getStops().size()-1), line.getStops().at(0), n);
+	}
 }
 
 void Application::driversShow(){
