@@ -60,9 +60,7 @@ public:
 	void linesDelete();
 	void searchStops(string stop, vector<Stop> &stopsDirect, vector<Stop> &stopsInverse);
 	int chooseLine();
-	int printTimes(vector<Clock> time, int freq, int n, int d);
-	void printStops(int id_number, Line& line);
-	void printStopsHeader(const Line& line, int id_number, int direction);
+	void printTimes(vector<Clock> time, Line line, int &n, int d);
 	void linesSchedule();
 	void linesTravelTimes();
 	void linesStopLines();

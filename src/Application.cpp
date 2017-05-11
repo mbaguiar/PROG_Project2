@@ -231,25 +231,25 @@ void Application::linesUpdateFreq(int id_number) {
 
 void Application::linesUpdateStops(int id_number) {
 	Line l = company.getLines()[id_number];
-		cout << "The current stops for line " << id_number << " are ";
-		for (int i = 0; i < l.getStops().size(); i++){
-				cout << l.getStops().at(i);
-				if (i != l.getStops().size() - 1) cout << ", ";
-				else cout << ".\n";
-		}
-		string foo;
-		vector<string> stops;
-		do {
-			cout << "Insert the new stops (Press enter twice to stop): ";
-			getline(cin, foo);
-			if(foo == "") break;
-			stops.push_back(foo);
-		} while (true);
-		l.setStops(stops);
-		company.setLine(id_number, l);
-		linesChanged= true;
-		cout << "Line updated successfully.\nPress any key to continue.";
-		getchar();
+	cout << "The current stops for line " << id_number << " are ";
+	for (int i = 0; i < l.getStops().size(); i++){
+		cout << l.getStops().at(i);
+		if (i != l.getStops().size() - 1) cout << ", ";
+		else cout << ".\n";
+	}
+	string foo;
+	vector<string> stops;
+	do {
+		cout << "Insert the new stops (Press enter twice to stop): ";
+		getline(cin, foo);
+		if(foo == "") break;
+		stops.push_back(foo);
+	} while (true);
+	l.setStops(stops);
+	company.setLine(id_number, l);
+	linesChanged= true;
+	cout << "Line updated successfully.\nPress any key to continue.";
+	getchar();
 }
 void Application::linesUpdateTimes(int id_number) {
 	Line l = company.getLines()[id_number];
@@ -373,8 +373,12 @@ int Application::chooseLine() {
 	return lineID;
 }
 
-int Application::printTimes(vector<Clock> time, int freq, int n, int d){
+void Application::printTimes(vector<Clock> time, Line line, int &n, int d){
+	vector<string> stops = line.getStops();
+	int freq = line.getFreq();
+	int t;
 	bool end = false;
+	cout << std::left;
 	while(!end){
 		for (int i = 0; i < time.size(); i++) {
 			string v;
@@ -387,10 +391,16 @@ int Application::printTimes(vector<Clock> time, int freq, int n, int d){
 				v = v + "0" + to_string(time.at(i).mins);
 			} else
 				v = v + to_string(time.at(i).mins);
-
-			cout << setw(12) << v;
+			if(d == 1){
+				t= i;
+			}else t = stops.size() -1 -i;
+			if(stops.at(t).size() < 5){
+				cout << setw(5) << v;
+			}else cout << setw(stops.at(t).size()) << v;
+			if(i != stops.size()-1){
+				cout << setw(3) << " ";
+			}else cout << endl;
 		}
-		cout << endl;
 		for(int i=0; i< time.size(); i++){
 			time.at(i) = addTime(freq, time.at(i));
 		}
@@ -403,55 +413,31 @@ int Application::printTimes(vector<Clock> time, int freq, int n, int d){
 			if(n == 0) end = true;
 		}
 	}
-	return n;
 }
-
-void Application::printStops(int id_number, Line& line) {
-	for (int i = 1; i <= line.getStops().size(); i++) {
-		cout << id_number << "." << i << " " << line.getStops().at(i - 1) << " | ";
-	}
-	cout << endl << endl;
-}
-
-void Application::printStopsHeader(const Line& line, int id_number, int direction) {
-	string s;
-	int start, end;
-	if (direction == 1) {
-		start = 1;
-		end = line.getStops().size()+1;
-	} else {
-		start = line.getStops().size();
-		end = 0;
-	}
-	for (int i = start; i != end; i=i+direction) {
-		s = to_string(id_number) + "." + to_string(i);
-		cout << setw(12) << s;
-	}
-	cout << endl;
-	for(int i=1; i<=line.getStops().size(); i++){
-		cout << setw(12) << "-----";
-	}
-	cout << endl;
-}
-
-
 
 void Application::linesSchedule(){
 	int sum;
 	Clock start_time;
 	start_time.hours = day_start;
 	start_time.mins = 0;
+	int n =0;
 	string s;
 	vector<Clock> time;
 	vector <Clock> time2;
 
 	Line line = company.getLines()[chooseLine()];
-	printStops(line.getId(), line);
-	int freq = line.getFreq();
 
 	cout << "Direction: " << line.getStops().at(0);
 	cout << " to " << line.getStops().at(line.getStops().size()-1) << endl << endl;
-	printStopsHeader(line, line.getId(), 1);
+	cout << std::left;
+	for(int i=0; i< line.getStops().size(); i++){
+		if(line.getStops().at(i).size() < 5){
+			cout << setw(5) << line.getStops().at(i);
+		}else cout << setw(line.getStops().at(i).size()) << line.getStops().at(i);
+		if(i != line.getStops().size()-1){
+			cout << setw(3) << " ";
+		}else cout << endl << endl;
+	}
 
 	time.push_back(start_time);
 	sum = 0;
@@ -459,12 +445,20 @@ void Application::linesSchedule(){
 		sum = sum + line.getTimes().at(i);
 		time.push_back(addTime(sum , start_time));
 	}
-	int n= printTimes(time, freq, n, 1);
+	printTimes(time, line, n, 1);
 	cout << endl << endl;
 
 	cout << "Direction: " << line.getStops().at(line.getStops().size()-1);
 	cout << " to " << line.getStops().at(0) << endl << endl;
-	printStopsHeader(line, line.getId(), -1);
+	cout << std::left;
+	for(int i = line.getStops().size()-1; i >= 0; i--){
+		if(line.getStops().at(i).size() < 5){
+			cout << setw(5) << line.getStops().at(i);
+		}else cout << setw(line.getStops().at(i).size()) << line.getStops().at(i);
+		if( i != 0){
+			cout << setw(3) << " ";
+		}else cout << endl << endl;
+	}
 	start_time = addTime(sum, start_time);
 	time2.push_back(start_time);
 	sum = 0;
@@ -472,7 +466,7 @@ void Application::linesSchedule(){
 		sum = sum + line.getTimes().at(i);
 		time2.push_back(addTime(sum , start_time));
 	}
-	printTimes(time2, freq, n, -1);
+	printTimes(time2, line, n, -1);
 
 }
 
@@ -629,16 +623,16 @@ void Application::driversShow(){
 
 void Application::printDrivers() {
 	DriverList drivers = company.getDrivers();
-		cout << std::left << setw(4) << "ID" << setw(3) << " " << setw(30) << "NAME" << setw(3) << " " << setw(7);
-		cout << "H/SHIFT" << setw(3) << " " << setw(6) << "H/WEEK" << setw(3) << " " << setw(6) << "H/REST" << endl;
-		for (auto& x: drivers) {
-			Driver d = x.second;
-			cout << std::left << setw(4) << d.getId() << setw(3) << " ";
-			cout << setw(30) << d.getName() << setw(3) << " ";
-			cout << std::right << setw(7) << d.getMaxShift() << setw(3) << " ";
-			cout << setw(6) << d.getMaxWeek() << setw(3) << " ";
-			cout << setw(6) << d.getMinRest()<< endl;
-		}
+	cout << std::left << setw(4) << "ID" << setw(3) << " " << setw(30) << "NAME" << setw(3) << " " << setw(7);
+	cout << "H/SHIFT" << setw(3) << " " << setw(6) << "H/WEEK" << setw(3) << " " << setw(6) << "H/REST" << endl;
+	for (auto& x: drivers) {
+		Driver d = x.second;
+		cout << std::left << setw(4) << d.getId() << setw(3) << " ";
+		cout << setw(30) << d.getName() << setw(3) << " ";
+		cout << std::right << setw(7) << d.getMaxShift() << setw(3) << " ";
+		cout << setw(6) << d.getMaxWeek() << setw(3) << " ";
+		cout << setw(6) << d.getMinRest()<< endl;
+	}
 }
 void Application::driversDetailShow(int id_number){
 	Driver driver = company.getDrivers()[id_number];
@@ -731,16 +725,16 @@ void Application::driversUpdateMaxShift(int id_number){
 	cout << "The current daily shift for driver " << id_number << " is " << d.getMaxShift() << "h.";
 	do {
 		bool success = true;
-				cout << "Insert the new daily shift(h): ";
-				getline(cin,foo);
-				try{
-					shift = stoi(foo, nullptr);
-				}
-				catch(const std::invalid_argument& ia){
-					cout << "Invalid input. Reenter." << endl;
-					success = false;
-				}
-				if(success) break;
+		cout << "Insert the new daily shift(h): ";
+		getline(cin,foo);
+		try{
+			shift = stoi(foo, nullptr);
+		}
+		catch(const std::invalid_argument& ia){
+			cout << "Invalid input. Reenter." << endl;
+			success = false;
+		}
+		if(success) break;
 	} while (true);
 	d.setMaxShift(shift);
 	company.setDriver(id_number, d);
@@ -756,16 +750,16 @@ void Application::driversUpdateMaxWeek(int id_number){
 	cout << "The current weekly shift for driver " << id_number << " is " << d.getMaxWeek() << "h.";
 	do {
 		bool success = true;
-				cout << "Insert the new weekly shift(h): ";
-				getline(cin,foo);
-				try{
-					shift = stoi(foo, nullptr);
-				}
-				catch(const std::invalid_argument& ia){
-					cout << "Invalid input. Reenter." << endl;
-					success = false;
-				}
-				if(success) break;
+		cout << "Insert the new weekly shift(h): ";
+		getline(cin,foo);
+		try{
+			shift = stoi(foo, nullptr);
+		}
+		catch(const std::invalid_argument& ia){
+			cout << "Invalid input. Reenter." << endl;
+			success = false;
+		}
+		if(success) break;
 	} while (true);
 	d.setMaxWeek(shift);
 	company.setDriver(id_number, d);
@@ -781,16 +775,16 @@ void Application::driversUpdateMinRest(int id_number){
 	cout << "The current daily shift for driver " << id_number << " is " << d.getMinRest() << "h.";
 	do {
 		bool success = true;
-				cout << "Insert the new minimum rest(h): ";
-				getline(cin,foo);
-				try{
-					rest = stoi(foo, nullptr);
-				}
-				catch(const std::invalid_argument& ia){
-					cout << "Invalid input. Reenter." << endl;
-					success = false;
-				}
-				if(success) break;
+		cout << "Insert the new minimum rest(h): ";
+		getline(cin,foo);
+		try{
+			rest = stoi(foo, nullptr);
+		}
+		catch(const std::invalid_argument& ia){
+			cout << "Invalid input. Reenter." << endl;
+			success = false;
+		}
+		if(success) break;
 	} while (true);
 	d.setMinRest(rest);
 	company.setDriver(id_number, d);
@@ -874,8 +868,8 @@ void Application::displayMainMenu(){
 
 void Application::displayUpdateMenu(int id_number, string identifier){
 	if (identifier == LINES_IDENTIFIER){
-	cout << "Lines Update - Line " << id_number << " selected" << endl;
-	cout << "     Frequency, Stops, Times" << endl;
+		cout << "Lines Update - Line " << id_number << " selected" << endl;
+		cout << "     Frequency, Stops, Times" << endl;
 	} else if (identifier == DRIVERS_IDENTIFIER) {
 		cout << "Drivers Update - Driver " << id_number << " selected" << endl;
 		cout << "     Name, H/Day, H/Week, H/Rest" << endl;
