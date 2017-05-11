@@ -918,6 +918,54 @@ void Application::updateMenu(int id_number, string identifier){
 	} while(true);
 }
 
+vector<string> Application::linesToStrings() {
+	vector<string> v;
+	string next;
+	LineList lines = company.getLines();
+	for (auto &item: lines) {
+		Line l = item.second;
+		next.clear();
+		next = to_string(l.getId()) + " ; " + to_string(l.getFreq()) + " ; ";
+		for (size_t x = 0; x < l.getStops().size(); x++) {
+			next += l.getStops().at(x);
+			if (x != l.getStops().size() - 1) {
+				next += ", ";
+			}
+			else {
+				next += " ; ";
+			}
+		}
+		for (size_t x = 0; x < l.getTimes().size(); x++) {
+			next += to_string(l.getTimes().at(x));
+			if (x != l.getTimes().size() - 1) next += ", ";
+		}
+		v.push_back(next);
+	}
+	return v;
+}
+
+vector<string> Application::driversToStrings() {
+	vector<string> v;
+	string next;
+	DriverList drivers = company.getDrivers();
+	for (auto &item: drivers) {
+		Driver d = item.second;
+		next.clear();
+		next = to_string(d.getId()) + " ; " + d.getName() + " ; " + to_string(d.getMaxShift()) + " ; " + to_string(d.getMaxWeek()) + " ; " +
+				to_string(d.getMinRest());
+		v.push_back(next);
+	}
+	return v;
+}
+
+void Application::saveChanges(string identifier) {
+	ofstream output_file;
+	string newStrings;
+	if (identifier == LINES_IDENTIFIER) {
+
+	}
+}
+
 Application::~Application() {
 	// TODO Auto-generated destructor stub
 }
