@@ -224,6 +224,7 @@ void Application::linesUpdateFreq(int id_number) {
 	} while (true);
 	l.setFreq(freq);
 	company.setLine(id_number, l);
+	linesChanged= true;
 	cout << "Line updated successfully.\nPress any key to continue.";
 	getchar();
 }
@@ -246,6 +247,7 @@ void Application::linesUpdateStops(int id_number) {
 		} while (true);
 		l.setStops(stops);
 		company.setLine(id_number, l);
+		linesChanged= true;
 		cout << "Line updated successfully.\nPress any key to continue.";
 		getchar();
 }
@@ -279,6 +281,7 @@ void Application::linesUpdateTimes(int id_number) {
 	} while (true);
 	l.setTimes(times);
 	company.setLine(id_number, l);
+	linesChanged= true;
 	cout << "Line updated successfully.\nPress any key to continue.";
 	getchar();
 }
@@ -295,8 +298,8 @@ void Application::linesDelete(){
 		}
 	} while (true);
 	company.eraseLine(id);
-	cout << "Line " << id << " deleted successfully.\n";
 	linesChanged= true;
+	cout << "Line " << id << " deleted successfully.\n";
 }
 
 void Application::searchStops(string stop, vector<Stop> &stopsDirect, vector<Stop> &stopsInverse){
@@ -716,6 +719,7 @@ void Application::driversUpdateName(int id_number){
 	getline(cin, foo);
 	d.setName(foo);
 	company.setDriver(id_number, d);
+	driversChanged = true;
 	cout << "Driver updated successfully.\nPress any key to continue.";
 	getchar();
 }
@@ -740,6 +744,7 @@ void Application::driversUpdateMaxShift(int id_number){
 	} while (true);
 	d.setMaxShift(shift);
 	company.setDriver(id_number, d);
+	driversChanged = true;
 	cout << "Driver updated successfully.\nPress any key to continue.";
 	getchar();
 }
@@ -764,6 +769,7 @@ void Application::driversUpdateMaxWeek(int id_number){
 	} while (true);
 	d.setMaxWeek(shift);
 	company.setDriver(id_number, d);
+	driversChanged = true;
 	cout << "Driver updated successfully.\nPress any key to continue.";
 	getchar();
 }
@@ -788,12 +794,13 @@ void Application::driversUpdateMinRest(int id_number){
 	} while (true);
 	d.setMinRest(rest);
 	company.setDriver(id_number, d);
+	driversChanged = true;
 	cout << "Driver updated successfully.\nPress any key to continue.";
 	getchar();
 }
 
 void Application::driversDelete(){
-	driversShow();
+	printDrivers();
 	int id;
 	do {
 		cout << "Driver's id:";
