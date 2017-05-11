@@ -21,6 +21,9 @@ Application::Application() {
 	day_end = 23;
 	linesChanged = false;
 	driversChanged = false;
+	INSIDE_SUBMENU = false;
+	LINES_IDENTIFIER = "lines";
+	DRIVERS_IDENTIFIER = "drivers";
 	LineList l;
 	DriverList d;
 	Company c = Company("semprarrolar",l, d) ;
@@ -47,32 +50,28 @@ void Application::loadFiles(){
 	ifstream driversfile;
 	string l;
 	string d;
-	cout << "Insert lines's file name" << endl;
-	getline(cin,linesFilepath);
-	linesfile.open(linesFilepath);
 
-	while(linesfile.fail()){
-		cout << "Error opening file. Try again.";
-		cout << "Insert lines's file name" << endl;
+	do {
+		cout << "Insert lines filename: ";
 		getline(cin,linesFilepath);
 		linesfile.open(linesFilepath);
-	}
+		if (!linesfile.fail()) break;
+		else cout << "Error opening file. Try again.\n";
+	} while (true);
+
 	while(!linesfile.eof()) {
 		getline(linesfile,l);
 		company.addLine(readLine(l));
 	}
 	linesfile.close();
 
-	cout << "Insert drivers' file name" << endl;
-	getline(cin,driversFilepath);
-	driversfile.open(driversFilepath);
-
-	while(driversfile.fail()){
-		cout << "Error opening file. Try again.";
-		cout << "Insert drivers' file name" << endl;
+	do {
+		cout << "Insert drivers filename: ";
 		getline(cin,driversFilepath);
 		driversfile.open(driversFilepath);
-	}
+		if (!driversfile.fail()) break;
+		else cout << "Error opening file. Try again.\n";
+	} while (true);
 
 	while(!driversfile.eof()) {
 		getline(driversfile,d);
@@ -85,16 +84,19 @@ void Application::loadFiles(){
 void Application::linesShow(){
 	linesSummaryShow();
 	int id;
+	string foo;
 	do {
-		cout << "Line's id:";
-		validArg(id);
-		if (validIdLines(id)) break;
+		cout << "Do you wish to view detailed information about a line (Y/N)?: ";
+		getline(cin, foo);
+		normalize(foo);
+		if (foo == "y") {
+			linesDetailShow(chooseLine());
+		} else if (foo == "n") break;
 		else {
-			cout << "Invalid id. Reenter." << endl;
+			cout << "Invalid option. Reenter." << endl;
 		}
 	} while (true);
 	cout << endl;
-	linesDetailShow(id);
 }
 
 void Application::linesDetailShow(int id_number) {
@@ -113,7 +115,7 @@ void Application::linesDetailShow(int id_number) {
 	for (int i = 0; i < line.getTimes().size(); i++) {
 		cout << line.getTimes().at(i);
 		if (i != (line.getTimes().size() - 1)) cout << ", ";
-		else cout << endl;
+		else cout << endl << endl;
 	}
 
 }
@@ -183,6 +185,7 @@ void Application::linesCreate(){
 
 void Application::linesUpdate(){
 	int id;
+	linesSummaryShow();
 	do {
 		cout << "Insert the line to change: ";
 		validArg(id);
@@ -196,9 +199,9 @@ void Application::linesUpdate(){
 
 	linesDetailShow(id);
 	do {
-		displayUpdateMenu();
-		updateMenu(id);
-	} while (true);
+		displayUpdateMenu(id, LINES_IDENTIFIER);
+		updateMenu(id, LINES_IDENTIFIER);
+	} while (INSIDE_SUBMENU);
 }
 
 void Application::linesUpdateFreq(int id_number) {
@@ -221,7 +224,7 @@ void Application::linesUpdateFreq(int id_number) {
 	} while (true);
 	l.setFreq(freq);
 	company.setLine(id_number, l);
-	cout << "Press any key to continue...";
+	cout << "Line updated successfully.\nPress any key to continue.";
 	getchar();
 }
 
@@ -243,6 +246,8 @@ void Application::linesUpdateStops(int id_number) {
 		} while (true);
 		l.setStops(stops);
 		company.setLine(id_number, l);
+		cout << "Line updated successfully.\nPress any key to continue.";
+		getchar();
 }
 void Application::linesUpdateTimes(int id_number) {
 	Line l = company.getLines()[id_number];
@@ -274,7 +279,8 @@ void Application::linesUpdateTimes(int id_number) {
 	} while (true);
 	l.setTimes(times);
 	company.setLine(id_number, l);
-
+	cout << "Line updated successfully.\nPress any key to continue.";
+	getchar();
 }
 
 void Application::linesDelete(){
@@ -351,13 +357,14 @@ int Application::chooseLine() {
 			Line l = x.second;
 			cout << l.getId() << " ";
 		}
+		cout << endl;
 	}
 	do {
-		cout << "Choose line:";
+		cout << "Choose line: ";
 		validArg(lineID);
 		if (validIdLines(lineID)) break;
 		else {
-			cout << "Invalid id. Reenter." << endl;
+			cout << "Invalid id. Reenter.";
 		}
 	} while (true);
 	return lineID;
@@ -558,7 +565,7 @@ void Application::linesTravelTimes(){
 			}
 			else cout << times.at(i) << "min";
 			cout << " - (";
-			for (int x = 0; x < routes.at(i).size(); x++) {
+			for (size_t x = 0; x < routes.at(i).size(); x++) {
 				cout << routes.at(i).at(x);
 				if (x != routes.at(i).size() - 1) {
 					cout << ", ";
@@ -609,7 +616,7 @@ void Application::linesStopTimetable(){
 
 }
 
-void Application::driversSummaryShow(){
+void Application::driversShow(){
 	DriverList drivers = company.getDrivers();
 	cout << std::left << setw(4) << "ID" << setw(3) << " " << setw(30) << "NAME" << setw(3) << " " << setw(7);
 	cout << "H/SHIFT" << setw(3) << " " << setw(6) << "H/WEEK" << setw(3) << " " << setw(6) << "H/REST" << endl;
@@ -617,36 +624,28 @@ void Application::driversSummaryShow(){
 		Driver d = x.second;
 		cout << std::left << setw(4) << d.getId() << setw(3) << " ";
 		cout << setw(30) << d.getName() << setw(3) << " ";
-		cout << std::right << setw(7) << d.getShiftMaxDuration() << setw(3) << " ";
-		cout << setw(6) << d.getMaxWeekWorkingTime() << setw(3) << " ";
-		cout << setw(6) << d.getMinRestTime()<< endl;
+		cout << std::right << setw(7) << d.getMaxShift() << setw(3) << " ";
+		cout << setw(6) << d.getMaxWeek() << setw(3) << " ";
+		cout << setw(6) << d.getMinRest()<< endl;
 	}
-	cout << endl;
+	cout << endl << endl;
+	cout << "Press any key to continue.";
+	getchar();
 }
 
-void Application::driversShow(){
-	driversSummaryShow();
-	int id;
-	do {
-		cout << "Driver's id:";
-		validArg(id);
-		if (validIdDrivers(id)) break;
-		else {
-			cout << "Invalid id. Reenter." << endl;
-		}
-	} while (true);
-	Driver driver = company.getDrivers()[id];
+void Application::driversDetailShow(int id_number){
+	Driver driver = company.getDrivers()[id_number];
 	cout << std::left;
 	cout << setw(15) << "ID: ";
 	cout << driver.getId() << endl;
 	cout << setw(15) << "Name: ";
 	cout << driver.getName() << endl;
 	cout << setw(15) << "Daily shift: ";
-	cout << driver.getMaxWeekWorkingTime() << "h\n";
+	cout << driver.getMaxWeek() << "h\n";
 	cout << setw(15) << "Weekly shift: ";
-	cout << driver.getShiftMaxDuration() << "h\n";
+	cout << driver.getMaxShift() << "h\n";
 	cout << setw(15) << "Resting hours: ";
-	cout << driver.getMinRestTime() << "h\n\n";
+	cout << driver.getMinRest() << "h\n\n";
 }
 
 void Application::driversCreate(){
@@ -677,19 +676,120 @@ void Application::driversCreate(){
 
 	newdriver.setId(id_number);
 	newdriver.setName(name);
-	newdriver.setMax_shift(max_shift);
-	newdriver.setMax_week(max_week);
-	newdriver.setMin_rest(min_rest);
+	newdriver.setMaxShift(max_shift);
+	newdriver.setMaxWeek(max_week);
+	newdriver.setMinRest(min_rest);
 	company.addDriver(newdriver);
 	driversChanged = true;
 }
 
 void Application::driversUpdate(){
+	int id;
+	driversShow();
+	do {
+		cout << "Insert the driver to change: ";
+		validArg(id);
+		if (validIdDrivers(id)) break;
+		else {
+			cout << "Invalid id. Reenter." << endl;
+		}
+	} while (true);
 
+	cout << endl;
+
+	driversDetailShow(id);
+	do {
+		displayUpdateMenu(id, DRIVERS_IDENTIFIER);
+		updateMenu(id, DRIVERS_IDENTIFIER);
+	} while (INSIDE_SUBMENU);
+}
+
+void Application::driversUpdateName(int id_number){
+	Driver d = company.getDrivers()[id_number];
+	string foo;
+	cout << "The current name for driver " << id_number << " is " << d.getName() << endl;
+	cout << "Insert the new name: ";
+	getline(cin, foo);
+	d.setName(foo);
+	company.setDriver(id_number, d);
+	cout << "Driver updated successfully.\nPress any key to continue.";
+	getchar();
+}
+
+void Application::driversUpdateMaxShift(int id_number){
+	Driver d = company.getDrivers()[id_number];
+	string foo;
+	int shift;
+	cout << "The current daily shift for driver " << id_number << " is " << d.getMaxShift() << "h.";
+	do {
+		bool success = true;
+				cout << "Insert the new daily shift(h): ";
+				getline(cin,foo);
+				try{
+					shift = stoi(foo, nullptr);
+				}
+				catch(const std::invalid_argument& ia){
+					cout << "Invalid input. Reenter." << endl;
+					success = false;
+				}
+				if(success) break;
+	} while (true);
+	d.setMaxShift(shift);
+	company.setDriver(id_number, d);
+	cout << "Driver updated successfully.\nPress any key to continue.";
+	getchar();
+}
+
+void Application::driversUpdateMaxWeek(int id_number){
+	Driver d = company.getDrivers()[id_number];
+	string foo;
+	int shift;
+	cout << "The current weekly shift for driver " << id_number << " is " << d.getMaxWeek() << "h.";
+	do {
+		bool success = true;
+				cout << "Insert the new weekly shift(h): ";
+				getline(cin,foo);
+				try{
+					shift = stoi(foo, nullptr);
+				}
+				catch(const std::invalid_argument& ia){
+					cout << "Invalid input. Reenter." << endl;
+					success = false;
+				}
+				if(success) break;
+	} while (true);
+	d.setMaxWeek(shift);
+	company.setDriver(id_number, d);
+	cout << "Driver updated successfully.\nPress any key to continue.";
+	getchar();
+}
+
+void Application::driversUpdateMinRest(int id_number){
+	Driver d = company.getDrivers()[id_number];
+	string foo;
+	int rest;
+	cout << "The current daily shift for driver " << id_number << " is " << d.getMinRest() << "h.";
+	do {
+		bool success = true;
+				cout << "Insert the new minimum rest(h): ";
+				getline(cin,foo);
+				try{
+					rest = stoi(foo, nullptr);
+				}
+				catch(const std::invalid_argument& ia){
+					cout << "Invalid input. Reenter." << endl;
+					success = false;
+				}
+				if(success) break;
+	} while (true);
+	d.setMinRest(rest);
+	company.setDriver(id_number, d);
+	cout << "Driver updated successfully.\nPress any key to continue.";
+	getchar();
 }
 
 void Application::driversDelete(){
-	driversSummaryShow();
+	driversShow();
 	int id;
 	do {
 		cout << "Driver's id:";
@@ -709,6 +809,7 @@ void Application::exitMenu(){
 	cout << "bye bye";
 	exit(0);
 }
+
 
 void Application::setupMenu(){
 	mainMenu["lines show"] = &Application::linesShow;
@@ -738,27 +839,36 @@ void Application::setupMenu(){
 	mainMenu["du"] = &Application::driversUpdate;
 	mainMenu["dd"] = &Application::driversDelete;
 	mainMenu["e"] = &Application::exitMenu;
-	//update menu
+	//line update menu
 	lineUpdateMenu["frequency"] = &Application::linesUpdateFreq;
 	lineUpdateMenu["stops"] = &Application::linesUpdateStops;
 	lineUpdateMenu["times"] = &Application::linesUpdateTimes;
+	//driver update menu
+	driverUpdateMenu["name"] = &Application::driversUpdateName;
+	driverUpdateMenu["h/day"] = &Application::driversUpdateMaxShift;
+	driverUpdateMenu["h/week"] = &Application::driversUpdateMaxWeek;
+	driverUpdateMenu["h/rest"] = &Application::driversUpdateMinRest;
 }
 
 void Application::displayMainMenu(){
 	cout << "\n";
 	cout << "Lines" << endl;
 	cout << "     Show, Create, Update, Delete" << endl;
-	cout << "     Schedules, Travel time" << endl;
+	cout << "     Schedules, Travel Time" << endl;
 	cout << "     Stop Lines, Stop Timetable" << endl;
 	cout << "Drivers" << endl;
 	cout << "     Show, Create, Update, Delete" << endl;
 	cout << "Exit" << endl;
 }
 
-void Application::displayUpdateMenu(){
-	cout << "\n";
-	cout << "Lines Update" << endl;
+void Application::displayUpdateMenu(int id_number, string identifier){
+	if (identifier == LINES_IDENTIFIER){
+	cout << "Lines Update - Line " << id_number << " selected" << endl;
 	cout << "     Frequency, Stops, Times" << endl;
+	} else if (identifier == DRIVERS_IDENTIFIER) {
+		cout << "Drivers Update - Driver " << id_number << " selected" << endl;
+		cout << "     Name, H/Day, H/Week, H/Rest" << endl;
+	}
 	cout << "     Back" << endl;
 }
 
@@ -766,24 +876,33 @@ void Application::inputMenu(){
 	string command;
 	displayMainMenu();
 	do {
-		cout << "Command:";
+		cout << "Command: ";
 		getline(cin,command);
 		normalize(command);
 		if(mainMenu.find(command) != mainMenu.end()){
 			(this->*mainMenu[command])();
+			break;
 		} else cout << "Invalid command.\n";
 	} while(true);
 }
 
-void Application::updateMenu(int id_number){
+void Application::updateMenu(int id_number, string identifier){
+	map<string,UpdateMenuOption> updateMenu;
+	if (identifier == LINES_IDENTIFIER) updateMenu = lineUpdateMenu;
+	else if (identifier == DRIVERS_IDENTIFIER)  updateMenu = driverUpdateMenu;
 	string command;
 	do {
-		cout << "Command:";
+		INSIDE_SUBMENU = true;
+		cout << "Command: ";
 		getline(cin,command);
 		normalize(command);
-		if (command == "back") break;
-		else if(lineUpdateMenu.find(command) != lineUpdateMenu.end()){
-			(this->*lineUpdateMenu[command])(id_number);
+		if (command == "back") {
+			INSIDE_SUBMENU = false;
+			break;
+		}
+		else if(updateMenu.find(command) != lineUpdateMenu.end()){
+			(this->*updateMenu[command])(id_number);
+			break;
 		} else cout << "Invalid command.\n";
 	} while(true);
 }

@@ -13,18 +13,19 @@
 using namespace std;
 
 void validArg(int &variable){
-	variable = 0;
+	bool success = true;
 	string foo;
-	while(true){
+	do{
 		getline(cin,foo);
 		try{
 			variable = stoi(foo,nullptr);
 		}
 		catch(const std::invalid_argument& ia){
 			cout << "Invalid input. Reenter." << endl;
+			success = false;
 		}
-		if(variable) break;
-	}
+		if(success) break;
+	} while (true);
 }
 
 // Helpers for string processing
@@ -101,11 +102,11 @@ Driver readDriver(string &d){
 	next(foo2,d);
 	newdriver.setName(foo2);
 	next(foo,d,";");
-	newdriver.setMax_shift(foo);
+	newdriver.setMaxShift(foo);
 	next(foo,d,";");
-	newdriver.setMax_week(foo);
+	newdriver.setMaxWeek(foo);
 	next(foo,d,";");
-	newdriver.setMin_rest(foo);
+	newdriver.setMinRest(foo);
 	return newdriver;
 }
 

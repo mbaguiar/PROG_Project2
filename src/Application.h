@@ -31,8 +31,12 @@ private:
 	int day_end;
 	map<string,MenuOption> mainMenu;
 	map<string,UpdateMenuOption> lineUpdateMenu;
+	map<string,UpdateMenuOption> driverUpdateMenu;
 	string linesFilepath;
 	string driversFilepath;
+	bool INSIDE_SUBMENU;
+	string LINES_IDENTIFIER;
+	string DRIVERS_IDENTIFIER;
 
 public:
 	Application();
@@ -41,11 +45,10 @@ public:
 	void loadFiles();
 	void setupMenu();
 	void displayMainMenu();
-	void displayUpdateMenu();
+	void displayUpdateMenu(int id_number, string identifier);
 	map<string, MenuOption> getMainMenu();
-	void setupLineUpdateMenu();
 	void inputMenu();
-	void updateMenu(int id_number);
+	void updateMenu(int id_number, string identifier);
 	void linesShow();
 	void linesSummaryShow();
 	void linesDetailShow(int id_number);
@@ -64,10 +67,11 @@ public:
 	void linesTravelTimes();
 	void linesStopLines();
 	void linesStopTimetable();
-	void driversSummaryShow();
+	void driversDetailShow(int id_number);
 	void driversShow();
 	void driversCreate();
 	void driversUpdate();
+	void driversUpdateName(int id_number);
 	void driversUpdateMaxShift(int id_number);
 	void driversUpdateMaxWeek(int id_number);
 	void driversUpdateMinRest(int id_number);

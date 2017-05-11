@@ -27,19 +27,20 @@ class Driver{
 
   unsigned int getId() const;
   string getName() const;
-  unsigned int getShiftMaxDuration() const;
-  unsigned int getMaxWeekWorkingTime() const;
-  unsigned int getMinRestTime() const;
+  unsigned int getMaxShift() const;
+  unsigned int getMaxWeek() const;
+  unsigned int getMinRest() const;
   vector<Shift> getShifts() const;
 
   // SET METHODS
 
   void setId(unsigned int id);
   void setName (string name);
-  void setMax_shift(unsigned int max_shift);
-  void setMax_week(unsigned int max_week);
-  void setMin_rest(unsigned int min_rest);
+  void setMaxShift(unsigned int max_shift);
+  void setMaxWeek(unsigned int max_week);
+  void setMinRest(unsigned int min_rest);
   void setShifts(vector<Shift> shifts);
+
 
 };
 

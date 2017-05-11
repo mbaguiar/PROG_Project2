@@ -14,6 +14,8 @@ int main() {
 	Application app;
 	app.setupMenu();
 	app.loadFiles();
+	do {
 	app.inputMenu();
+	} while (true);
 	return 0;
 }
