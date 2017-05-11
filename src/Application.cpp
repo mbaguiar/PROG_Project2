@@ -904,7 +904,7 @@ void Application::updateMenu(int id_number, string identifier){
 			INSIDE_SUBMENU = false;
 			break;
 		}
-		else if(updateMenu.find(command) != lineUpdateMenu.end()){
+		else if(updateMenu.find(command) != updateMenu.end()){
 			(this->*updateMenu[command])(id_number);
 			break;
 		} else cout << "Invalid command.\n";
