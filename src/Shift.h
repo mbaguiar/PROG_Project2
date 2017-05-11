@@ -16,7 +16,7 @@ class Shift{
   unsigned int endTime;   
 
  public:
-  Shift(unsigned int busLineId, unsigned int driverId, unsigned int busNumber, unsigned int startTime, unsigned int endTime);
+  Shift(unsigned int busLineId, unsigned int driverId, unsigned int busOrderNumber, unsigned int startTime, unsigned int endTime);
 
   // GET METHODS
 

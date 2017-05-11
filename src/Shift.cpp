@@ -1,6 +1,12 @@
 #include "Shift.h"
 
-Shift::Shift(  unsigned int linha, unsigned int condutor, unsigned int autocarro, unsigned int inicio, unsigned int fim){}
+Shift::Shift(unsigned int busLineId, unsigned int driverId, unsigned int busOrderNumber, unsigned int startTime, unsigned int endTime){
+	this->busLineId = busLineId;
+	this->driverId = driverId;
+	this->busOrderNumber = busOrderNumber;
+	this->startTime = startTime;
+	this->endTime = endTime;
+}
 
 // metodos get
 unsigned int Shift::getBusLineId() const{

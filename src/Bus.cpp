@@ -1,10 +1,12 @@
 #include "Bus.h"
 
 
-Bus::  Bus(unsigned int id, unsigned int driver, unsigned int line){
-
-  // INITIALISATION CODE GOES IN HERE
-  
+Bus::Bus(unsigned int orderInLine, unsigned int driverId, unsigned int lineId){
+	this->orderInLine = orderInLine;
+	this->driverId = driverId;
+	this->lineId = lineId;
+	vector<Shift> s;
+	schedule = s;
 }
 
 ////////////////////////////////
@@ -26,11 +28,22 @@ vector<Shift> Bus::getSchedule() const{
   return schedule;
 }
 
+void Bus::setOrderInLine(unsigned int orderInLine){
+	this->orderInLine = orderInLine;
+}
 
-//////////////////////////////
-// metodos set
-/////////////////////////////
+void Bus::setLineId(unsigned int lineId){
+	this->lineId = lineId;
+}
 
-////////////////////////////
-// outher methods
-///////////////////////////
+void Bus::setDriverId(unsigned int driverId){
+	this->driverId = driverId;
+}
+
+void Bus::setSchedule(vector<Shift> schedule){
+	this->schedule = schedule;
+}
+
+void Bus::addShift(Shift shift){
+	schedule.push_back(shift);
+}
