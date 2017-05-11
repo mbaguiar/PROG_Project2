@@ -75,6 +75,9 @@ public:
 	void driversUpdateMaxWeek(int id_number);
 	void driversUpdateMinRest(int id_number);
 	void driversDelete();
+	vector<string> linesToStrings();
+	vector<string> driversToStrings();
+	void saveChanges(string identifier);
 	void exitMenu();
 	virtual ~Application();
 };
