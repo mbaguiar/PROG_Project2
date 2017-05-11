@@ -16,6 +16,8 @@ int main() {
 	app.loadFiles();
 	do {
 	app.inputMenu();
+	cout << "Press any key to continue.";
+	getchar();
 	} while (true);
 	return 0;
 }

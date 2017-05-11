@@ -838,7 +838,7 @@ void Application::driversUpdateName(int id_number){
 	d.setName(foo);
 	company.setDriver(id_number, d);
 	driversChanged = true;
-	cout << "Driver updated successfully.\nPress any key to continue.";
+	cout << "Driver updated successfully.\n to continue.";
 	getchar();
 }
 
@@ -923,7 +923,7 @@ void Application::driversDelete(){
 	do {
 		cout << "Driver's id:";
 		validArg(id);
-		if (validIdLines(id)) break;
+		if (validIdDrivers(id)) break;
 		else {
 			cout << "Invalid id. Reenter." << endl;
 		}
@@ -935,7 +935,7 @@ void Application::driversDelete(){
 }
 
 void Application::exitMenu(){
-	cout << "bye bye";
+	saveChanges();
 	exit(0);
 }
 
@@ -1076,14 +1076,72 @@ vector<string> Application::driversToStrings() {
 	return v;
 }
 
-void Application::saveChanges(string identifier) {
+void Application::changeFile(string type) {
 	ofstream output_file;
-	string newStrings;
-	if (identifier == LINES_IDENTIFIER) {
+	string path;
+	vector<string> newStrings;
 
+	if (type == "lines") {
+		if (!linesFilepath.empty()) {
+			path = linesFilepath;
+		}
+		else {
+			cout << "Insert the name of the file to save " << type << " to (e.g. 'lines.txt'): ";
+			getline(cin, path);
+		}
+		newStrings = linesToStrings();
+	}
+	else {
+		if (!driversFilepath.empty()) {
+			path = driversFilepath;
+		}
+		else {
+			cout << "Insert the name of the file to save " << type << " to (e.g. 'drivers.txt'): ";
+			getline(cin, path);
+		}
+		newStrings = driversToStrings();
+
+	}
+
+	output_file.open(path);
+
+	if (output_file.fail()) {
+		cerr << "The output file could not be opened.\n";
+	}
+	else {
+
+		for (int i = 0; i < newStrings.size(); i++) {
+			output_file << newStrings.at(i);
+			if (i != newStrings.size() - 1) output_file << endl;
+		}
+		type.at(0) = toupper(type.at(0));
+		cout << "Changes to " << type << " file ('" << path << "') successfully deployed.\n";
+		if (type == "lines") linesChanged = false;
+		else driversChanged = false;
+
+		output_file.close();
 	}
 }
 
+
+void Application::saveChanges() {
+	string command;
+	if (linesChanged || driversChanged) {
+		cout << "There are changes to be deployed to the files.\n";
+		do {
+			cout << "Would you like to save those changes (Y/N) ? ";
+			getline(cin, command);
+			if (command == "Y" || command == "y") {
+				if(linesChanged) changeFile("lines");
+				if(driversChanged) changeFile("drivers");
+				break;
+			}else if ( command == "N" || command == "n" ) break;
+			else{
+				cout << "Invalid option.\n";
+			}
+		} while (true);
+	}
+}
 Application::~Application() {
 	// TODO Auto-generated destructor stub
 }
