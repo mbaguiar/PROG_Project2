@@ -470,6 +470,44 @@ void Application::linesSchedule(){
 
 }
 
+void Application::route(Stop stop1, Stop stop2, int pos1, int pos2, int &duration, vector<string> &route){
+	duration =0;
+	int id1 = stop1.getLineId();
+	Line line1 = company.getLines()[id1];
+	int id2 = stop2.getLineId();
+	Line line2 = company.getLines()[id2];
+	if(stop1.getPosInLine() < pos1){
+		for(int i=stop1.getPosInLine(); i<=pos1; i++){
+			route.push_back(line1.getStops().at(i));
+		}
+		for(int i=stop1.getPosInLine(); i<pos1; i++){
+			duration = duration + line1.getTimes().at(i);
+		}
+	}else{
+		for(int i=stop1.getPosInLine(); i>=pos1; i--){
+			route.push_back(line1.getStops().at(i));
+		}
+		for(int i=pos1; i<stop1.getPosInLine(); i++){
+			duration = duration + line1.getTimes().at(i);
+		}
+	}
+	if(stop2.getPosInLine() < pos2){
+		for(int i=pos2-1; i>=stop2.getPosInLine(); i--){
+			route.push_back(line2.getStops().at(i));
+		}
+		for(int i=stop2.getPosInLine(); i<pos2; i++){
+			duration = duration + line2.getTimes().at(i);
+		}
+	}else{
+		for(int i=pos2+1; i>=stop2.getPosInLine(); i--){
+			route.push_back(line2.getStops().at(i));
+		}
+		for(int i=pos2; i<stop2.getPosInLine(); i++){
+			duration = duration + line2.getTimes().at(i);
+		}
+	}
+}
+
 void Application::linesTravelTimes(){
 	string stop1, stop2;
 	vector<Stop> stopsDirect1, stopsDirect2, stopsInverse1, stopsInverse2;
@@ -498,6 +536,11 @@ void Application::linesTravelTimes(){
 	vector<int> directions;
 	vector<int> times;
 	vector<vector <string> > routes;
+
+	vector<int> startIDs;
+	vector<int> endIDs;
+	vector<int> times2;
+	vector<vector <string> > routes2;
 
 	for(int i=0; i<stopsDirect1.size(); i++){
 		for(int x=0; x< stopsDirect2.size(); x++){
@@ -575,6 +618,60 @@ void Application::linesTravelTimes(){
 	}
 	else {
 		cout << "There are no direct routes from " << stop1 << " to " << stop2 << ".\n";
+		for(int i=0; i<stopsDirect1.size(); i++){
+			int id1 = stopsDirect1.at(i).getLineId();
+			for(int x=0; x<stopsDirect2.size(); x++){
+				int id2 = stopsDirect2.at(x).getLineId();
+				int pos1 = -1;
+				int pos2 = -1;
+				for(int t=0; t<company.getLines()[id1].getStops().size(); t++){
+					for(int z=0; z<company.getLines()[id2].getStops().size(); z++){
+						if(company.getLines()[id1].getStops().at(t) == company.getLines()[id2].getStops().at(z)){
+							pos1 = t;
+							pos2 = z;
+						}
+					}
+				}
+				if(pos1 != -1 && pos2 != -1){
+					startIDs.push_back(id1);
+					endIDs.push_back(id2);
+					int temp;
+					vector<string> temp2;
+					route(stopsDirect1.at(i), stopsDirect2.at(x), pos1, pos2, temp, temp2);
+					times2.push_back(temp);
+					routes2.push_back(temp2);
+				}
+			}
+		}
+		if (!startIDs.empty()) {
+			cout << "There are " << startIDs.size() << " non-direct routes from " << stop1 << " to " << stop2 << ":\n";
+			for (int i = 0; i < startIDs.size(); i++) {
+				cout << endl;
+				cout << "Line " << startIDs.at(i) << " and " << endIDs.at(i);
+				cout << " - ";
+				cout << "ETA:";
+				if (times2.at(i) >= 60) {
+					int t = times2.at(i);
+					int h = 0;
+					while (t >= 60) {
+						t -= 60;
+						h++;
+					}
+					cout << h << "h " << t << "min";
+				}
+				else cout << times2.at(i) << "min";
+				cout << " - (";
+				for (size_t x = 0; x < routes2.at(i).size(); x++) {
+					cout << routes2.at(i).at(x);
+					if (x != routes2.at(i).size() - 1) {
+						cout << ", ";
+					}
+					else {
+						cout << ")\n";
+					}
+				}
+			}
+		}
 	}
 }
 

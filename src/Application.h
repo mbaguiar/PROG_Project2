@@ -63,6 +63,7 @@ public:
 	int chooseLine();
 	void printTimes(vector<Clock> time, Line line, int &n, int d);
 	void linesSchedule();
+	void route(Stop stop1, Stop stop2, int pos1, int pos2, int &duration, vector<string> &route);
 	void linesTravelTimes();
 	void linesStopLines();
 	void printTable(Stop stop, int duration, Clock start, string begin, string end, int &n);

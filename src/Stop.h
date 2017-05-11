@@ -36,7 +36,7 @@ public:
 	int getDirection() const;
 	void setName(string name);
 	void setPosInLine(int posInLine);
-	void setLineId(int posInLine);
+	void setLineId(int LineId);
 	void setTimeFromStart(int timeFromStart);
 	void setStopH(int stopH);
 	void setStopM(int stopM);

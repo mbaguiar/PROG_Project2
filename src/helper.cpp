@@ -24,6 +24,10 @@ void validArg(int &variable){
 			cout << "Invalid input. Reenter." << endl;
 			success = false;
 		}
+		if (variable <= 0){
+			cout << "Invalid input. Reenter." << endl;
+			success = false;
+		}
 		if(success) break;
 	} while (true);
 }
