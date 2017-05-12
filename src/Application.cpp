@@ -93,7 +93,6 @@ void Application::loadBuses(){
 			duration = duration + l.getTimes().at(i);
 		}
 		duration = duration+ duration;
-		cout << duration;
 		int n =  (int) ((double) duration / freq + 1.0);
 		for(int i=1; i<=7; i++){
 			for(int t=1; t<=n; t++){
