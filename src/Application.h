@@ -54,12 +54,6 @@ public:
 	void linesShow();
 	void linesSummaryShow();
 	void linesDetailShow(int id_number);
-	void linesCreate();
-	void linesUpdate();
-	void linesUpdateFreq(int id_number);
-	void linesUpdateStops(int id_number);
-	void linesUpdateTimes(int id_number);
-	void linesDelete();
 	void searchStops(string stop, vector<Stop> &stopsDirect, vector<Stop> &stopsInverse);
 	int chooseLine();
 	void printTimes(vector<Clock> time, Line line, int &n, int d);
