@@ -10,6 +10,7 @@
 #include "Line.h"
 #include "Driver.h"
 #include "Stop.h"
+#include "Bus.h"
 
   typedef map<int, Driver> DriverList;
   typedef map<int, Line> LineList;
@@ -22,6 +23,7 @@ class Company{
   string name;
   DriverList drivers;
   LineList lines;
+  vector<Bus> buses;
 
 
  public:
@@ -33,6 +35,7 @@ class Company{
 
   LineList getLines() const; // returns lines map
   DriverList getDrivers() const; // returns drivers map
+  vector<Bus> getBuses() const;
 
 //  Line getLine(int index) const; // returns line of lines vector at index
 //  Driver getDriver(int index) const; // returns driver of drivers vector at index
@@ -43,15 +46,16 @@ class Company{
 
   void setLine(int index, Line newLine); // replaces line at index with newLine
   void setDriver(int index, Driver newDriver); // replaces driver at index with newDriver
+  void setBus(Bus bus);
 
   // OTHER METHODS
 
   void addLine(Line l);
   void addDriver(Driver d);
+  void addBus(Bus b);
   void eraseLine(int id);
   void eraseDriver(int id);
 
-  void distribuiServico();  // funcao que implementa a afectacao de servico
 };
 
 

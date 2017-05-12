@@ -1,9 +1,14 @@
 #include "Bus.h"
 
+Bus::Bus(){
+	orderInLine = 0;
+	lineId = 0;
+	vector<Shift> s;
+	schedule = s;
+}
 
-Bus::Bus(unsigned int orderInLine, unsigned int driverId, unsigned int lineId){
+Bus::Bus(unsigned int orderInLine, unsigned int lineId){
 	this->orderInLine = orderInLine;
-	this->driverId = driverId;
 	this->lineId = lineId;
 	vector<Shift> s;
 	schedule = s;
@@ -14,10 +19,6 @@ Bus::Bus(unsigned int orderInLine, unsigned int driverId, unsigned int lineId){
 ///////////////////////////////
 unsigned int Bus::getBusOrderInLine() const{
   return orderInLine;
-}
-
-unsigned int Bus::getDriverId() const{
-  return driverId;
 }
 
 unsigned int Bus::getLineId() const{
@@ -34,10 +35,6 @@ void Bus::setOrderInLine(unsigned int orderInLine){
 
 void Bus::setLineId(unsigned int lineId){
 	this->lineId = lineId;
-}
-
-void Bus::setDriverId(unsigned int driverId){
-	this->driverId = driverId;
 }
 
 void Bus::setSchedule(vector<Shift> schedule){

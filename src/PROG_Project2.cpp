@@ -14,6 +14,7 @@ int main() {
 	Application app;
 	app.setupMenu();
 	app.loadFiles();
+	app.loadBuses();
 	do {
 	app.inputMenu();
 	cout << "Press any key to continue.";

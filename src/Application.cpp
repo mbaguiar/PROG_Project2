@@ -81,9 +81,40 @@ void Application::loadFiles(){
 
 }
 
+void Application::loadBuses(){
+	LineList lines = company.getLines();
+	for(auto& x:lines){
+		int start = day_start*60;
+		int end = day_end*60;
+		Line l = x.second;
+		int duration = 0;
+		int freq = l.getFreq();
+		for(int i = 0; i<l.getTimes().size(); i++){
+			duration = duration + l.getTimes().at(i);
+		}
+		duration = duration+ duration;
+		cout << duration;
+		int n =  (int) ((double) duration / freq + 1.0);
+		for(int i=1; i<=7; i++){
+			for(int t=1; t<=n; t++){
+				Bus newbus;
+				newbus.setLineId(l.getId());
+				newbus.setOrderInLine(t);
+				while(start<=end){
+				Shift newshift = Shift(l.getId(), 0, t, start, start+duration);
+				newbus.addShift(newshift);
+				start = start+freq*(n-1);
+				}
+				company.addBus(newbus);
+			}
+			start = start + 1440;
+			end = end + 1440;
+		}
+	}
+}
+
 void Application::linesShow(){
 	linesSummaryShow();
-	int id;
 	string foo;
 	do {
 		cout << "Do you wish to view detailed information about a line (Y/N)?: ";
@@ -1031,11 +1062,37 @@ void Application::driversDelete(){
 	driversChanged = true;
 }
 
+void Application::driversShowAssignedWork(){
+
+}
+
+void Application::driversShowFreeTime(){
+
+}
+
+void Application::driversAssignWork(){
+
+}
+
+void Application::busesShow(){
+
+}
+
+void Application::busesShowFreeTime(){
+	Bus bus = company.getBuses().at(0);
+	int day, hours, mins;
+	cout << bus.getSchedule().at(0).getStartTime() << endl;
+	treatTime(day, hours, mins, bus.getSchedule().at(0).getStartTime());
+	cout << "begin:" << day << " " << hours << " " << mins << endl;
+	cout << bus.getSchedule().at(0).getEndTime() << endl;
+	treatTime(day, hours, mins, bus.getSchedule().at(0).getEndTime());
+	cout << "end:" << day << " " << hours << " " << mins << endl;
+}
+
 void Application::exitMenu(){
 	saveChanges();
 	exit(0);
 }
-
 
 void Application::setupMenu(){
 	mainMenu["lines show"] = &Application::linesShow;
@@ -1050,6 +1107,11 @@ void Application::setupMenu(){
 	mainMenu["drivers create"] = &Application::driversCreate;
 	mainMenu["drivers update"] = &Application::driversUpdate;
 	mainMenu["drivers delete"] = &Application::driversDelete;
+	mainMenu["drivers show assigned work"] = &Application::driversShowAssignedWork;
+	mainMenu["drivers show free time"] = &Application::driversShowFreeTime;
+	mainMenu["drivers assign work"] = &Application::driversAssignWork;
+	mainMenu["buses show"] = &Application::busesShow;
+	mainMenu["buses show free time"] = &Application::busesShowFreeTime;
 	mainMenu["exit"] = &Application::exitMenu;
 	//shortcuts
 	mainMenu["ls"] = &Application::linesShow;
@@ -1064,6 +1126,11 @@ void Application::setupMenu(){
 	mainMenu["dc"] = &Application::driversCreate;
 	mainMenu["du"] = &Application::driversUpdate;
 	mainMenu["dd"] = &Application::driversDelete;
+	mainMenu["dsaw"] = &Application::driversShowAssignedWork;
+	mainMenu["dsft"] = &Application::driversShowFreeTime;
+	mainMenu["daw"] = &Application::driversAssignWork;
+	mainMenu["bs"] = &Application::busesShow;
+	mainMenu["bsft"] = &Application::busesShowFreeTime;
 	mainMenu["e"] = &Application::exitMenu;
 	//line update menu
 	lineUpdateMenu["frequency"] = &Application::linesUpdateFreq;
@@ -1084,6 +1151,9 @@ void Application::displayMainMenu(){
 	cout << "     Stop Lines, Stop Timetable" << endl;
 	cout << "Drivers" << endl;
 	cout << "     Show, Create, Update, Delete" << endl;
+	cout << "     Show Assigned Work, Show Free Time, Assign Work" << endl;
+	cout << "Buses" << endl;
+	cout << "     Show, Show Free Time" << endl;
 	cout << "Exit" << endl;
 }
 

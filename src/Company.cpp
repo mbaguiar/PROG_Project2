@@ -35,15 +35,8 @@ DriverList Company::getDrivers() const {
 	return drivers;
 }
 
-//Line Company::getLine(int index) const{
-//	return lines.at(index);
-//}
-//
-//Driver Company::getDriver(int index) const{
-//	return drivers.at(index);
-//}
-
-void Company::distribuiServico(){
+vector<Bus> Company::getBuses() const{
+	return buses;
 }
 
 // MUTATING METHODS
@@ -54,6 +47,10 @@ void Company::addLine(Line l) {
 
 void Company::addDriver(Driver d){
 	drivers[d.getId()] = d;
+}
+
+void Company::addBus(Bus bus){
+	buses.push_back(bus);
 }
 
 void Company::eraseLine(int id){
@@ -70,4 +67,12 @@ void Company::setLine(int index, Line newLine) {
 
 void Company::setDriver(int index, Driver newDriver) {
 	drivers[index] = newDriver;
+}
+
+void Company::setBus(Bus bus){
+	for(int i= 0; i<buses.size(); i++){
+		if(buses.at(i).getLineId() == bus.getLineId() && buses.at(i).getBusOrderInLine() == bus.getBusOrderInLine()){
+			buses.at(i) = bus;
+		}
+	}
 }

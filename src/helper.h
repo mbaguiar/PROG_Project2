@@ -15,6 +15,7 @@ struct Clock{
 };
 
 void validArg(int &variable);
+void treatTime(int &day, int &hours, int &mins, int time);
 void trimstring(string &s);
 void normalize(string &s);
 void next(string &piece, string &line, string separator);

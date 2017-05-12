@@ -142,3 +142,9 @@ Clock subTime(int min, Clock time){
 	}
 	return result;
 }
+
+void treatTime(int &day, int &hours, int &mins, int time){
+	day = time/1440 + 1;
+	hours = (time%1440)/60 ;
+	mins = (time%1440)%60;
+}

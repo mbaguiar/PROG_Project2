@@ -43,6 +43,7 @@ public:
 	bool validIdLines(int id_number);
 	bool validIdDrivers(int id_number);
 	void loadFiles();
+	void loadBuses();
 	void changeFile(string type);
 	void setupMenu();
 	void displayMainMenu();
@@ -78,6 +79,11 @@ public:
 	void driversUpdateMaxWeek(int id_number);
 	void driversUpdateMinRest(int id_number);
 	void driversDelete();
+	void driversShowAssignedWork();
+	void driversShowFreeTime();
+	void driversAssignWork();
+	void busesShow();
+	void busesShowFreeTime();
 	vector<string> linesToStrings();
 	vector<string> driversToStrings();
 	void saveChanges();
