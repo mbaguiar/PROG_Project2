@@ -84,8 +84,6 @@ void Application::loadFiles(){
 void Application::loadBuses(){
 	LineList lines = company.getLines();
 	for(auto& x:lines){
-		int start = day_start*60;
-		int end = day_end*60;
 		Line l = x.second;
 		int duration = 0;
 		int freq = l.getFreq();
@@ -94,20 +92,22 @@ void Application::loadBuses(){
 		}
 		duration = duration+ duration;
 		int n =  (int) ((double) duration / freq + 1.0);
-		for(int i=1; i<=7; i++){
-			for(int t=1; t<=n; t++){
-				Bus newbus;
-				newbus.setLineId(l.getId());
-				newbus.setOrderInLine(t);
+		for(int i=1; i<=n; i++){
+			int start = day_start*60 + freq*(i-1);
+			int end = day_end*60;
+			Bus newbus;
+			newbus.setLineId(l.getId());
+			newbus.setOrderInLine(i);
+			for(int t=1; t<=7; t++){
 				while(start<=end){
-				Shift newshift = Shift(l.getId(), 0, t, start, start+duration);
-				newbus.addShift(newshift);
-				start = start+freq*(n-1);
+					Shift newshift = Shift(l.getId(), 0, t, start, start+duration);
+					newbus.addShift(newshift);
+					start = start+freq*n;
 				}
-				company.addBus(newbus);
+				start = day_start*60 + 1440*t + freq*(i-1);
+				end = day_end*60 + 1440*t;
 			}
-			start = start + 1440;
-			end = end + 1440;
+			company.addBus(newbus);
 		}
 	}
 }
@@ -1077,15 +1077,54 @@ void Application::busesShow(){
 
 }
 
+void Application::printBus(Bus bus, int day){
+	for(int t=0; t<bus.getSchedule().size(); t++){
+		Shift shift = bus.getSchedule().at(t);
+		int day1, day2 ,hours1, mins1, hours2, mins2;
+		int time1= shift.getStartTime();
+		int time2=shift.getEndTime();
+		treatTime(day1, hours1, mins1, time1);
+		treatTime(day2, hours2, mins2, time2);
+		if(day1 == day && shift.getDriverId() == 0){
+			cout << setw(12) << timeToString(hours1, hours2, mins1, mins2) << setw(3) << " " ;
+		}
+	}
+}
+
 void Application::busesShowFreeTime(){
-	Bus bus = company.getBuses().at(0);
-	int day, hours, mins;
-	cout << bus.getSchedule().at(0).getStartTime() << endl;
-	treatTime(day, hours, mins, bus.getSchedule().at(0).getStartTime());
-	cout << "begin:" << day << " " << hours << " " << mins << endl;
-	cout << bus.getSchedule().at(0).getEndTime() << endl;
-	treatTime(day, hours, mins, bus.getSchedule().at(0).getEndTime());
-	cout << "end:" << day << " " << hours << " " << mins << endl;
+	if(!linesChanged){
+		int id;
+		id = chooseLine();
+		vector<Bus> buses = company.getBuses();
+		cout << "Line " << id << endl << endl;
+		for(int i=0; i<buses.size(); i++){
+			if(buses.at(i).getLineId() == id){
+				cout << "Bus " << buses.at(i).getBusOrderInLine() << endl;
+				cout << setw(12) << "Monday" << setw(3) << " ";
+				printBus(buses.at(i), 1);
+				cout << endl;
+				cout << setw(12) << "Tuesday" << setw(3) << " ";
+				printBus(buses.at(i), 2);
+				cout << endl;
+				cout << setw(12) << "Wednesday" << setw(3) << " ";
+				printBus(buses.at(i), 3);
+				cout << endl;
+				cout << setw(12) << "Thursday" << setw(3) << " ";
+				printBus(buses.at(i), 4);
+				cout << endl;
+				cout << setw(12) << "Friday" << setw(3) << " ";
+				printBus(buses.at(i), 5);
+				cout << endl;
+				cout << setw(12) << "Saturday" << setw(3) << " ";
+				printBus(buses.at(i), 6);
+				cout << endl;
+				cout << setw(12) << "Sunday" << setw(3) << " ";
+				printBus(buses.at(i), 7);
+				cout << endl;
+				cout << endl;
+			}
+		}
+	}
 }
 
 void Application::exitMenu(){
