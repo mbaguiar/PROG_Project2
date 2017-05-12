@@ -162,175 +162,6 @@ void Application::linesSummaryShow(){
 	cout << endl;
 }
 
-void Application::linesCreate(){
-	Line newline;
-	string foo;
-	int id_number, freq, time;
-	string stop;
-	vector<string> stops;
-	vector<int> times;
-	LineList lines = company.getLines();
-
-	cout << "Insert the new line information: \n\n";
-	do {
-		cout << "Insert id_number: "; validArg(id_number);
-		if (validIdLines(id_number)) {
-			cout << "The line already exists. Please insert another id or delete the line." << endl;
-		} else {
-			break;
-		}
-	} while (true);
-
-	cout << "Insert frequency: "; validArg(freq);
-	cout << "Insert the stops:(Press enter to stop) ";
-	while(true){
-		getline(cin,stop);
-		if(stop == "") break;
-		stops.push_back(stop);
-	}
-	cout << "Insert the times:(Press enter to stop) ";
-	while(true){
-		time = 0;
-		getline(cin,foo);
-		if(foo == "") break;
-		while(true){
-			time = 0;
-			try{
-				time = stoi(foo, nullptr);
-			}
-			catch(const std::invalid_argument& ia){
-				cout << "Invalid input. Reenter." << endl; getline(cin,foo);
-			}
-			if(time) break;
-		}
-		times.push_back(time);
-	}
-	newline.setId(id_number);
-	newline.setFreq(freq);
-	newline.setStops(stops);
-	newline.setTimes(times);
-	company.addLine(newline);
-	linesChanged = true;
-}
-
-void Application::linesUpdate(){
-	int id;
-	linesSummaryShow();
-	do {
-		cout << "Insert the line to change: ";
-		validArg(id);
-		if (validIdLines(id)) break;
-		else {
-			cout << "Invalid id. Reenter." << endl;
-		}
-	} while (true);
-
-	cout << endl;
-
-	linesDetailShow(id);
-	do {
-		displayUpdateMenu(id, LINES_IDENTIFIER);
-		updateMenu(id, LINES_IDENTIFIER);
-	} while (INSIDE_SUBMENU);
-}
-
-void Application::linesUpdateFreq(int id_number) {
-	Line l = company.getLines()[id_number];
-	cout << "The current frequeny for line " << id_number << " is " << l.getFreq() << "min.\n";
-	string foo;
-	int freq;
-	do {
-		bool success = true;
-		cout << "Insert the new frequency: ";
-		getline(cin,foo);
-		try{
-			freq = stoi(foo, nullptr);
-		}
-		catch(const std::invalid_argument& ia){
-			cout << "Invalid input. Reenter." << endl;
-			success = false;
-		}
-		if(success) break;
-	} while (true);
-	l.setFreq(freq);
-	company.setLine(id_number, l);
-	linesChanged= true;
-	cout << "Line updated successfully.\nPress any key to continue.";
-	getchar();
-}
-
-void Application::linesUpdateStops(int id_number) {
-	Line l = company.getLines()[id_number];
-	cout << "The current stops for line " << id_number << " are ";
-	for (int i = 0; i < l.getStops().size(); i++){
-		cout << l.getStops().at(i);
-		if (i != l.getStops().size() - 1) cout << ", ";
-		else cout << ".\n";
-	}
-	string foo;
-	vector<string> stops;
-	do {
-		cout << "Insert the new stops (Press enter twice to stop): ";
-		getline(cin, foo);
-		if(foo == "") break;
-		stops.push_back(foo);
-	} while (true);
-	l.setStops(stops);
-	company.setLine(id_number, l);
-	linesChanged= true;
-	cout << "Line updated successfully.\nPress any key to continue.";
-	getchar();
-}
-void Application::linesUpdateTimes(int id_number) {
-	Line l = company.getLines()[id_number];
-	cout << "The current times for line " << id_number << " are ";
-	for (int i = 0; i < l.getTimes().size(); i++){
-		cout << l.getTimes().at(i);
-		if (i != l.getTimes().size() - 1) cout << ", ";
-		else cout << ".\n";
-	}
-	string foo;
-	vector<int> times;
-	do {
-		int time;
-		cout << "Insert the new times (Press enter twice to stop): ";
-		do {
-			bool success = true;
-			getline(cin, foo);
-			try {
-				time = stoi(foo, nullptr);
-			}
-			catch(const std::invalid_argument& ia) {
-				cout << "Invalid input. Reenter.\n";
-				success = false;
-			}
-			if (success) break;
-		} while (true);
-		times.push_back(time);
-		if (foo == "") break;
-	} while (true);
-	l.setTimes(times);
-	company.setLine(id_number, l);
-	linesChanged= true;
-	cout << "Line updated successfully.\nPress any key to continue.";
-	getchar();
-}
-
-void Application::linesDelete(){
-	linesSummaryShow();
-	int id;
-	do {
-		cout << "Line's id:";
-		validArg(id);
-		if (validIdLines(id)) break;
-		else {
-			cout << "Invalid id. Reenter." << endl;
-		}
-	} while (true);
-	company.eraseLine(id);
-	linesChanged= true;
-	cout << "Line " << id << " deleted successfully.\n";
-}
 
 void Application::searchStops(string stop, vector<Stop> &stopsDirect, vector<Stop> &stopsInverse){
 	vector<Stop> stopsD;
@@ -1092,37 +923,35 @@ void Application::printBus(Bus bus, int day){
 }
 
 void Application::busesShowFreeTime(){
-	if(!linesChanged){
-		int id;
-		id = chooseLine();
-		vector<Bus> buses = company.getBuses();
-		cout << "Line " << id << endl << endl;
-		for(int i=0; i<buses.size(); i++){
-			if(buses.at(i).getLineId() == id){
-				cout << "Bus " << buses.at(i).getBusOrderInLine() << endl;
-				cout << setw(12) << "Monday" << setw(3) << " ";
-				printBus(buses.at(i), 1);
-				cout << endl;
-				cout << setw(12) << "Tuesday" << setw(3) << " ";
-				printBus(buses.at(i), 2);
-				cout << endl;
-				cout << setw(12) << "Wednesday" << setw(3) << " ";
-				printBus(buses.at(i), 3);
-				cout << endl;
-				cout << setw(12) << "Thursday" << setw(3) << " ";
-				printBus(buses.at(i), 4);
-				cout << endl;
-				cout << setw(12) << "Friday" << setw(3) << " ";
-				printBus(buses.at(i), 5);
-				cout << endl;
-				cout << setw(12) << "Saturday" << setw(3) << " ";
-				printBus(buses.at(i), 6);
-				cout << endl;
-				cout << setw(12) << "Sunday" << setw(3) << " ";
-				printBus(buses.at(i), 7);
-				cout << endl;
-				cout << endl;
-			}
+	int id;
+	id = chooseLine();
+	vector<Bus> buses = company.getBuses();
+	cout << "Line " << id << endl << endl;
+	for(int i=0; i<buses.size(); i++){
+		if(buses.at(i).getLineId() == id){
+			cout << "Bus " << buses.at(i).getBusOrderInLine() << endl;
+			cout << setw(12) << "Monday" << setw(3) << " ";
+			printBus(buses.at(i), 1);
+			cout << endl;
+			cout << setw(12) << "Tuesday" << setw(3) << " ";
+			printBus(buses.at(i), 2);
+			cout << endl;
+			cout << setw(12) << "Wednesday" << setw(3) << " ";
+			printBus(buses.at(i), 3);
+			cout << endl;
+			cout << setw(12) << "Thursday" << setw(3) << " ";
+			printBus(buses.at(i), 4);
+			cout << endl;
+			cout << setw(12) << "Friday" << setw(3) << " ";
+			printBus(buses.at(i), 5);
+			cout << endl;
+			cout << setw(12) << "Saturday" << setw(3) << " ";
+			printBus(buses.at(i), 6);
+			cout << endl;
+			cout << setw(12) << "Sunday" << setw(3) << " ";
+			printBus(buses.at(i), 7);
+			cout << endl;
+			cout << endl;
 		}
 	}
 }
@@ -1134,9 +963,6 @@ void Application::exitMenu(){
 
 void Application::setupMenu(){
 	mainMenu["lines show"] = &Application::linesShow;
-	mainMenu["lines create"] = &Application::linesCreate;
-	mainMenu["lines update"] = &Application::linesUpdate;
-	mainMenu["lines delete"] = &Application::linesDelete;
 	mainMenu["lines schedules"] = &Application::linesSchedule;
 	mainMenu["lines travel time"] = &Application::linesTravelTimes;
 	mainMenu["lines stop lines"] = &Application::linesStopLines;
@@ -1153,9 +979,6 @@ void Application::setupMenu(){
 	mainMenu["exit"] = &Application::exitMenu;
 	//shortcuts
 	mainMenu["ls"] = &Application::linesShow;
-	mainMenu["lc"] = &Application::linesCreate;
-	mainMenu["lu"] = &Application::linesUpdate;
-	mainMenu["ld"] = &Application::linesDelete;
 	mainMenu["lsch"] = &Application::linesSchedule;
 	mainMenu["ltt"] = &Application::linesTravelTimes;
 	mainMenu["lsl"] = &Application::linesStopLines;
@@ -1170,10 +993,6 @@ void Application::setupMenu(){
 	mainMenu["bs"] = &Application::busesShow;
 	mainMenu["bsft"] = &Application::busesShowFreeTime;
 	mainMenu["e"] = &Application::exitMenu;
-	//line update menu
-	lineUpdateMenu["frequency"] = &Application::linesUpdateFreq;
-	lineUpdateMenu["stops"] = &Application::linesUpdateStops;
-	lineUpdateMenu["times"] = &Application::linesUpdateTimes;
 	//driver update menu
 	driverUpdateMenu["name"] = &Application::driversUpdateName;
 	driverUpdateMenu["h/day"] = &Application::driversUpdateMaxShift;
@@ -1184,8 +1003,7 @@ void Application::setupMenu(){
 void Application::displayMainMenu(){
 	cout << "\n";
 	cout << "Lines" << endl;
-	cout << "     Show, Create, Update, Delete" << endl;
-	cout << "     Schedules, Travel Time" << endl;
+	cout << "     Show, Schedules, Travel Time" << endl;
 	cout << "     Stop Lines, Stop Timetable" << endl;
 	cout << "Drivers" << endl;
 	cout << "     Show, Create, Update, Delete" << endl;
@@ -1196,10 +1014,7 @@ void Application::displayMainMenu(){
 }
 
 void Application::displayUpdateMenu(int id_number, string identifier){
-	if (identifier == LINES_IDENTIFIER){
-		cout << "Lines Update - Line " << id_number << " selected" << endl;
-		cout << "     Frequency, Stops, Times" << endl;
-	} else if (identifier == DRIVERS_IDENTIFIER) {
+	if (identifier == DRIVERS_IDENTIFIER) {
 		cout << "Drivers Update - Driver " << id_number << " selected" << endl;
 		cout << "     Name, H/Day, H/Week, H/Rest" << endl;
 	}
@@ -1222,8 +1037,7 @@ void Application::inputMenu(){
 
 void Application::updateMenu(int id_number, string identifier){
 	map<string,UpdateMenuOption> updateMenu;
-	if (identifier == LINES_IDENTIFIER) updateMenu = lineUpdateMenu;
-	else if (identifier == DRIVERS_IDENTIFIER)  updateMenu = driverUpdateMenu;
+	if (identifier == DRIVERS_IDENTIFIER)  updateMenu = driverUpdateMenu;
 	string command;
 	do {
 		INSIDE_SUBMENU = true;
@@ -1331,7 +1145,7 @@ void Application::changeFile(string type) {
 
 void Application::saveChanges() {
 	string command;
-	if (linesChanged || driversChanged) {
+	if (driversChanged) {
 		cout << "There are changes to be deployed to the files.\n";
 		do {
 			cout << "Would you like to save those changes (Y/N) ? ";
