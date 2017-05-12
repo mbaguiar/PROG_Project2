@@ -80,6 +80,7 @@ public:
 	void driversUpdateMinRest(int id_number);
 	void driversDelete();
 	void driversShowAssignedWork();
+	void printBus(Bus bus, int day);
 	void driversShowFreeTime();
 	void driversAssignWork();
 	void busesShow();

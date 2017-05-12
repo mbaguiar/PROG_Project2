@@ -148,3 +148,20 @@ void treatTime(int &day, int &hours, int &mins, int time){
 	hours = (time%1440)/60 ;
 	mins = (time%1440)%60;
 }
+
+string timeToString(int hours1, int hours2, int mins1, int mins2){
+	string s;
+	if(hours1 < 10){
+		s = s + "0" + to_string(hours1) + ":";
+	}else s = s + to_string(hours1) + ":";
+	if(mins1 < 10){
+		s = s + "0" + to_string(mins1) + "-";
+	}else s = s + to_string(mins1) + "-";
+	if(hours2 < 10){
+		s = s + "0" + to_string(hours2) + ":";
+	}else s = s + to_string(hours2) + ":";
+	if(mins2 < 10){
+		s = s + "0" + to_string(mins2) ;
+	}else s = s + to_string(mins2) ;
+	return s;
+}
