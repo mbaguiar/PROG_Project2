@@ -165,3 +165,15 @@ string timeToString(int hours1, int hours2, int mins1, int mins2){
 	}else s = s + to_string(mins2) ;
 	return s;
 }
+
+void printDay(int day){
+	switch(day){
+	case 1: cout << "Mon"; break;
+	case 2: cout << "Tue"; break;
+	case 3: cout << "Wed"; break;
+	case 4: cout << "Thu"; break;
+	case 5: cout << "Fri"; break;
+	case 6: cout << "Sat"; break;
+	case 7: cout << "Sun"; break;
+	}
+}

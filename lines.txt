@@ -3,3 +3,4 @@
 505 ; 30 ; Matosinhos, Sete Bicas, Rotunda dos Produtos Estrela, Senhora da Hora; 40, 30, 45
 6 ; 7 ; Porto, Gaia; 5
 999 ; 15 ; P1, P2, P3; 10, 11
+2 ; 13 ; ISEP, Sao Tome, Senhora da Hora; 10, 12

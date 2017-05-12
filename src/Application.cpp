@@ -906,17 +906,20 @@ void Application::driversShowAssignedWork(){
 
 	Driver d = company.getDrivers()[id];
 
-	if (d.getShifts().empty()) cout << "The driver has no assigned work.";
+	if (d.getShifts().empty()) cout << "The driver has no assigned work.\n";
 	else {
 		for (auto &s: d.getShifts()){
-			int day, hours, mins, time;
+			int day1, hours1, mins1, day2, hours2, mins2;
 			cout << "| Line " << s.getBusLineId() << " - Bus " << s.getBusOrderNumber() << ": ";
-			treatTime(day, hours, mins, s.getStartTime());
-			cout << day << ", " << hours << ":" << mins;
-			treatTime(day, hours, mins, s.getEndTime());
-			cout << " - " << day << ", " << hours << ":" << mins << endl;
+			treatTime(day1, hours1, mins1, s.getStartTime());
+			treatTime(day2, hours2, mins2, s.getEndTime());
+			cout << setw(5) << printDay(day1) << "; ";
+			cout << setw(12) << timeToString(hours1, hours2, mins1, mins2) << setw(3) << " " ;
 		}
 	}
+
+	cout << "Press any key to continue.";
+	getchar();
 }
 
 void Application::driversShowFreeTime(){
