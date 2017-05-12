@@ -339,28 +339,30 @@ void Application::route(Stop stop1, Stop stop2, int pos1, int pos2, int &duratio
 	Line line2 = company.getLines()[id2];
 	if(stop1.getPosInLine() < pos1){
 		for(int i=stop1.getPosInLine(); i<=pos1; i++){
-			route.push_back(line1.getStops().at(i));
+			if (i == pos1) route.push_back(line1.getStops().at(i) + "*");
+			else route.push_back(line1.getStops().at(i));
 		}
 		for(int i=stop1.getPosInLine(); i<pos1; i++){
 			duration = duration + line1.getTimes().at(i);
 		}
 	}else{
 		for(int i=stop1.getPosInLine(); i>=pos1; i--){
-			route.push_back(line1.getStops().at(i));
+			if (i == pos1) route.push_back(line1.getStops().at(i) + "*");
+			else route.push_back(line1.getStops().at(i));
 		}
 		for(int i=pos1; i<stop1.getPosInLine(); i++){
 			duration = duration + line1.getTimes().at(i);
 		}
 	}
 	if(stop2.getPosInLine() < pos2){
-		for(int i=pos2-1; i>=stop2.getPosInLine(); i--){
+		for(int i=pos2 - 1; i > stop2.getPosInLine(); i--){
 			route.push_back(line2.getStops().at(i));
 		}
 		for(int i=stop2.getPosInLine(); i<pos2; i++){
 			duration = duration + line2.getTimes().at(i);
 		}
 	}else{
-		for(int i=pos2+1; i>=stop2.getPosInLine(); i--){
+		for(int i=pos2 + 1; i <= stop2.getPosInLine(); i++){
 			route.push_back(line2.getStops().at(i));
 		}
 		for(int i=pos2; i<stop2.getPosInLine(); i++){
