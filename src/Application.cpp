@@ -895,10 +895,57 @@ void Application::driversDelete(){
 }
 
 void Application::driversShowAssignedWork(){
+	printDrivers();
+	int id;
+	do {
+	cout << endl << "Insert the driver number: ";
+	validArg(id);
+	if (validIdDrivers(id)) break;
+	else cout << "Invalid id. Reenter.\n";
+	} while (true);
 
+	Driver d = company.getDrivers()[id];
+
+	if (d.getShifts().empty()) cout << "The driver has no assigned work.\n";
+	else {
+		for (auto &s: d.getShifts()){
+			int day1, hours1, mins1, day2, hours2, mins2;
+			cout << "| Line " << s.getBusLineId() << " - Bus " << s.getBusOrderNumber() << ": ";
+			treatTime(day1, hours1, mins1, s.getStartTime());
+			treatTime(day2, hours2, mins2, s.getEndTime());
+			printDay(day1);
+			cout << " ,";
+			cout << setw(12) << timeToString(hours1, hours2, mins1, mins2) << setw(3) << " " ;
+		}
+	}
+
+	cout << "Press any key to continue.";
+	getchar();
 }
 
 void Application::driversShowFreeTime(){
+	printDrivers();
+		int id;
+		do {
+		cout << endl << "Insert the driver number: ";
+		validArg(id);
+		if (validIdDrivers(id)) break;
+		else cout << "Invalid id. Reenter.\n";
+		} while (true);
+
+		Driver d = company.getDrivers()[id];
+
+		// for loop for days
+
+		for (auto &s: d.getShifts()){
+			int timeStart; // day_start monday
+			int timeEnd; //day_end monday
+			if (timeStart >= s.getStartTime() && timeEnd <= s.getEndTime()){
+				cout << "dia" << timeStart << " - " << s.getStartTime(); // converter valores
+				timeStart = s.getEndTime();
+			}
+		}
+
 
 }
 
@@ -1076,42 +1123,26 @@ void Application::changeFile(string type) {
 	string path;
 	vector<string> newStrings;
 
-	if (type == "lines") {
-		if (!linesFilepath.empty()) {
-			path = linesFilepath;
-		}
-		else {
-			cout << "Insert the name of the file to save " << type << " to (e.g. 'lines.txt'): ";
-			getline(cin, path);
-		}
-
+	if (type == LINES_IDENTIFIER) {
+		path = linesFilepath;
 	}
 	else {
-		if (!driversFilepath.empty()) {
-			path = driversFilepath;
-		}
-		else {
-			cout << "Insert the name of the file to save " << type << " to (e.g. 'drivers.txt'): ";
-			getline(cin, path);
-		}
+		path = driversFilepath;
 		newStrings = driversToStrings();
 
 	}
-
 	output_file.open(path);
 
 	if (output_file.fail()) {
 		cerr << "The output file could not be opened.\n";
 	}
 	else {
-
 		for (int i = 0; i < newStrings.size(); i++) {
 			output_file << newStrings.at(i);
 			if (i != newStrings.size() - 1) output_file << endl;
 		}
-		type.at(0) = toupper(type.at(0));
 		cout << "Changes to " << type << " file ('" << path << "') successfully deployed.\n";
-		if (type == "lines") linesChanged = false;
+		if (type == LINES_IDENTIFIER) linesChanged = false;
 		else driversChanged = false;
 
 		output_file.close();

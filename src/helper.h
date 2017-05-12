@@ -26,6 +26,7 @@ Line readLine(string &l);
 Driver readDriver(string &d);
 Clock addTime(int min, Clock time);
 Clock subTime(int min, Clock time);
+void printDay(int day);
 
 
 #endif /* SRC_HELPER_H_ */
