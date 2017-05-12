@@ -935,6 +935,16 @@ void Application::driversShowFreeTime(){
 
 		Driver d = company.getDrivers()[id];
 
+		// for loop for days
+
+		for (auto &s: d.getShifts()){
+			int timeStart; // day_start monday
+			int timeEnd; //day_end monday
+			if (timeStart >= s.getStartTime() && timeEnd <= s.getEndTime()){
+				cout << "dia" << timeStart << " - " << s.getStartTime(); // converter valores
+				timeStart = s.getEndTime();
+			}
+		}
 
 
 }
