@@ -168,12 +168,12 @@ string timeToString(int hours1, int hours2, int mins1, int mins2){
 
 void printDay(int day){
 	switch(day){
-	case 1: cout << "Mon"; break;
-	case 2: cout << "Tue"; break;
-	case 3: cout << "Wed"; break;
-	case 4: cout << "Thu"; break;
-	case 5: cout << "Fri"; break;
-	case 6: cout << "Sat"; break;
-	case 7: cout << "Sun"; break;
+	case 1: cout << setw(3) << "Mon"; break;
+	case 2: cout << setw(3) << "Tue"; break;
+	case 3: cout << setw(3) << "Wed"; break;
+	case 4: cout << setw(3) << "Thu"; break;
+	case 5: cout << setw(3) << "Fri"; break;
+	case 6: cout << setw(3) << "Sat"; break;
+	case 7: cout << setw(3) << "Sun"; break;
 	}
 }

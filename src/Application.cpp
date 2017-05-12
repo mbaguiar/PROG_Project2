@@ -913,7 +913,8 @@ void Application::driversShowAssignedWork(){
 			cout << "| Line " << s.getBusLineId() << " - Bus " << s.getBusOrderNumber() << ": ";
 			treatTime(day1, hours1, mins1, s.getStartTime());
 			treatTime(day2, hours2, mins2, s.getEndTime());
-			cout << setw(5) << printDay(day1) << "; ";
+			printDay(day1);
+			cout << " ,";
 			cout << setw(12) << timeToString(hours1, hours2, mins1, mins2) << setw(3) << " " ;
 		}
 	}
@@ -923,6 +924,17 @@ void Application::driversShowAssignedWork(){
 }
 
 void Application::driversShowFreeTime(){
+	printDrivers();
+		int id;
+		do {
+		cout << endl << "Insert the driver number: ";
+		validArg(id);
+		if (validIdDrivers(id)) break;
+		else cout << "Invalid id. Reenter.\n";
+		} while (true);
+
+		Driver d = company.getDrivers()[id];
+
 
 
 }
