@@ -30,7 +30,6 @@ private:
 	int day_start;
 	int day_end;
 	map<string,MenuOption> mainMenu;
-	map<string,UpdateMenuOption> lineUpdateMenu;
 	map<string,UpdateMenuOption> driverUpdateMenu;
 	string linesFilepath;
 	string driversFilepath;
@@ -79,7 +78,6 @@ public:
 	void driversAssignWork();
 	void busesShow();
 	void busesShowFreeTime();
-	vector<string> linesToStrings();
 	vector<string> driversToStrings();
 	void saveChanges();
 	void exitMenu();

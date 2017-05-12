@@ -1084,7 +1084,7 @@ void Application::changeFile(string type) {
 			cout << "Insert the name of the file to save " << type << " to (e.g. 'lines.txt'): ";
 			getline(cin, path);
 		}
-		newStrings = linesToStrings();
+
 	}
 	else {
 		if (!driversFilepath.empty()) {
