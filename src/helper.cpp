@@ -39,8 +39,11 @@ void trimstring(string &s){
 	s = s.substr(0, s.find_last_not_of(" ")+1);
 }
 
+
 void normalize(string &s){
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
+	for (int i = 0; i < s.size(); i++) {
+		s.at(i) = tolower(s.at(i));
+	}
 	trimstring(s);
 }
 
@@ -80,7 +83,7 @@ Line readLine(string &l){
 
 	next(piece,l);
 	vector<string> s;
-	while(piece!=""){
+	while(piece != ""){
 		string elem;
 		next(elem,piece,",");
 		s.push_back(elem);
