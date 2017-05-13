@@ -26,30 +26,34 @@ Application::Application() {
 	DRIVERS_IDENTIFIER = "drivers";
 	LineList l;
 	DriverList d;
-	Company c = Company("semprarrolar",l, d) ;
+	Company c = Company("Semprarrolar",l, d) ;
 	company = c;
 	linesFilepath = "";
 	driversFilepath= "";
 }
 
-
+// Tests if the line with id id_number exists
 bool Application::validIdLines(int id_number){
 	LineList lines = company.getLines();
 	if (lines.find(id_number) != lines.end()) return true;
 	else return false;
 }
 
+// Tests if the line with id id_number exists
 bool Application::validIdDrivers(int id_number){
 	DriverList drivers = company.getDrivers();
 	if (drivers.find(id_number) != drivers.end()) return true;
 	else return false;
 }
 
+// Asks for the input files and saves their information in the company object
 void Application::loadFiles(){
 	ifstream linesfile;
 	ifstream driversfile;
 	string l;
 	string d;
+
+	// Lines
 
 	do {
 		cout << "Insert lines filename: ";
@@ -64,6 +68,8 @@ void Application::loadFiles(){
 		company.addLine(readLine(l));
 	}
 	linesfile.close();
+
+	// Drivers
 
 	do {
 		cout << "Insert drivers filename: ";
@@ -81,6 +87,7 @@ void Application::loadFiles(){
 
 }
 
+// Creates the buses vector for each line
 void Application::loadBuses(){
 	LineList lines = company.getLines();
 	for(auto& x:lines){
@@ -91,19 +98,23 @@ void Application::loadBuses(){
 			duration = duration + l.getTimes().at(i);
 		}
 		duration = duration+ duration;
-		int n =  (int) ((double) duration / freq + 1.0);
+		int n =  (int) ((double) duration / freq + 1.0); // n = number of buses needed
 		for(int i=1; i<=n; i++){
-			int start = day_start*60 + freq*(i-1);
-			int end = day_end*60;
+			int start = day_start*60 + freq*(i-1); // departure time
+			int end = day_end*60;						// end time
 			Bus newbus;
 			newbus.setLineId(l.getId());
 			newbus.setOrderInLine(i);
+
+			// Creates shifts for every day of the week and places it on the
+			// shifts vector
 			for(int t=1; t<=7; t++){
 				while(start<=end){
 					Shift newshift = Shift(l.getId(), 0, t, start, start+duration);
 					newbus.addShift(newshift);
 					start = start+freq*n;
 				}
+				// +1 Day on the clock
 				start = day_start*60 + 1440*t + freq*(i-1);
 				end = day_end*60 + 1440*t;
 			}
@@ -112,6 +123,8 @@ void Application::loadBuses(){
 	}
 }
 
+// Displays a line summary and asks if the user wants to see detailed info
+// about a individual line
 void Application::linesShow(){
 	linesSummaryShow();
 	string foo;
@@ -129,6 +142,7 @@ void Application::linesShow(){
 	cout << endl;
 }
 
+// Displays detailed info about the line with id id_number
 void Application::linesDetailShow(int id_number) {
 	Line line = company.getLines()[id_number];
 	cout << setw(12) << "ID: ";
@@ -150,6 +164,7 @@ void Application::linesDetailShow(int id_number) {
 
 }
 
+// Displays a table with the ids, frequency and first and last stop of the lines
 void Application::linesSummaryShow(){
 	LineList lines = company.getLines();
 	cout << "LINE SUMMARY\n\n";
@@ -162,7 +177,8 @@ void Application::linesSummaryShow(){
 	cout << endl;
 }
 
-
+// Searches a stop given a string stop in every line and places the information
+// in vectors (direct and inverse) of Stop objects
 void Application::searchStops(string stop, vector<Stop> &stopsDirect, vector<Stop> &stopsInverse){
 	vector<Stop> stopsD;
 	vector<Stop> stopsI;
@@ -172,7 +188,7 @@ void Application::searchStops(string stop, vector<Stop> &stopsDirect, vector<Sto
 		for (size_t x = 0; x < l.getStops().size(); x++) {
 			if (l.getStops().at(x) == stop) {
 
-				// SENTIDO DIRETO
+				// Direct direction
 
 				Stop newStop;
 				newStop.setName(stop);
@@ -188,7 +204,7 @@ void Application::searchStops(string stop, vector<Stop> &stopsDirect, vector<Sto
 				newStop.setStopM(newStop.getTimeFromStart());
 				stopsD.push_back(newStop);
 
-				//SENTIDO INVRSO
+				// Inverse direction
 
 				Stop newStop2;
 				newStop2.setName(stop);
@@ -212,6 +228,7 @@ void Application::searchStops(string stop, vector<Stop> &stopsDirect, vector<Sto
 	stopsInverse = stopsI;
 }
 
+// Returns the id of the chosen lines
 int Application::chooseLine() {
 	int lineID;
 	LineList lines = company.getLines();
@@ -922,28 +939,58 @@ void Application::driversShowAssignedWork(){
 
 void Application::driversShowFreeTime(){
 	printDrivers();
-		int id;
-		do {
+	int id;
+	do {
 		cout << endl << "Insert the driver number: ";
 		validArg(id);
 		if (validIdDrivers(id)) break;
 		else cout << "Invalid id. Reenter.\n";
-		} while (true);
+	} while (true);
 
-		Driver d = company.getDrivers()[id];
+	Driver d = company.getDrivers()[id];
+	int temp;
 
-		// for loop for days
+	for (auto &s: d.getShifts()) {
+		temp+= s.getEndTime() - s.getStartTime();
+	}
 
-		for (auto &s: d.getShifts()){
-			int timeStart; // day_start monday
-			int timeEnd; //day_end monday
-			if (timeStart >= s.getStartTime() && timeEnd <= s.getEndTime()){
-				cout << "dia" << timeStart << " - " << s.getStartTime(); // converter valores
-				timeStart = s.getEndTime();
-			}
+	if (temp >= d.getMaxWeek()) cout << "The driver has a full schedule for the week.\n";
+	else {
+		temp = 0;
+		int timeStart; // day_start monday
+		timeToMins(0, day_start, 0, timeStart);
+		int timeEnd; //day_end monday
+		timeToMins(0, day_end, 0, timeEnd);
+
+		for (int i = 1; i <=7; i++){
+
+				for (auto &s: d.getShifts()) {
+					int day1, hours1, mins1, day2, hours2, mins2, freeTimeStart, freeTimeEnd;
+
+				if (s.getStartTime() >= timeStart && s.getEndTime() <= timeEnd){
+					freeTimeStart = s.getStartTime() - (d.getMinRest() * 60);
+					if (freeTimeStart > timeStart) {
+						cout << "| "; printDay(i); cout << ": ";
+						treatTime(day1, hours1, mins1, timeStart);
+						treatTime(day2, hours2, mins2, freeTimeStart);
+						cout << timeToString(hours1, mins1, hours2, mins2) << endl;
+					}
+					freeTimeEnd = s.getEndTime() + (d.getMinRest() * 60);
+
+					if (freeTimeEnd < timeEnd)  {
+						cout << "| "; printDay(i); cout << ": ";
+						treatTime(day1, hours1, mins1, freeTimeEnd);
+						treatTime(day2, hours2, mins2, timeEnd);
+						cout << timeToString(hours1, mins1, hours2, mins2) << endl;
+					}
+				}
+				}
+				timeToMins(i, day_start, 0, timeStart);
+				timeToMins(i, day_end, 0, timeEnd);
+
 		}
 
-
+	}
 }
 
 void Application::driversAssignWork(){
