@@ -185,3 +185,13 @@ void printDay(int day){
 		cout << setw(3) << "Sun"; break;
 	}
 }
+
+void timeToMins(int day, int hours, int mins, int &time){
+	time = 1440 * day;
+	time += 60 * hours;
+	time += mins;
+}
+
+bool sortShifts(Shift i, Shift j) {
+	return (i.getStartTime() < j.getStartTime());
+}
