@@ -293,6 +293,7 @@ void Application::printTimes(vector<Clock> time, Line line, int &n, int d){
 	}
 }
 
+// Prints line schedule
 void Application::linesSchedule(){
 	int sum;
 	Clock start_time;
@@ -348,6 +349,7 @@ void Application::linesSchedule(){
 
 }
 
+// Recieves 2 stops
 void Application::route(Stop stop1, Stop stop2, int pos1, int pos2, int &duration, vector<string> &route){
 	duration =0;
 	int id1 = stop1.getLineId();
