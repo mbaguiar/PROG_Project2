@@ -918,9 +918,6 @@ void Application::driversShowAssignedWork(){
 			cout << setw(12) << timeToString(hours1, hours2, mins1, mins2) << setw(3) << " " ;
 		}
 	}
-
-	cout << "Press any key to continue.";
-	getchar();
 }
 
 void Application::driversShowFreeTime(){
@@ -954,7 +951,43 @@ void Application::driversAssignWork(){
 }
 
 void Application::busesShow(){
-
+	int id;
+	int nbus;
+	id = chooseLine();
+	int n=0;
+	for(int i=0; i<company.getBuses().size(); i++){
+		if(company.getBuses().at(i).getLineId() == id){
+			n++;
+		}
+	}
+	cout << "There are " << n << " available buses for this line. Choose bus:";
+	do{
+		validArg(nbus);
+		if(nbus >= 1 && nbus <= n){
+			break;
+		}else {
+			cout << "Invalid. Reenter.";
+		}
+	}while(true);
+	cout << "Line " << id << " Bus number " << nbus << endl;
+	cout << "Shifts:\n";
+	vector<Bus> buses = company.getBuses();
+	for(int i=0; i<buses.size(); i++){
+		if(buses.at(i).getLineId() == id && buses.at(i).getBusOrderInLine() == nbus){
+			vector<Shift> shifts = buses.at(i).getSchedule();
+			for(int t=0; t<shifts.size(); t++){
+				int day1, day2, h1, h2, min1, min2;
+				treatTime(day1, h1, min1, shifts.at(t).getStartTime());
+				treatTime(day2, h2, min2, shifts.at(t).getEndTime());
+				cout << "Shift " << setw(3) << t+1 << setw(3) << " ";
+				cout << "Day: "; printDay(day1);
+				cout << setw(3) << " " << "Time:" << timeToString(h1,h2,min1,min2) << setw(3) << " ";
+				cout << "Driver: ";
+				if(shifts.at(t).getDriverId() == 0) cout << "Unassigned" << endl;
+				else cout << shifts.at(i).getDriverId() << endl;
+			}
+		}
+	}
 }
 
 void Application::printBus(Bus bus, int day){
