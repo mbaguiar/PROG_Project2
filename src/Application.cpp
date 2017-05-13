@@ -922,6 +922,7 @@ void Application::driversShowAssignedWork(){
 	} while (true);
 
 	Driver d = company.getDrivers()[id];
+	cout << d.getShifts().size();
 
 	if (d.getShifts().empty()) cout << "The driver has no assigned work.\n";
 	else {
@@ -1112,10 +1113,10 @@ void Application::driversAssignWork(){
 	int rest = d.getMinRest()*60;
 	int max_shift = d.getMaxShift()*60;
 	int max_week = d.getMaxWeek()*60;
-	int duration;
+	int duration=0;
 	bool success = true;
 	for(int i=0; i<d.getShifts().size(); i++){
-		int temp;
+		int temp=0;
 		temp = d.getShifts().at(i).getEndTime() - d.getShifts().at(i).getStartTime();
 		duration = duration + temp;
 	}
@@ -1124,14 +1125,14 @@ void Application::driversAssignWork(){
 	if(durationShift <= max_shift && (duration+durationShift) <= max_week){
 		cout << "muito fofinho\n";
 		if (!d.getShifts().empty()){
-		for(int t=0; t<d.getShifts().size(); t++){
-			if(newdrivershift.getStartTime() >= (d.getShifts().at(t).getStartTime()-rest) && newdrivershift.getStartTime() <= (d.getShifts().at(t).getEndTime()+rest)){
-				success = false;
+			for(int t=0; t<d.getShifts().size(); t++){
+				if(newdrivershift.getStartTime() >= (d.getShifts().at(t).getStartTime()-rest) && newdrivershift.getStartTime() <= (d.getShifts().at(t).getEndTime()+rest)){
+					success = false;
 
-			}else if(newdrivershift.getEndTime() >= (d.getShifts().at(t).getStartTime()-rest) && newdrivershift.getEndTime() <= (d.getShifts().at(t).getEndTime()+rest)){
-				success = false;
+				}else if(newdrivershift.getEndTime() >= (d.getShifts().at(t).getStartTime()-rest) && newdrivershift.getEndTime() <= (d.getShifts().at(t).getEndTime()+rest)){
+					success = false;
+				}
 			}
-		}
 		}
 	}else{
 		cout << "Max hours per shift or max hours per week reached!\n";
@@ -1141,7 +1142,8 @@ void Application::driversAssignWork(){
 		vector<Shift> newshifts = d.getShifts();
 		newshifts.push_back(newdrivershift);
 		d.setShifts(newshifts);
-		//sort(d.getShifts().begin(), d.getShifts().end(), sortShifts);
+		company.setDriver(d.getId(), d);
+		sort(d.getShifts().begin(), d.getShifts().end(), sortShifts);
 		for(int i=0; i<shiftsNumbers.size(); i++){
 			buses.at(busIndex).setDriverShift(shiftsNumbers.at(i), idD);
 		}
@@ -1306,8 +1308,8 @@ void Application::displayUpdateMenu(int id_number, string identifier){
 
 void Application::inputMenu(){
 	string command;
-	displayMainMenu();
 	do {
+		displayMainMenu();
 		cout << "Command: ";
 		getline(cin,command);
 		normalize(command);
