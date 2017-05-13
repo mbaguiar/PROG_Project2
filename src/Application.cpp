@@ -1190,7 +1190,7 @@ void Application::busesShow(){
 				cout << setw(3) << " " << "Time:" << timeToString(h1,h2,min1,min2) << setw(3) << " ";
 				cout << "Driver: ";
 				if(shifts.at(t).getDriverId() == 0) cout << "Unassigned" << endl;
-				else cout << shifts.at(i).getDriverId() << endl;
+				else cout << shifts.at(t).getDriverId() << endl;
 			}
 		}
 	}
