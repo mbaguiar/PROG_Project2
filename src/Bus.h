@@ -26,6 +26,7 @@ class Bus{
    void setLineId(unsigned int lineId);
    void setSchedule(vector<Shift> schedule);
    void addShift(Shift shift);
+   void setDriverShift(int shiftIndex, int driverId);
   // other methods
 
 };

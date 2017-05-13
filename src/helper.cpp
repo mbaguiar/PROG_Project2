@@ -170,8 +170,7 @@ string timeToString(int hours1, int hours2, int mins1, int mins2){
 void printDay(int day){
 	switch(day){
 	case 1:
-		cout << setw(3) << "Mon";
-		break;
+		cout << setw(3) << "Mon"; break;
 	case 2:
 		cout << setw(3) << "Tue"; break;
 	case 3:

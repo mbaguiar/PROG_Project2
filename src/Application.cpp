@@ -898,10 +898,10 @@ void Application::driversShowAssignedWork(){
 	printDrivers();
 	int id;
 	do {
-	cout << endl << "Insert the driver number: ";
-	validArg(id);
-	if (validIdDrivers(id)) break;
-	else cout << "Invalid id. Reenter.\n";
+		cout << endl << "Insert the driver number: ";
+		validArg(id);
+		if (validIdDrivers(id)) break;
+		else cout << "Invalid id. Reenter.\n";
 	} while (true);
 
 	Driver d = company.getDrivers()[id];
@@ -922,32 +922,178 @@ void Application::driversShowAssignedWork(){
 
 void Application::driversShowFreeTime(){
 	printDrivers();
-		int id;
-		do {
+	int id;
+	do {
 		cout << endl << "Insert the driver number: ";
 		validArg(id);
 		if (validIdDrivers(id)) break;
 		else cout << "Invalid id. Reenter.\n";
-		} while (true);
+	} while (true);
 
-		Driver d = company.getDrivers()[id];
+	Driver d = company.getDrivers()[id];
 
-		// for loop for days
+	// for loop for days
 
-		for (auto &s: d.getShifts()){
-			int timeStart; // day_start monday
-			int timeEnd; //day_end monday
-			if (timeStart >= s.getStartTime() && timeEnd <= s.getEndTime()){
-				cout << "dia" << timeStart << " - " << s.getStartTime(); // converter valores
-				timeStart = s.getEndTime();
-			}
+	for (auto &s: d.getShifts()){
+		int timeStart; // day_start monday
+		int timeEnd; //day_end monday
+		if (timeStart >= s.getStartTime() && timeEnd <= s.getEndTime()){
+			cout << "dia" << timeStart << " - " << s.getStartTime(); // converter valores
+			timeStart = s.getEndTime();
 		}
+	}
 
 
 }
 
 void Application::driversAssignWork(){
+	Shift newdrivershift;
+	printDrivers();
+	int idD;
+	do{
+		cout << endl << "Insert the driver number: ";
+		validArg(idD);
+		if (validIdDrivers(idD)) break;
+		else cout << "Invalid id. Reenter.\n";
+	}while (true);
 
+	Driver d = company.getDrivers()[idD];
+	int idL, nbus;
+	idL = chooseLine();
+	int n=0;
+	for(int i=0; i<company.getBuses().size(); i++){
+		if(company.getBuses().at(i).getLineId() == idL){
+			n++;
+		}
+	}
+	cout << "There are " << n << " available buses for this line. Choose bus:";
+	do{
+		validArg(nbus);
+		if(nbus >= 1 && nbus <= n){
+			break;
+		}else {
+			cout << "Invalid. Reenter.";
+		}
+	}while(true);
+	cout << "Line " << idL << " Bus number " << nbus << endl;
+	cout << "Shifts:\n";
+	vector<Bus> buses = company.getBuses();
+	int busIndex;
+	for(int i=0; i<buses.size(); i++){
+		if(buses.at(i).getLineId() == idL && buses.at(i).getBusOrderInLine() == nbus){
+			busIndex = i;
+			vector<Shift> shifts = buses.at(i).getSchedule();
+			for(int t=0; t<shifts.size(); t++){
+				if(shifts.at(i).getDriverId() == 0){
+					int day1, day2, h1, h2, min1, min2;
+					treatTime(day1, h1, min1, shifts.at(t).getStartTime());
+					treatTime(day2, h2, min2, shifts.at(t).getEndTime());
+					cout << "Shift " << setw(3) << t+1 << setw(3) << " ";
+					cout << "Day: "; printDay(day1);
+					cout << setw(3) << " " << "Time:" << timeToString(h1,h2,min1,min2) << setw(3) << " ";
+					cout << endl;
+				}
+			}
+		}
+	}
+	cout << "Would you like to assign more than one shift(Y/N)?";
+	string foo;
+	vector<int> shiftsNumbers;
+	int t =1;
+	bool s = true;
+	getline(cin,foo);
+	if(foo == "Y" || foo == "y"){
+		while(true){
+			string foo2;
+			s= true;
+			shiftsNumbers.resize(0);
+			cout << "Insert consecutive shifts (Press enter to stop):";
+			t = 1;
+			while(t){
+				t = 0;
+				getline(cin,foo2);
+				if(foo2 == "") break;
+				while(true){
+					t = 0;
+					try{
+						t = stoi(foo2, nullptr);
+					}
+					catch(const std::invalid_argument& ia){
+						cout << "Invalid. Reenter." << endl; getline(cin,foo2);
+					}
+					if(t) break;
+				}
+				shiftsNumbers.push_back(t-1);
+			}
+			for(int i=0; i<shiftsNumbers.size()-1; i++){
+				if(shiftsNumbers.at(i) != shiftsNumbers.at(i+1)-1){
+					s=false;
+				}
+			}
+			for(int i=0; i<shiftsNumbers.size(); i++){
+				if(shiftsNumbers.at(i) > buses.at(busIndex).getSchedule().size()){
+					s = false;
+				}
+			}
+			if(s) break;
+		}
+		Shift firstShift = buses.at(busIndex).getSchedule().at(shiftsNumbers.at(0));
+		Shift lastShift = buses.at(busIndex).getSchedule().at(shiftsNumbers.at(shiftsNumbers.size()-1));
+		newdrivershift.setBusLineId(idL);
+		newdrivershift.setDriverId(idD);
+		newdrivershift.setBusOrderNumber(nbus);
+		newdrivershift.setStartTime(firstShift.getStartTime());
+		newdrivershift.setEndTime(lastShift.getEndTime());
+	}else if(foo == "N" && foo == "n"){
+		int idS;
+		do{
+			cout << "Insert number of shift:";
+			validArg(idS);
+			if(idS <= buses.at(busIndex).getSchedule().size()) break;
+		}while(true);
+		shiftsNumbers.push_back(idS-1);
+		newdrivershift.setBusLineId(idL);
+		newdrivershift.setDriverId(idD);
+		newdrivershift.setBusOrderNumber(nbus);
+		newdrivershift.setStartTime(buses.at(busIndex).getSchedule().at(idS-1).getStartTime());
+		newdrivershift.setEndTime(buses.at(busIndex).getSchedule().at(idS-1).getEndTime());
+	}else {
+		cout << "Invalid input\n";
+		break;
+	}
+	int rest = d.getMinRest();
+	int max_shift = d.getMaxShift()*60;
+	int max_week = d.getMaxWeek()*60;
+	int duration;
+	bool success = true;
+	for(int i=0; i<d.getShifts().size(); i++){
+		int temp;
+		temp = d.getShifts().at(i).getEndTime() - d.getShifts().at(i).getStartTime();
+		duration = duration + temp;
+	}
+	int durationShift = newdrivershift.getEndTime()-newdrivershift.getStartTime();
+	if(durationShift <= max_shift && duration+durationShift <= max_week){
+		for(int t=0; t<d.getShifts(); t++){
+			if(newdrivershift.getStartTime() >= d.getShifts().at(t).getStartTime() && newdrivershift.getStartTime() <= d.getShifts().at(t).getEndTime()){
+				success = false;
+			}else if(newdrivershift.getEndTime() >= d.getShifts().at(t).getStartTime() && newdrivershift.getEndTime() <= d.getShifts().at(t).getEndTime()){
+				success = false;
+			}
+		}
+	}else{
+		cout << "Max hours per shift or max hours per week reached!";
+		break;
+	}
+	if(success){
+		d.getShifts().push_back(newdrivershift);
+		std::sort(d.getShifts().begin(), d.getShifts().end(), sortShifts);
+		for(int i=0; i<shiftsNumbers.size(); i++){
+			buses.at(busIndex).setDriverShift(shiftsNumbers.at(i), idD);
+		}
+	}else {
+		cout << "You cannot overlap shifs!";
+		break;
+	}
 }
 
 void Application::busesShow(){

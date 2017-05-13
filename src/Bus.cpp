@@ -44,3 +44,7 @@ void Bus::setSchedule(vector<Shift> schedule){
 void Bus::addShift(Shift shift){
 	schedule.push_back(shift);
 }
+
+void Bus::setDriverShift(int shiftIndex, int driverId){
+	schedule.at(shiftIndex).setDriverId(driverId);
+}

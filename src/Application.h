@@ -14,6 +14,7 @@
 #include <iomanip>
 #include <fstream>
 #include <vector>
+#include <algorithm>
 #include "Company.h"
 #include "helper.h"
 
