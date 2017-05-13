@@ -110,7 +110,7 @@ void Application::loadBuses(){
 			// shifts vector
 			for(int t=1; t<=7; t++){
 				while(start<=end){
-					Shift newshift = Shift(l.getId(), 0, t, start, start+duration);
+					Shift newshift = Shift(l.getId(), 0, i, start, start+duration);
 					newbus.addShift(newshift);
 					start = start+freq*n;
 				}
@@ -293,6 +293,7 @@ void Application::printTimes(vector<Clock> time, Line line, int &n, int d){
 	}
 }
 
+// Prints line schedule
 void Application::linesSchedule(){
 	int sum;
 	Clock start_time;
@@ -348,6 +349,7 @@ void Application::linesSchedule(){
 
 }
 
+// Recieves 2 stops
 void Application::route(Stop stop1, Stop stop2, int pos1, int pos2, int &duration, vector<string> &route){
 	duration =0;
 	int id1 = stop1.getLineId();
