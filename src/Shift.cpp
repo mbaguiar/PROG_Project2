@@ -1,5 +1,13 @@
 #include "Shift.h"
 
+Shift::Shift(){
+	busLineId = 0;
+	driverId = 0;
+	busOrderNumber = 0;
+	startTime = 0;
+	endTime = 0;
+}
+
 Shift::Shift(unsigned int busLineId, unsigned int driverId, unsigned int busOrderNumber, unsigned int startTime, unsigned int endTime){
 	this->busLineId = busLineId;
 	this->driverId = driverId;

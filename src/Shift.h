@@ -17,6 +17,7 @@ class Shift{
 
  public:
   Shift(unsigned int busLineId, unsigned int driverId, unsigned int busOrderNumber, unsigned int startTime, unsigned int endTime);
+  Shift();
 
   // GET METHODS
 
