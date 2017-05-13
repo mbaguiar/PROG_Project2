@@ -1145,10 +1145,11 @@ void Application::driversAssignWork(){
 		newshifts.push_back(newdrivershift);
 		d.setShifts(newshifts);
 		company.setDriver(d.getId(), d);
-		sort(d.getShifts().begin(), d.getShifts().end(), sortShifts);
+		//sort(d.getShifts().begin(), d.getShifts().end(), sortShifts);
 		for(int i=0; i<shiftsNumbers.size(); i++){
 			buses.at(busIndex).setDriverShift(shiftsNumbers.at(i), idD);
 		}
+		company.setBus(buses.at(busIndex));
 	}else {
 		cout << "You cannot overlap shifts!\n";
 		return;
