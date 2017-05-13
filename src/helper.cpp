@@ -198,3 +198,11 @@ void timeToMins(int day, int hours, int mins, int &time){
 bool sortShifts(Shift i, Shift j) {
 	return (i.getStartTime() < j.getStartTime());
 }
+
+struct sortShifts
+{
+    inline bool operator() (const Shift& i, const Shift& j)
+    {
+        return (i.getStartTime() < j.getStartTime());
+    }
+};

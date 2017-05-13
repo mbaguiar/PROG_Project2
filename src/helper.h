@@ -28,6 +28,7 @@ Clock addTime(int min, Clock time);
 Clock subTime(int min, Clock time);
 void printDay(int day);
 void timeToMins(int day, int hours, int mins, int &time);
-bool sortShifts(Shift i, Shift j);
+struct SortShifts;
+
 
 #endif /* SRC_HELPER_H_ */

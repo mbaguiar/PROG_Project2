@@ -924,7 +924,6 @@ void Application::driversShowAssignedWork(){
 	} while (true);
 
 	Driver d = company.getDrivers()[id];
-	cout << d.getShifts().size();
 
 	if (d.getShifts().empty()) cout << "The driver has no assigned work.\n";
 	else {
@@ -934,10 +933,13 @@ void Application::driversShowAssignedWork(){
 			treatTime(day1, hours1, mins1, s.getStartTime());
 			treatTime(day2, hours2, mins2, s.getEndTime());
 			printDay(day1);
-			cout << " ,";
-			cout << setw(12) << timeToString(hours1, hours2, mins1, mins2) << setw(3) << " " ;
+			cout << ",";
+			cout << setw(12) << timeToString(hours1, hours2, mins1, mins2) << setw(3) << " "  << endl;
 		}
 	}
+
+	cout << "Press enter to continue.";
+	getchar();
 }
 
 void Application::driversShowFreeTime(){
@@ -951,13 +953,14 @@ void Application::driversShowFreeTime(){
 	} while (true);
 
 	Driver d = company.getDrivers()[id];
-	int temp;
+	int temp = 0;
+
 
 	for (auto &s: d.getShifts()) {
-		temp+= s.getEndTime() - s.getStartTime();
+		temp+= (s.getEndTime() - s.getStartTime());
 	}
 
-	if (temp >= d.getMaxWeek()) cout << "The driver has a full schedule for the week.\n";
+	if (temp >= d.getMaxWeek()*60) cout << "The driver has a full schedule for the week.\n";
 	else {
 		temp = 0;
 		int timeStart; // day_start monday
@@ -966,17 +969,18 @@ void Application::driversShowFreeTime(){
 		timeToMins(0, day_end, 0, timeEnd);
 
 		for (int i = 1; i <=7; i++){
-
+			int n = 0;
 			for (auto &s: d.getShifts()) {
 				int day1, hours1, mins1, day2, hours2, mins2, freeTimeStart, freeTimeEnd;
 
 				if (s.getStartTime() >= timeStart && s.getEndTime() <= timeEnd){
+					n++;
 					freeTimeStart = s.getStartTime() - (d.getMinRest() * 60);
 					if (freeTimeStart > timeStart) {
 						cout << "| "; printDay(i); cout << ": ";
 						treatTime(day1, hours1, mins1, timeStart);
 						treatTime(day2, hours2, mins2, freeTimeStart);
-						cout << timeToString(hours1, mins1, hours2, mins2) << endl;
+						cout << timeToString(hours1, hours2, mins1, mins2) << endl;
 					}
 					freeTimeEnd = s.getEndTime() + (d.getMinRest() * 60);
 
@@ -985,9 +989,16 @@ void Application::driversShowFreeTime(){
 						cout << "| "; printDay(i); cout << ": ";
 						treatTime(day1, hours1, mins1, freeTimeEnd);
 						treatTime(day2, hours2, mins2, timeEnd);
-						cout << timeToString(hours1, mins1, hours2, mins2) << endl;
+						cout << timeToString(hours1, hours2, mins1, mins2) << endl;
 					}
 				}
+			}
+			if (n == 0) {
+				cout << "| "; printDay(i); cout << ": ";
+				int d1, h1, m1, d2, h2, m2;
+				treatTime(d1, h1, m1, timeStart);
+				treatTime(d1, h2, m2, timeEnd);
+				cout << timeToString(h1, h2, m1, m2) << endl;
 			}
 			timeToMins(i, day_start, 0, timeStart);
 			timeToMins(i, day_end, 0, timeEnd);
@@ -1035,7 +1046,7 @@ void Application::driversAssignWork(){
 			busIndex = i;
 			vector<Shift> shifts = buses.at(i).getSchedule();
 			for(int t=0; t<shifts.size(); t++){
-				if(shifts.at(i).getDriverId() == 0){
+				if(shifts.at(t).getDriverId() == 0){
 					int day1, day2, h1, h2, min1, min2;
 					treatTime(day1, h1, min1, shifts.at(t).getStartTime());
 					treatTime(day2, h2, min2, shifts.at(t).getEndTime());
