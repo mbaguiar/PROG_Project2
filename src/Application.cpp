@@ -1010,7 +1010,7 @@ void Application::driversAssignWork(){
 	Driver d = company.getDrivers()[idD];
 	int idL, nbus;
 	idL = chooseLine();
-	int n=0;
+	int n = 0;
 	for(int i=0; i<company.getBuses().size(); i++){
 		if(company.getBuses().at(i).getLineId() == idL){
 			n++;
@@ -1040,7 +1040,7 @@ void Application::driversAssignWork(){
 					treatTime(day2, h2, min2, shifts.at(t).getEndTime());
 					cout << "Shift " << setw(3) << t+1 << setw(3) << " ";
 					cout << "Day: "; printDay(day1);
-					cout << setw(3) << " " << "Time:" << timeToString(h1,h2,min1,min2) << setw(3) << " ";
+					cout << setw(3) << " " << "Time: " << timeToString(h1,h2,min1,min2) << setw(3) << " ";
 					cout << endl;
 				}
 			}
@@ -1049,16 +1049,16 @@ void Application::driversAssignWork(){
 	cout << "Would you like to assign more than one shift(Y/N)?";
 	string foo;
 	vector<int> shiftsNumbers;
-	int t =1;
 	bool s = true;
 	getline(cin,foo);
-	if(foo == "Y" || foo == "y"){
+	normalize(foo);
+	if(foo == "y"){
 		while(true){
 			string foo2;
-			s= true;
+			s = true;
 			shiftsNumbers.resize(0);
 			cout << "Insert consecutive shifts (Press enter to stop):";
-			t = 1;
+			int t = 1;
 			while(t){
 				t = 0;
 				getline(cin,foo2);
@@ -1094,7 +1094,7 @@ void Application::driversAssignWork(){
 		newdrivershift.setBusOrderNumber(nbus);
 		newdrivershift.setStartTime(firstShift.getStartTime());
 		newdrivershift.setEndTime(lastShift.getEndTime());
-	}else if(foo == "N" && foo == "n"){
+	}else if(foo == "n"){
 		int idS;
 		do{
 			cout << "Insert number of shift:";
@@ -1109,9 +1109,9 @@ void Application::driversAssignWork(){
 		newdrivershift.setEndTime(buses.at(busIndex).getSchedule().at(idS-1).getEndTime());
 	}else {
 		cout << "Invalid input\n";
-		break;
+		return;
 	}
-	int rest = d.getMinRest();
+	int rest = d.getMinRest()*60;
 	int max_shift = d.getMaxShift()*60;
 	int max_week = d.getMaxWeek()*60;
 	int duration;
@@ -1121,28 +1121,35 @@ void Application::driversAssignWork(){
 		temp = d.getShifts().at(i).getEndTime() - d.getShifts().at(i).getStartTime();
 		duration = duration + temp;
 	}
+	cout << "fofinho\n";
 	int durationShift = newdrivershift.getEndTime()-newdrivershift.getStartTime();
-	if(durationShift <= max_shift && duration+durationShift <= max_week){
-		for(int t=0; t<d.getShifts(); t++){
-			if(newdrivershift.getStartTime() >= d.getShifts().at(t).getStartTime() && newdrivershift.getStartTime() <= d.getShifts().at(t).getEndTime()){
+	if(durationShift <= max_shift && (duration+durationShift) <= max_week){
+		cout << "muito fofinho\n";
+		if (!d.getShifts().empty()){
+		for(int t=0; t<d.getShifts().size(); t++){
+			if(newdrivershift.getStartTime() >= (d.getShifts().at(t).getStartTime()-rest) && newdrivershift.getStartTime() <= (d.getShifts().at(t).getEndTime()+rest)){
 				success = false;
-			}else if(newdrivershift.getEndTime() >= d.getShifts().at(t).getStartTime() && newdrivershift.getEndTime() <= d.getShifts().at(t).getEndTime()){
+
+			}else if(newdrivershift.getEndTime() >= (d.getShifts().at(t).getStartTime()-rest) && newdrivershift.getEndTime() <= (d.getShifts().at(t).getEndTime()+rest)){
 				success = false;
 			}
 		}
+		}
 	}else{
-		cout << "Max hours per shift or max hours per week reached!";
-		break;
+		cout << "Max hours per shift or max hours per week reached!\n";
 	}
+	cout << "Oii\n";
 	if(success){
-		d.getShifts().push_back(newdrivershift);
-		std::sort(d.getShifts().begin(), d.getShifts().end(), sortShifts);
+		vector<Shift> newshifts = d.getShifts();
+		newshifts.push_back(newdrivershift);
+		d.setShifts(newshifts);
+		//sort(d.getShifts().begin(), d.getShifts().end(), sortShifts);
 		for(int i=0; i<shiftsNumbers.size(); i++){
 			buses.at(busIndex).setDriverShift(shiftsNumbers.at(i), idD);
 		}
 	}else {
-		cout << "You cannot overlap shifs!";
-		break;
+		cout << "You cannot overlap shifts!\n";
+		return;
 	}
 }
 
@@ -1308,7 +1315,6 @@ void Application::inputMenu(){
 		normalize(command);
 		if(mainMenu.find(command) != mainMenu.end()){
 			(this->*mainMenu[command])();
-			break;
 		} else cout << "Invalid command.\n";
 	} while(true);
 }
