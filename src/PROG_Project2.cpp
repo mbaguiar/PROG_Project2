@@ -15,10 +15,6 @@ int main() {
 	app.setupMenu();
 	app.loadFiles();
 	app.loadBuses();
-	do {
-	app.inputMenu();
-	cout << "Press any key to continue.";
-	getchar();
-	} while (true);
+	app.start();
 	return 0;
 }

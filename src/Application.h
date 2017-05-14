@@ -40,10 +40,12 @@ private:
 
 public:
 	Application();
+	void start();
 	bool validIdLines(int id_number);
 	bool validIdDrivers(int id_number);
 	void loadFiles();
 	void loadBuses();
+	int chooseBus(int lineID);
 	void changeFile(string type);
 	void setupMenu();
 	void displayMainMenu();
