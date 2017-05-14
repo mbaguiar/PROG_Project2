@@ -684,7 +684,6 @@ void Application::printTable(Stop stop, int duration, Clock start, string begin,
 void Application::linesStopTimetable(){
 	string stop;
 	int n=0;
-	int duration= 0;
 	int travel;
 	vector<Stop> stopsDirect, stopsInverse;
 	do {
@@ -699,6 +698,7 @@ void Application::linesStopTimetable(){
 	} while (true);
 	Clock start;
 	for(int i = 0; i<stopsDirect.size(); i++){
+		int duration= 0;
 		n=0;
 		start.hours = day_start;
 		start.mins = 0;
