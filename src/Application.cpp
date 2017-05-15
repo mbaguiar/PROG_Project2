@@ -584,10 +584,10 @@ void Application::linesStopLines() {
 	vector<Stop> stopsInverse;
 	do {
 		do {
-		cout << "Insert the stop name to search for: ";
-		getline(cin, stop);
-		if (stop == "") cout << "Invalid input.\n";
-		else break;
+			cout << "Insert the stop name to search for: ";
+			getline(cin, stop);
+			if (stop == "") cout << "Invalid input.\n";
+			else break;
 		} while (true);
 		searchStops(stop, stopsDirect, stopsInverse);
 		if (stopsDirect.empty() && stopsInverse.empty()) {
@@ -1194,6 +1194,7 @@ void Application::driversAssignWork() {
 	}
 	else {
 		cout << "Max hours per shift or max hours per week reached!\n";
+		success = false;
 	}
 
 	if (success) {
@@ -1210,8 +1211,11 @@ void Application::driversAssignWork() {
 		pause();
 	}
 	else {
-		cout << "You cannot overlap shifts!\n";
-		return;
+		if(!success) return;
+		else{
+			cout << "You cannot overlap shifts!\n";
+			return;
+		}
 	}
 }
 

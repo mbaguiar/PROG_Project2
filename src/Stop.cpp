@@ -55,7 +55,7 @@ void Stop::setLineId(int lineID){
 void Stop::setTimeFromStart(int timeFromStart){
 	this->timeFromStart = timeFromStart;
 }
-s
+
 void Stop::setFreq(int freq){
 	this->freq = freq;
 }
