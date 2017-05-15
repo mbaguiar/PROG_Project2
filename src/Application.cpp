@@ -854,6 +854,8 @@ void Application::driversUpdateName(int id_number) {
 
 void Application::driversUpdateMaxShift(int id_number) {
 	Driver d = company.getDrivers()[id_number];
+	if (!d.getShifts().empty()) cout << "You can't update a driver with assigned work. ";
+	else {
 	string foo;
 	int shift;
 	cout << "The current daily shift for driver " << id_number << " is " << d.getMaxShift() << "h.";
@@ -874,56 +876,63 @@ void Application::driversUpdateMaxShift(int id_number) {
 	company.setDriver(id_number, d);
 	driversChanged = true;
 	cout << "Driver updated successfully. ";
+	}
 	pause();
 }
 
 void Application::driversUpdateMaxWeek(int id_number) {
 	Driver d = company.getDrivers()[id_number];
-	string foo;
-	int shift;
-	cout << "The current weekly shift for driver " << id_number << " is " << d.getMaxWeek() << "h.";
-	do {
-		bool success = true;
-		cout << "Insert the new weekly shift(h): ";
-		getline(cin, foo);
-		try {
-			shift = stoi(foo, nullptr);
-		}
-		catch (const std::invalid_argument& ia) {
-			cout << "Invalid input. Reenter." << endl;
-			success = false;
-		}
-		if (success) break;
-	} while (true);
-	d.setMaxWeek(shift);
-	company.setDriver(id_number, d);
-	driversChanged = true;
-	cout << "Driver updated successfully. ";
+	if (!d.getShifts().empty()) cout << "You can't update a driver with assigned work. ";
+	else {
+		string foo;
+		int shift;
+		cout << "The current weekly shift for driver " << id_number << " is " << d.getMaxWeek() << "h.";
+		do {
+			bool success = true;
+			cout << "Insert the new weekly shift(h): ";
+			getline(cin, foo);
+			try {
+				shift = stoi(foo, nullptr);
+			}
+			catch (const std::invalid_argument& ia) {
+				cout << "Invalid input. Reenter." << endl;
+				success = false;
+			}
+			if (success) break;
+		} while (true);
+		d.setMaxWeek(shift);
+		company.setDriver(id_number, d);
+		driversChanged = true;
+		cout << "Driver updated successfully. ";
+	}
 	pause();
 }
 
 void Application::driversUpdateMinRest(int id_number) {
 	Driver d = company.getDrivers()[id_number];
-	string foo;
-	int rest;
-	cout << "The current daily shift for driver " << id_number << " is " << d.getMinRest() << "h.";
-	do {
-		bool success = true;
-		cout << "Insert the new minimum rest(h): ";
-		getline(cin, foo);
-		try {
-			rest = stoi(foo, nullptr);
-		}
-		catch (const std::invalid_argument& ia) {
-			cout << "Invalid input. Reenter." << endl;
-			success = false;
-		}
-		if (success) break;
-	} while (true);
-	d.setMinRest(rest);
-	company.setDriver(id_number, d);
-	driversChanged = true;
-	cout << "Driver updated successfully. ";
+	if (!d.getShifts().empty()) cout << "You can't update a driver with assigned work. ";
+	else {
+		string foo;
+		int rest;
+		cout << "The current daily shift for driver " << id_number << " is " << d.getMinRest() << "h.";
+		do {
+			bool success = true;
+			cout << "Insert the new minimum rest(h): ";
+			getline(cin, foo);
+			try {
+				rest = stoi(foo, nullptr);
+			}
+			catch (const std::invalid_argument& ia) {
+				cout << "Invalid input. Reenter." << endl;
+				success = false;
+			}
+			if (success) break;
+		} while (true);
+		d.setMinRest(rest);
+		company.setDriver(id_number, d);
+		driversChanged = true;
+		cout << "Driver updated successfully. ";
+	}
 	pause();
 }
 
@@ -939,9 +948,12 @@ void Application::driversDelete() {
 		}
 	} while (true);
 	validIdDrivers(id);
-	company.eraseDriver(id);
-	cout << "Driver " << id << " deleted successfully. ";
-	driversChanged = true;
+	if (!company.getDrivers()[id].getShifts().empty()) cout << "You can't delete a driver with assigned work. ";
+	else {
+		company.eraseDriver(id);
+		cout << "Driver " << id << " deleted successfully. ";
+		driversChanged = true;
+	}
 	pause();
 }
 
@@ -1356,7 +1368,7 @@ void Application::setupMenu() {
 	mainMenu["e"] = &Application::exitMenu;
 	//driver update menu
 	driverUpdateMenu["name"] = &Application::driversUpdateName;
-	driverUpdateMenu["h/day"] = &Application::driversUpdateMaxShift;
+	driverUpdateMenu["h/shift"] = &Application::driversUpdateMaxShift;
 	driverUpdateMenu["h/week"] = &Application::driversUpdateMaxWeek;
 	driverUpdateMenu["h/rest"] = &Application::driversUpdateMinRest;
 }
@@ -1378,7 +1390,7 @@ void Application::displayMainMenu() {
 void Application::displayUpdateMenu(int id_number, string identifier) {
 	if (identifier == DRIVERS_IDENTIFIER) {
 		cout << "Drivers Update - Driver " << id_number << " selected" << endl;
-		cout << "     Name, H/Day, H/Week, H/Rest" << endl;
+		cout << "     Name, H/Shift, H/Week, H/Rest" << endl;
 	}
 	cout << "     Back" << endl;
 }
