@@ -138,6 +138,7 @@ void Application::linesShow() {
 		getline(cin, foo);
 		normalize(foo);
 		if (foo == "y") {
+			cout << endl;
 			linesDetailShow(chooseLine());
 		}
 		else if (foo == "n") break;
@@ -709,16 +710,15 @@ void Application::printTable(Stop stop, int duration, Clock start, string begin,
 	cout << endl;
 }
 
-void Application::linesStopTimetable() {
+void Application::linesStopTimetable(){
 	string stop;
-	int n = 0;
-	int duration = 0;
+	int n=0;
 	int travel;
 	vector<Stop> stopsDirect, stopsInverse;
 	do {
 		cout << "Insert the stop name: ";
 		getline(cin, stop);
-		searchStops(stop, stopsDirect, stopsInverse);
+		searchStops(stop, stopsDirect,  stopsInverse);
 
 		if (stopsDirect.empty() && stopsInverse.empty()) {
 			cout << "Invalid stop name.\n\n";
@@ -726,21 +726,21 @@ void Application::linesStopTimetable() {
 		else break;
 	} while (true);
 	Clock start;
-	start.hours = day_start;
-	start.mins = 0;
-	for (size_t i = 0; i < stopsDirect.size(); i++) {
-		travel = stopsDirect.at(i).getTimeFromStart();
+	for(int i = 0; i<stopsDirect.size(); i++){
+		int duration= 0;
+		n=0;
+		start.hours = day_start;
+		start.mins = 0;
+		travel  = stopsDirect.at(i).getTimeFromStart();
 		Line line = company.getLines()[stopsDirect.at(i).getLineId()];
-		for (size_t t = 0; t < line.getTimes().size(); t++) {
-			duration += line.getTimes().at(t);
+		for(int t=0; t<line.getTimes().size(); t++){
+			duration = duration + line.getTimes().at(t);
 		}
-		printTable(stopsDirect.at(i), duration, start, line.getStops().at(0), line.getStops().at(line.getStops().size() - 1), n);
-	}
-	start = addTime(duration, start);
-	for (size_t i = 0; i < stopsInverse.size(); i++) {
+		printTable(stopsDirect.at(i),duration, start, line.getStops().at(0), line.getStops().at(line.getStops().size()-1), n );
+		start = addTime(duration, start);
 		travel = stopsInverse.at(i).getTimeFromStart();
-		Line line = company.getLines()[stopsInverse.at(i).getLineId()];
-		printTable(stopsInverse.at(i), duration, start, line.getStops().at(line.getStops().size() - 1), line.getStops().at(0), n);
+		line = company.getLines()[stopsInverse.at(i).getLineId()];
+		printTable(stopsInverse.at(i), duration, start, line.getStops().at(line.getStops().size()-1), line.getStops().at(0), n);
 	}
 }
 
@@ -964,6 +964,7 @@ void Application::driversShowAssignedWork() {
 	} while (true);
 
 	Driver d = company.getDrivers()[id];
+	cout << d.getShifts().size();
 
 	if (d.getShifts().empty()) cout << "The driver has no assigned work.\n";
 	else {
@@ -977,8 +978,8 @@ void Application::driversShowAssignedWork() {
 			cout << setw(12) << timeToString(hours1, hours2, mins1, mins2) << setw(3) << " " << endl;
 		}
 	}
-
 	pause();
+
 }
 
 void Application::driversShowFreeTime() {
@@ -1086,6 +1087,7 @@ void Application::driversAssignWork() {
 		if (buses.at(i).getLineId() == lineID && buses.at(i).getBusOrderInLine() == busN) {
 			busIndex = i;
 			vector<Shift> shifts = buses.at(i).getSchedule();
+
 			for (size_t t = 0; t < shifts.size(); t++) {
 				if (shifts.at(t).getDriverId() == 0) {
 					int day1, day2, h1, h2, min1, min2;
@@ -1123,10 +1125,12 @@ void Application::driversAssignWork() {
 						success = false;
 					}
 				}
+
 				for (size_t i = 0; i < shiftsNumbers.size(); i++) {
 					if (shiftsNumbers.at(i) + 1 > buses.at(busIndex).getSchedule().size()) {
 						success = false;
 					}
+
 				}
 
 				sort(shiftsNumbers.begin(), shiftsNumbers.end());
