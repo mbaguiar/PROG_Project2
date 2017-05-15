@@ -9,6 +9,7 @@
 #include <string>
 #include "Line.h"
 #include "Driver.h"
+#include "Route.h"
 #include "helper.h"
 
 using namespace std;
@@ -234,6 +235,9 @@ void timeToMins( int day,  int hours,  int mins,  int &time){
 
 bool sortShifts(const Shift & s1, const Shift & s2) {
 	return (s1.getStartTime() < s2.getStartTime());
+}
+bool sortRoutes (const Route &r1, const Route &r2) {
+	return (r1.getDuration() < r2.getDuration());
 }
 
 void pause() {

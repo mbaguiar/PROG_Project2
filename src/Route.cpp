@@ -37,6 +37,22 @@ int Route::getDuration() const {
 vector<string> Route::getStops() const {
 	return stops;
 }
+
+void Route::setStartLineID(int startID) {
+	startLineID = startID;
+}
+void Route::setEndLineID(int endID) {
+	endLineID = endID;
+}
+
+void Route::setDuration(int dur) {
+	duration = dur;
+}
+
+void Route::setStops(vector<string> stops) {
+	this->stops = stops;
+}
+
 Route::~Route() {
 	// TODO Auto-generated destructor stub
 }

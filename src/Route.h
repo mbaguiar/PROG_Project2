@@ -27,6 +27,10 @@ public:
 	int getEndLineID() const;
 	int getDuration() const;
 	vector<string> getStops() const;
+	void setStartLineID(int startID);
+	void setEndLineID(int endID);
+	void setDuration(int dur);
+	void setStops(vector<string> stops);
 };
 
 #endif /* SRC_ROUTE_H_ */

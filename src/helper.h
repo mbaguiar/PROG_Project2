@@ -8,6 +8,8 @@
 #ifndef SRC_HELPER_H_
 #define SRC_HELPER_H_
 
+
+
 struct Clock{
 	int hours;
 	int mins;
@@ -29,7 +31,8 @@ Clock addTime(int min, Clock time);
 Clock subTime(int min, Clock time);
 void printDay(int day);
 void timeToMins(int day, int hours, int mins, int &time);
-bool sortShifts (const Shift & s1, const Shift & s2);
+bool sortShifts (const Shift &s1, const Shift &s2);
+bool sortRoutes (const Route &r1, const Route &r2);
 void pause();
 
 
