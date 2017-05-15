@@ -19,6 +19,9 @@ bool validArg(int & variable){
 	bool success = true;
 	string input;
 	getline(cin, input);
+	if (input == ""){
+		success = false;
+	} else {
 	trimString(input);
 
 	try {
@@ -32,6 +35,7 @@ bool validArg(int & variable){
 	if (index != input.length()) success = false;
 
 	if (variable <= 0) success = false;
+	}
 
 	if (!success) cout << "Invalid input. Reenter.\n";
 	return success;

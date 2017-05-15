@@ -587,14 +587,13 @@ void Application::linesStopLines() {
 	vector<Stop> stopsDirect;
 	vector<Stop> stopsInverse;
 	do {
-		cout << "Insert the stop name to search for (CTRL-Z to cancel): ";
+		do {
+		cout << "Insert the stop name to search for: ";
 		getline(cin, stop);
-		if (cin.eof()) {
-			cin.clear();
-			return;
-		}
+		if (stop == "") cout << "Invalid input.\n";
+		else break;
+		} while (true);
 		searchStops(stop, stopsDirect, stopsInverse);
-
 		if (stopsDirect.empty() && stopsInverse.empty()) {
 			cout << "Invalid stop name.\n";
 		}
@@ -1369,6 +1368,7 @@ void Application::setupMenu() {
 }
 
 void Application::displayMainMenu() {
+	cout << company.getName() << " menu:\n";
 	cout << "\n";
 	cout << "Lines" << endl;
 	cout << "     Show, Schedules, Routes" << endl;
