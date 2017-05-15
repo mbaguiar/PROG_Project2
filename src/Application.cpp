@@ -336,7 +336,7 @@ void Application::linesSchedule() {
 	//Inverse direction
 
 	cout << "Direction: " << line.getStops().at(line.getStops().size() - 1);
-	cout << " to " << line.getStops().at(0) << endl << endl;
+	cout << " -> " << line.getStops().at(0) << endl << endl;
 	cout << std::left;
 	for (int i = line.getStops().size() - 1; i >= 0; i--) {
 		if (line.getStops().at(i).size() < 5) {
@@ -609,6 +609,7 @@ void Application::linesStopLines() {
 			cout << ".\n";
 		}
 	}
+	pause();
 }
 
 // Prints a table with the schedule of a line in a given Stop in one of the directions
@@ -679,7 +680,7 @@ void Application::printTable(Stop stop, int duration, Clock start, string begin,
 	int id = stop.getLineId();
 	cout << "Line: " << id << " - " << stop.getName() << endl;
 	cout << "Direction: " << begin;
-	cout << " to " << end << endl << endl;
+	cout << " -> " << end << endl << endl;
 	for (int i = 0; i < hours.size(); i++) {
 		cout << setw(6) << hours.at(i).at(0).hours;
 	}
@@ -749,6 +750,7 @@ void Application::linesStopTimetable(){
 		line = company.getLines()[stopsInverse.at(i).getLineId()];
 		printTable(stopsInverse.at(i), duration, start, line.getStops().at(line.getStops().size()-1), line.getStops().at(0), n);
 	}
+	pause();
 }
 
 // Displays a driver summary and asks if the user wants to see detailed info about an individual driver
@@ -819,7 +821,6 @@ void Application::driversCreate() {
 
 	do {
 		cout << "Weekly shift(h): ";
-		getline(cin, foo);
 		if (validArg(max_week)) break;
 	} while (true);
 
@@ -834,7 +835,9 @@ void Application::driversCreate() {
 	newdriver.setMaxWeek(max_week);
 	newdriver.setMinRest(min_rest);
 	company.addDriver(newdriver);
+	cout << "Driver successfully added. ";
 	driversChanged = true;
+	pause();
 }
 
 // Allows user to change any information about a specific driver
@@ -865,7 +868,7 @@ void Application::driversUpdate() {
 void Application::driversUpdateName(int id_number) {
 	Driver d = company.getDrivers()[id_number];
 	string foo;
-	cout << "The current name for driver " << id_number << " is " << d.getName() << endl;
+	cout << "The current name for driver " << id_number << " is " << d.getName() << ".\n";
 	cout << "Insert the new name: ";
 	getline(cin, foo);
 	d.setName(foo);
@@ -967,7 +970,7 @@ void Application::driversDelete() {
 	printDrivers();
 	int id;
 	do {
-		cout << "Driver's id:";
+		cout << "Insert the driver number: ";
 		if (!validArg(id)) continue;
 		if (validIdDrivers(id)) break;
 		else {
@@ -989,14 +992,13 @@ void Application::driversShowAssignedWork() {
 	printDrivers();
 	int id;
 	do {
-		cout << endl << "Insert the driver number: ";
+		cout << "Insert the driver number: ";
 		if (!validArg(id)) continue;
 		if (validIdDrivers(id)) break;
 		else cout << "Invalid id. Reenter.\n";
 	} while (true);
 
 	Driver d = company.getDrivers()[id];
-	cout << d.getShifts().size();
 
 	if (d.getShifts().empty()) cout << "The driver has no assigned work.\n";
 	else {
@@ -1094,6 +1096,7 @@ void Application::driversShowFreeTime() {
 
 		}
 	}
+	pause();
 }
 
 // Allows user to assign work to a choosen driver
