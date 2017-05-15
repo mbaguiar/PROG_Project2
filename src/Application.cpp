@@ -10,6 +10,7 @@
 #include "Line.h"
 #include "Driver.h"
 #include "Stop.h"
+#include "Route.h"
 #include "helper.h"
 
 typedef map<int, Driver> DriverList;
@@ -431,32 +432,27 @@ void Application::linesTravelTimes() {
 		else break;
 	} while (true);
 
-	vector<int> IDs;
-	vector<int> directions;
-	vector<int> times;
-	vector<vector <string> > routes;
-
-	vector<int> startIDs;
-	vector<int> endIDs;
-	vector<int> times2;
-	vector<vector <string> > routes2;
+	vector<Route> directRoutes;
+	vector<Route> nonDirectRoutes;
 
 	for (int i = 0; i < stopsDirect1.size(); i++) {
 		for (int x = 0; x < stopsDirect2.size(); x++) {
 			if (stopsDirect1.at(i).getLineId() == stopsDirect2.at(x).getLineId()) {
 				if (stopsDirect1.at(i).getPosInLine() < stopsDirect2.at(x).getPosInLine()) {
-					IDs.push_back(stopsDirect1.at(i).getLineId());
-					directions.push_back(0);
+					Route r;
+					r.setStartLineID(stopsDirect1.at(i).getLineId());
+					r.setEndLineID(stopsDirect1.at(i).getLineId());
 					int time = 0;
 					for (int z = stopsDirect1.at(i).getPosInLine(); z < stopsDirect2.at(x).getPosInLine(); z++) {
 						time += company.getLines()[stopsDirect1.at(i).getLineId()].getTimes().at(z);
 					}
-					times.push_back(time);
+					r.setDuration(time);
 					vector<string> stops;
 					for (int z = stopsDirect1.at(i).getPosInLine(); z <= stopsDirect2.at(x).getPosInLine(); z++) {
 						stops.push_back(company.getLines()[stopsDirect1.at(i).getLineId()].getStops().at(z));
 					}
-					routes.push_back(stops);
+					r.setStops(stops);
+					directRoutes.push_back(r);
 					break;
 				}
 			}
@@ -467,34 +463,33 @@ void Application::linesTravelTimes() {
 		for (int x = 0; x < stopsInverse2.size(); x++) {
 			if (stopsInverse1.at(i).getLineId() == stopsInverse2.at(x).getLineId()) {
 				if (stopsInverse1.at(i).getPosInLine() > stopsInverse2.at(x).getPosInLine()) {
-					IDs.push_back(stopsInverse1.at(i).getLineId());
-					directions.push_back(1);
+					Route r;
+					r.setStartLineID(stopsInverse1.at(i).getLineId());
+					r.setEndLineID(stopsInverse1.at(i).getLineId());
 					int time = 0;
 					for (int z = stopsInverse1.at(i).getPosInLine() - 1; z >= stopsInverse2.at(x).getPosInLine(); z--) {
 						time += company.getLines()[stopsDirect1.at(i).getLineId()].getTimes().at(z);
 					}
-					times.push_back(time);
+					r.setDuration(time);
 					vector<string> stops;
 					for (int z = stopsInverse1.at(i).getPosInLine(); z >= stopsInverse2.at(x).getPosInLine(); z--) {
 						stops.push_back(company.getLines()[stopsInverse1.at(i).getLineId()].getStops().at(z));
 					}
-					routes.push_back(stops);
+					r.setStops(stops);
+					directRoutes.push_back(r);
 					break;
 				}
 			}
 		}
 	}
-	if (!IDs.empty()) {
-		cout << "There are " << IDs.size() << " direct routes from " << stop1 << " to " << stop2 << ":\n";
-		for (int i = 0; i < IDs.size(); i++) {
-			cout << endl;
-			cout << "Line " << IDs.at(i);
-			cout << " - ";
-			if (directions.at(i) == 0) cout << "MAIN DIRECTION";
-			else cout << "INVERSE DIRECTION";
+	if (!directRoutes.empty()) {
+		sort (directRoutes.begin(), directRoutes.end(), sortRoutes);
+		cout << "There are " << directRoutes.size() << " routes from " << stop1 << " to " << stop2 << ":\n\n";
+		for (int i = 0; i < directRoutes.size(); i++) {
+			cout << "Line " << setw(3) << directRoutes.at(i).getStartLineID();
 			cout << " - Duration: ";
-			if (times.at(i) >= 60) {
-				int t = times.at(i);
+			if (directRoutes.at(i).getDuration() >= 60) {
+				int t = directRoutes.at(i).getDuration();
 				int h = 0;
 				while (t >= 60) {
 					t -= 60;
@@ -502,11 +497,11 @@ void Application::linesTravelTimes() {
 				}
 				cout << h << "h " << t << "min";
 			}
-			else cout << times.at(i) << "min";
+			else cout << directRoutes.at(i).getDuration() << "min";
 			cout << " - (";
-			for (size_t x = 0; x < routes.at(i).size(); x++) {
-				cout << routes.at(i).at(x);
-				if (x != routes.at(i).size() - 1) {
+			for (size_t x = 0; x < directRoutes.at(i).getStops().size(); x++) {
+				cout << directRoutes.at(i).getStops().at(x);
+				if (x != directRoutes.at(i).getStops().size() - 1) {
 					cout << ", ";
 				}
 				else {
@@ -532,26 +527,28 @@ void Application::linesTravelTimes() {
 					}
 				}
 				if (pos1 != -1 && pos2 != -1) {
-					startIDs.push_back(id1);
-					endIDs.push_back(id2);
-					int temp;
-					vector<string> temp2;
-					route(stopsDirect1.at(i), stopsDirect2.at(x), pos1, pos2, temp, temp2);
-					times2.push_back(temp);
-					routes2.push_back(temp2);
+					Route r;
+					r.setStartLineID(id1);
+					r.setEndLineID(id2);
+					int duration;
+					vector<string> stops;
+					route(stopsDirect1.at(i), stopsDirect2.at(x), pos1, pos2, duration, stops);
+					r.setDuration(duration);
+					r.setStops(stops);
+					nonDirectRoutes.push_back(r);
 				}
 			}
 		}
-		if (!startIDs.empty()) {
-			cout << "There are " << startIDs.size() << " non-direct routes from " << stop1 << " to " << stop2 << ":\n";
-			cout << "* Marks the stop where you must switch lines.\n";
-			for (size_t i = 0; i < startIDs.size(); i++) {
-				cout << endl;
-				cout << "Line " << startIDs.at(i) << " and " << endIDs.at(i);
+		if (!nonDirectRoutes.empty()) {
+			sort (nonDirectRoutes.begin(), nonDirectRoutes.end(), sortRoutes);
+			cout << "There are " << nonDirectRoutes.size() << " non-direct routes from " << stop1 << " to " << stop2 << ":\n";
+			cout << "* Marks the stop where you must switch lines.\n\n";
+			for (size_t i = 0; i < nonDirectRoutes.size(); i++) {
+				cout << "Line " << setw(3) << nonDirectRoutes.at(i).getStartLineID() << " and " << setw(3) << nonDirectRoutes.at(i).getEndLineID();
 				cout << " - ";
 				cout << "Duration: ";
-				if (times2.at(i) >= 60) {
-					int t = times2.at(i);
+				if (nonDirectRoutes.at(i).getDuration() >= 60) {
+					int t = nonDirectRoutes.at(i).getDuration();
 					int h = 0;
 					while (t >= 60) {
 						t -= 60;
@@ -559,11 +556,11 @@ void Application::linesTravelTimes() {
 					}
 					cout << h << "h " << t << "min";
 				}
-				else cout << times2.at(i) << "min";
+				else cout << nonDirectRoutes.at(i).getDuration() << "min";
 				cout << " - (";
-				for (size_t x = 0; x < routes2.at(i).size(); x++) {
-					cout << routes2.at(i).at(x);
-					if (x != routes2.at(i).size() - 1) {
+				for (size_t x = 0; x < nonDirectRoutes.at(i).getStops().size(); x++) {
+					cout << nonDirectRoutes.at(i).getStops().at(x);
+					if (x != nonDirectRoutes.at(i).getStops().size() - 1) {
 						cout << ", ";
 					}
 					else {
@@ -1317,6 +1314,7 @@ void Application::busesShowFreeTime() {
 			cout << endl;
 		}
 	}
+	pause();
 }
 
 void Application::exitMenu() {
