@@ -20,7 +20,6 @@ class Driver{
   vector<Shift> shifts;         // assigned shifts
  public:
   Driver();
-  Driver(string textLine);
   Driver(int id, string name, unsigned int max_shift, unsigned int max_week, unsigned int min_rest, vector<Shift> shifts);
 
   // GET METHODS

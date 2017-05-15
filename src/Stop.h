@@ -19,8 +19,6 @@ private:
 	int lineID;
 	int posInLine;
 	int timeFromStart;
-	int stopH;
-	int stopM;
 	int freq;
 	int direction;
 public:
@@ -30,16 +28,12 @@ public:
 	int getLineId() const;
 	int getPosInLine() const;
 	int getTimeFromStart() const;
-	int getStopH() const;
-	int getStopM() const;
 	int getFreq() const;
 	int getDirection() const;
 	void setName(string name);
 	void setPosInLine(int posInLine);
 	void setLineId(int LineId);
 	void setTimeFromStart(int timeFromStart);
-	void setStopH(int stopH);
-	void setStopM(int stopM);
 	void setFreq(int freq);
 	void setDirection(int direction);
 };

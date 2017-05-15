@@ -12,8 +12,6 @@ Stop::Stop() {
 	lineID = -1;
 	posInLine = -1;
 	timeFromStart = -1;
-	stopH = -1;
-	stopM = -1;
 	freq= 0;
 	direction = 0;
 }
@@ -32,14 +30,6 @@ int Stop::getPosInLine() const{
 
 int Stop::getTimeFromStart() const{
 	return timeFromStart;
-}
-
-int Stop::getStopH() const{
-	return stopH;
-}
-
-int Stop::getStopM() const{
-	return stopM;
 }
 
 int Stop::getFreq() const{
@@ -65,15 +55,7 @@ void Stop::setLineId(int lineID){
 void Stop::setTimeFromStart(int timeFromStart){
 	this->timeFromStart = timeFromStart;
 }
-
-void Stop::setStopH(int stopH){
-	this->stopH = stopH;
-}
-
-void Stop::setStopM(int stopM){
-	this->stopM = stopM;
-}
-
+s
 void Stop::setFreq(int freq){
 	this->freq = freq;
 }

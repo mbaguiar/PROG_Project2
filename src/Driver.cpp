@@ -1,6 +1,5 @@
 #include "Driver.h"
 
-Driver::Driver(string textLine){ }
 Driver::Driver(){
 	id = -1;
 	name = "";
