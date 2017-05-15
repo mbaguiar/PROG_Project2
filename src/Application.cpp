@@ -1119,7 +1119,13 @@ void Application::driversAssignWork() {
 				}
 
 				for (size_t i = 0; i < shiftsNumbers.size(); i++) {
+					int day1, day2, h1, h2, m1, m2;
+					treatTime(day1, h1, m1, buses.at(busIndex).getSchedule().at(shiftsNumbers.at(0)).getStartTime());
+					treatTime(day2, h2, m2, buses.at(busIndex).getSchedule().at(shiftsNumbers.at(i)).getStartTime());
 					if (shiftsNumbers.at(i) + 1 > buses.at(busIndex).getSchedule().size()) {
+						success = false;
+					}
+					if (day1 != day2){
 						success = false;
 					}
 
