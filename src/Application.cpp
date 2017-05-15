@@ -1355,7 +1355,7 @@ void Application::printBus(Bus bus, int day) {
 	}
 }
 
-// Shows all of the unassigned shifts of a chosen bus of a chosen line
+// Shows all of the unassigned shifts of all the buses of a chosen line
 void Application::busesShowFreeTime() {
 	int id = chooseLine();
 	vector<Bus> buses = company.getBuses();
