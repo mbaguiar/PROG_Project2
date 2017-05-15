@@ -1,5 +1,7 @@
 #include "Driver.h"
 
+// Constructors
+
 Driver::Driver(){
 	id = -1;
 	name = "";
@@ -10,9 +12,6 @@ Driver::Driver(){
 	shifts = s;
 }
 
-
-
-
 Driver::Driver(int id, string name, unsigned int max_shift, unsigned int max_week, unsigned int min_rest, vector<Shift> shifts) {
 	this->id = id;
 	this->max_shift = max_shift;
@@ -21,7 +20,7 @@ Driver::Driver(int id, string name, unsigned int max_shift, unsigned int max_wee
 	this->shifts = shifts;
 }
 
-// GET METHODS
+// Get methods
 
 unsigned int Driver::getId() const{
   return id;
@@ -47,7 +46,7 @@ vector<Shift> Driver::getShifts() const{
   return shifts;
 }
 
-// SET METHODS
+// Set methods
 
 void Driver::setId(unsigned int id){
 	this->id = id;

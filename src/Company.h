@@ -1,7 +1,6 @@
 #ifndef COMPANY_H_
 #define COMPANY_H_
 
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -25,30 +24,27 @@ class Company{
   LineList lines;
   vector<Bus> buses;
 
-
  public:
-  // CONSTRUCTORS
+
+  // Constructors
+
   Company(string nome, LineList lines, DriverList drivers);
   Company();
 
-  // GET METHODS
+  // Get methods
 
-  LineList getLines() const; // returns lines map
-  DriverList getDrivers() const; // returns drivers map
+  LineList getLines() const;
+  DriverList getDrivers() const;
   vector<Bus> getBuses() const;
+  string getName() const;
 
-//  Line getLine(int index) const; // returns line of lines vector at index
-//  Driver getDriver(int index) const; // returns driver of drivers vector at index
+  // Set methods
 
-  string getName() const; // returns company name
-
-  // SET METHODS
-
-  void setLine(int index, Line newLine); // replaces line at index with newLine
-  void setDriver(int index, Driver newDriver); // replaces driver at index with newDriver
+  void setLine(int index, Line newLine);
+  void setDriver(int index, Driver newDriver);
   void setBus(Bus bus);
 
-  // OTHER METHODS
+  // Mutating methods
 
   void addLine(Line l);
   void addDriver(Driver d);
@@ -57,6 +53,5 @@ class Company{
   void eraseDriver(int id);
 
 };
-
 
 #endif

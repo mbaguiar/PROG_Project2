@@ -4,7 +4,7 @@
 
 using namespace std;
 
-// CONSTRUCTORS
+// Constructors
 
 Company::Company(){
 	name = "";
@@ -20,8 +20,7 @@ Company::Company(string name, LineList lines , DriverList drivers){
 	this->drivers = drivers;
 }
 
-
-// GET METHODS
+// Get methods
 
 string Company::getName() const{
   return name;
@@ -39,7 +38,25 @@ vector<Bus> Company::getBuses() const{
 	return buses;
 }
 
-// MUTATING METHODS
+// Set methods
+
+void Company::setLine(int index, Line newLine) {
+	lines[index] = newLine;
+}
+
+void Company::setDriver(int index, Driver newDriver) {
+	drivers[index] = newDriver;
+}
+
+void Company::setBus(Bus bus){
+	for(int i= 0; i<buses.size(); i++){
+		if(buses.at(i).getLineId() == bus.getLineId() && buses.at(i).getBusOrderInLine() == bus.getBusOrderInLine()){
+			buses.at(i) = bus;
+		}
+	}
+}
+
+// Mutating methods
 
 void Company::addLine(Line l) {
 	lines[l.getId()] = l;
@@ -61,18 +78,3 @@ void Company::eraseDriver(int id){
 	drivers.erase(id);
 }
 
-void Company::setLine(int index, Line newLine) {
-	lines[index] = newLine;
-}
-
-void Company::setDriver(int index, Driver newDriver) {
-	drivers[index] = newDriver;
-}
-
-void Company::setBus(Bus bus){
-	for(int i= 0; i<buses.size(); i++){
-		if(buses.at(i).getLineId() == bus.getLineId() && buses.at(i).getBusOrderInLine() == bus.getBusOrderInLine()){
-			buses.at(i) = bus;
-		}
-	}
-}

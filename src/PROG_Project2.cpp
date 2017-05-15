@@ -1,9 +1,7 @@
 //============================================================================
 // Name        : PROG_Project2.cpp
-// Author      : 
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
+// Author      : Mariana Aguiar Tiago Fragoso
+// Description : Semprarrolar project
 //============================================================================
 
 #include <iostream>

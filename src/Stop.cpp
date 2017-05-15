@@ -1,11 +1,6 @@
-/*
- * Stop.cpp
- *
- *  Created on: May 8, 2017
- *      Author: mariana
- */
-
 #include "Stop.h"
+
+// Constructors
 
 Stop::Stop() {
 	name = "";
@@ -15,6 +10,8 @@ Stop::Stop() {
 	freq= 0;
 	direction = 0;
 }
+
+// Get methods
 
 string Stop::getName() const{
 	return name;
@@ -39,6 +36,8 @@ int Stop::getFreq() const{
 int Stop::getDirection() const{
 	return direction;
 }
+
+// Set methods
 
 void Stop::setName(string name){
 	this->name = name;
@@ -66,6 +65,6 @@ void Stop::setDirection(int direction){
 
 
 Stop::~Stop() {
-	// TODO Auto-generated destructor stub
+	// Auto-generated destructor stub
 }
 

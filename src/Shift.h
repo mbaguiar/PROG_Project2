@@ -4,10 +4,10 @@
 #include <iostream>
 #include <vector>
 
-
 using namespace std;
 
 class Shift{
+
  private:
   unsigned int busLineId;
   unsigned int driverId;  
@@ -16,10 +16,13 @@ class Shift{
   unsigned int endTime;   
 
  public:
+
+  // Constructors
+
   Shift(unsigned int busLineId, unsigned int driverId, unsigned int busOrderNumber, unsigned int startTime, unsigned int endTime);
   Shift();
 
-  // GET METHODS
+  // Get methods
 
   unsigned int getBusLineId() const;
   unsigned int getDriverId() const;
@@ -27,7 +30,7 @@ class Shift{
   unsigned int getStartTime() const;
   unsigned int getEndTime() const;
 
-  // SET METHODS
+  // Set methods
 
   void setBusLineId(unsigned int);
   void setDriverId(unsigned int);

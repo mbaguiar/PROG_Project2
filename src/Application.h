@@ -1,10 +1,3 @@
-/*
- * Application.h
- *
- *  Created on: Apr 28, 2017
- *      Author: mariana
- */
-
 #ifndef APPLICATION_H_
 #define APPLICATION_H_
 
@@ -21,10 +14,11 @@
 
 using namespace std;
 
-
 class Application {
+
 typedef void(Application::*MenuOption)(void);
 typedef void(Application::*UpdateMenuOption)(int id);
+
 private:
 	Company company;
 	bool linesChanged;
@@ -86,6 +80,7 @@ public:
 	void saveChanges();
 	void exitMenu();
 	virtual ~Application();
+
 };
 
 #endif /* APPLICATION_H_ */

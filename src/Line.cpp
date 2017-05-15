@@ -1,5 +1,7 @@
 #include "Line.h"
 
+// Constructors
+
 Line::Line(){
 	id = -1;
 	freq = 0;
@@ -17,7 +19,7 @@ Line::Line (unsigned int id, unsigned int freq, vector<string> stops, vector<int
 	this->times = times;
 }
 
-// GET METHODS
+// Get methods
 
 unsigned int Line::getId() const{
   return id;
@@ -35,7 +37,7 @@ vector<int> Line::getTimes() const{
   return times;
 }
 
-// SET METHODS
+// Set methods
 
 void Line::setId(unsigned int id) {
 	this->id = id;

@@ -1,11 +1,6 @@
-/*
- * Route.cpp
- *
- *  Created on: May 15, 2017
- *      Author: tiagofragoso
- */
-
 #include "Route.h"
+
+// Constructors
 
 Route::Route() {
 	startLineID = 0;
@@ -21,6 +16,8 @@ Route::Route(int startID, int endID, int dur, vector<string> stops){
 	duration = dur;
 	this->stops = stops;
 }
+
+// Get methods
 
 int Route::getStartLineID() const {
 	return startLineID;
@@ -38,6 +35,8 @@ vector<string> Route::getStops() const {
 	return stops;
 }
 
+// Set methods
+
 void Route::setStartLineID(int startID) {
 	startLineID = startID;
 }
@@ -54,6 +53,6 @@ void Route::setStops(vector<string> stops) {
 }
 
 Route::~Route() {
-	// TODO Auto-generated destructor stub
+	// Auto-generated destructor stub
 }
 

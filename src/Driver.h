@@ -7,22 +7,26 @@
 
 #include "Shift.h"
 
-
 using namespace std;
 
 class Driver{
+
  private:
   unsigned int id;
   string name;
-  unsigned int max_shift;        // maximum duration of a shift
-  unsigned int max_week;  // maximum number of hours of work in a week
-  unsigned int min_rest;     // minimum number of rest hours between shifts
-  vector<Shift> shifts;         // assigned shifts
+  unsigned int max_shift;
+  unsigned int max_week;
+  unsigned int min_rest;
+  vector<Shift> shifts;
+
  public:
+
+  // Constructors
+
   Driver();
   Driver(int id, string name, unsigned int max_shift, unsigned int max_week, unsigned int min_rest, vector<Shift> shifts);
 
-  // GET METHODS
+  // Get methods
 
   unsigned int getId() const;
   string getName() const;
@@ -31,7 +35,7 @@ class Driver{
   unsigned int getMinRest() const;
   vector<Shift> getShifts() const;
 
-  // SET METHODS
+  // Set methods
 
   void setId(unsigned int id);
   void setName (string name);
@@ -39,7 +43,6 @@ class Driver{
   void setMaxWeek(unsigned int max_week);
   void setMinRest(unsigned int min_rest);
   void setShifts(vector<Shift> shifts);
-
 
 };
 

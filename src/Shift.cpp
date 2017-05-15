@@ -1,5 +1,7 @@
 #include "Shift.h"
 
+// Constructors
+
 Shift::Shift(){
 	busLineId = 0;
 	driverId = 0;
@@ -16,7 +18,8 @@ Shift::Shift(unsigned int busLineId, unsigned int driverId, unsigned int busOrde
 	this->endTime = endTime;
 }
 
-// metodos get
+// Get methods
+
 unsigned int Shift::getBusLineId() const{
   return busLineId;
 }
@@ -36,9 +39,7 @@ unsigned int Shift::getEndTime() const{
   return endTime;
 }
 
-///////////////
-// set methods
-//////////////
+// Set methods
 
 void Shift::setBusLineId(unsigned int busLineId){
   this->busLineId = busLineId;

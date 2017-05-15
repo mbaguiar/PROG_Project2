@@ -1,9 +1,3 @@
-/*
- * helper.cpp
- *
- *  Created on: May 8, 2017
- *      Author: mariana
- */
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -138,6 +132,7 @@ Line readLine(string &l){
 	return newline;
 }
 
+// Functions to process drivers' file
 Driver readDriver(string &d){
 	Driver newdriver;
 
@@ -156,6 +151,7 @@ Driver readDriver(string &d){
 	return newdriver;
 }
 
+// Generic functions to treat times using objects Clock
 Clock addTime(int min, Clock time){
 	Clock result;
 	result.hours = time.hours;
@@ -185,6 +181,7 @@ Clock subTime(int min, Clock time){
 	return result;
 }
 
+// Functions to treat time to a continuous weekly minute scale
 void treatTime(int &day, int &hours, int &mins, int time){
 	day = time/1440 + 1;
 	hours = (time%1440)/60 ;
@@ -233,6 +230,7 @@ void timeToMins( int day,  int hours,  int mins,  int &time){
 	time += mins;
 }
 
+// Sorting shifts functions
 bool sortShifts(const Shift & s1, const Shift & s2) {
 	return (s1.getStartTime() < s2.getStartTime());
 }
@@ -240,6 +238,7 @@ bool sortRoutes (const Route &r1, const Route &r2) {
 	return (r1.getDuration() < r2.getDuration());
 }
 
+// Function to wait for next menu input
 void pause() {
 	string foo;
 	cout << "Press enter to continue.";

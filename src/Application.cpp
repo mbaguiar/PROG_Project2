@@ -1,10 +1,3 @@
-/*
- * Application.cpp
- *
- *  Created on: Apr 28, 2017
- *      Author: mariana
- */
-
 #include "Application.h"
 #include "Company.h"
 #include "Line.h"
@@ -110,8 +103,7 @@ void Application::loadBuses() {
 			b.setLineId(l.getId());
 			b.setOrderInLine(i);
 
-			// Creates shifts for every day of the week and places it on the
-			// shifts vector
+			// Creates shifts for every day of the week and places it on the shifts vector
 
 			for (size_t day = 1; day <= 7; day++) {
 
@@ -129,8 +121,7 @@ void Application::loadBuses() {
 	}
 }
 
-// Displays a line summary and asks if the user wants to see detailed info
-// about a individual line
+// Displays a line summary and asks if the user wants to see detailed info about an individual line
 void Application::linesShow() {
 	linesSummaryShow();
 	string foo;
@@ -232,7 +223,7 @@ void Application::searchStops(string stop, vector<Stop> &stopsDirect, vector<Sto
 	stopsInverse = stopsI;
 }
 
-// Returns the id of the chosen lines
+// Returns the id of the chosen line
 int Application::chooseLine() {
 	int lineID;
 	LineList lines = company.getLines();
@@ -255,6 +246,7 @@ int Application::chooseLine() {
 	return lineID;
 }
 
+//Prints a table with a line schedule given the direction
 void Application::printTimes(vector<Clock> time, Line line, int &n, int d) {
 	vector<string> stops = line.getStops();
 	int freq = line.getFreq();
@@ -302,7 +294,7 @@ void Application::printTimes(vector<Clock> time, Line line, int &n, int d) {
 	}
 }
 
-// Prints line schedule
+// Prints line schedule, both directions
 void Application::linesSchedule() {
 	int sum;
 	Clock start_time;
@@ -315,6 +307,8 @@ void Application::linesSchedule() {
 
 
 	Line line = company.getLines()[chooseLine()];
+
+	//Direct direction
 
 	cout << "Direction: " << line.getStops().at(0);
 	cout << " -> " << line.getStops().at(line.getStops().size() - 1) << endl << endl;
@@ -338,6 +332,8 @@ void Application::linesSchedule() {
 	}
 	printTimes(time, line, n, 1);
 	cout << endl << endl;
+
+	//Inverse direction
 
 	cout << "Direction: " << line.getStops().at(line.getStops().size() - 1);
 	cout << " to " << line.getStops().at(0) << endl << endl;
@@ -365,7 +361,8 @@ void Application::linesSchedule() {
 
 }
 
-// Recieves 2 stops
+// Receives 2 stops, start and finish form different lines and the position of the common stops in each line
+// Returns a string vector with the stops in the route and the duration
 void Application::route(Stop stop1, Stop stop2, int pos1, int pos2, int &duration, vector<string> &route) {
 	duration = 0;
 	int id1 = stop1.getLineId();
@@ -408,6 +405,7 @@ void Application::route(Stop stop1, Stop stop2, int pos1, int pos2, int &duratio
 	}
 }
 
+// Calculates all of the routes from stop1 to stop2, direct or not, shows them in travel time order
 void Application::linesTravelTimes() {
 	string stop1, stop2;
 	vector<Stop> stopsDirect1, stopsDirect2, stopsInverse1, stopsInverse2;
@@ -435,6 +433,10 @@ void Application::linesTravelTimes() {
 	vector<Route> directRoutes;
 	vector<Route> nonDirectRoutes;
 
+	// Direct routes
+
+		// Direct direction
+
 	for (int i = 0; i < stopsDirect1.size(); i++) {
 		for (int x = 0; x < stopsDirect2.size(); x++) {
 			if (stopsDirect1.at(i).getLineId() == stopsDirect2.at(x).getLineId()) {
@@ -458,6 +460,8 @@ void Application::linesTravelTimes() {
 			}
 		}
 	}
+
+		// Inverse direction
 
 	for (int i = 0; i < stopsInverse1.size(); i++) {
 		for (int x = 0; x < stopsInverse2.size(); x++) {
@@ -510,6 +514,9 @@ void Application::linesTravelTimes() {
 			}
 		}
 	}
+
+	// Non direct routes with only 1 exchanging point
+
 	else {
 		cout << "There are no direct routes from " << stop1 << " to " << stop2 << ".\n";
 		for (int i = 0; i < stopsDirect1.size(); i++) {
@@ -574,7 +581,7 @@ void Application::linesTravelTimes() {
 	pause();
 }
 
-
+// Shows all of the lines that pass by the stop stop
 void Application::linesStopLines() {
 	string stop;
 	vector<Stop> stopsDirect;
@@ -604,6 +611,7 @@ void Application::linesStopLines() {
 	}
 }
 
+// Prints a table with the schedule of a line in a given Stop in one of the directions
 void Application::printTable(Stop stop, int duration, Clock start, string begin, string end, int &n) {
 	Clock time = start;
 	int direction = stop.getDirection();
@@ -615,6 +623,9 @@ void Application::printTable(Stop stop, int duration, Clock start, string begin,
 	vector < vector < Clock > > hours;
 	time = addTime(travel, time);
 	temp.push_back(time);
+
+	// Stores times in a two dimensional vector of objects Clock
+
 	if (!direction) {
 		while (true) {
 			int foo = time.hours;
@@ -662,6 +673,9 @@ void Application::printTable(Stop stop, int duration, Clock start, string begin,
 			}
 		}
 	}
+
+	// Prints the table
+
 	int id = stop.getLineId();
 	cout << "Line: " << id << " - " << stop.getName() << endl;
 	cout << "Direction: " << begin;
@@ -702,6 +716,7 @@ void Application::printTable(Stop stop, int duration, Clock start, string begin,
 	cout << endl;
 }
 
+// Prints stop timetables for every direction and line that contains the stop stop
 void Application::linesStopTimetable(){
 	string stop;
 	int n=0;
@@ -736,6 +751,7 @@ void Application::linesStopTimetable(){
 	}
 }
 
+// Displays a driver summary and asks if the user wants to see detailed info about an individual driver
 void Application::driversShow() {
 	printDrivers();
 	cout << endl << endl;
@@ -743,6 +759,7 @@ void Application::driversShow() {
 
 }
 
+// Displays a driver summary
 void Application::printDrivers() {
 	DriverList drivers = company.getDrivers();
 	cout << std::left << setw(4) << "ID" << setw(3) << " " << setw(30) << "NAME" << setw(3) << " " << setw(7);
@@ -756,6 +773,8 @@ void Application::printDrivers() {
 		cout << setw(6) << d.getMinRest() << endl;
 	}
 }
+
+// Displays detailed info about the driver with id id_number
 void Application::driversDetailShow(int id_number) {
 	Driver driver = company.getDrivers()[id_number];
 	cout << std::left;
@@ -771,6 +790,7 @@ void Application::driversDetailShow(int id_number) {
 	cout << driver.getMinRest() << "h\n\n";
 }
 
+// Creates and stores a new driver given the information provided by the user
 void Application::driversCreate() {
 	Driver newdriver;
 	string foo;
@@ -817,6 +837,8 @@ void Application::driversCreate() {
 	driversChanged = true;
 }
 
+// Allows user to change any information about a specific driver
+// Shows a sub-menu to choose what information to change
 void Application::driversUpdate() {
 	int id;
 	string foo;
@@ -839,6 +861,7 @@ void Application::driversUpdate() {
 	} while (INSIDE_SUBMENU);
 }
 
+// Changes name of driver with the id id_number with the new information given by the user
 void Application::driversUpdateName(int id_number) {
 	Driver d = company.getDrivers()[id_number];
 	string foo;
@@ -852,6 +875,7 @@ void Application::driversUpdateName(int id_number) {
 	pause();
 }
 
+// Changes max hours / shift of driver with the id id_number with the new information given by the user
 void Application::driversUpdateMaxShift(int id_number) {
 	Driver d = company.getDrivers()[id_number];
 	if (!d.getShifts().empty()) cout << "You can't update a driver with assigned work. ";
@@ -880,6 +904,7 @@ void Application::driversUpdateMaxShift(int id_number) {
 	pause();
 }
 
+// Changes max hours / week of driver with the id id_number with the new information given by the user
 void Application::driversUpdateMaxWeek(int id_number) {
 	Driver d = company.getDrivers()[id_number];
 	if (!d.getShifts().empty()) cout << "You can't update a driver with assigned work. ";
@@ -908,6 +933,7 @@ void Application::driversUpdateMaxWeek(int id_number) {
 	pause();
 }
 
+// Changes min hours of rest of driver with the id id_number with the new information given by the user
 void Application::driversUpdateMinRest(int id_number) {
 	Driver d = company.getDrivers()[id_number];
 	if (!d.getShifts().empty()) cout << "You can't update a driver with assigned work. ";
@@ -936,6 +962,7 @@ void Application::driversUpdateMinRest(int id_number) {
 	pause();
 }
 
+// Deletes driver chosen by the user
 void Application::driversDelete() {
 	printDrivers();
 	int id;
@@ -957,6 +984,7 @@ void Application::driversDelete() {
 	pause();
 }
 
+// Shows all of the shifts of a chosen driver and info about them
 void Application::driversShowAssignedWork() {
 	printDrivers();
 	int id;
@@ -986,6 +1014,7 @@ void Application::driversShowAssignedWork() {
 
 }
 
+// Shows all of the periods of time that a chosen driver has no assigned work
 void Application::driversShowFreeTime() {
 	printDrivers();
 	int id;
@@ -1067,10 +1096,14 @@ void Application::driversShowFreeTime() {
 	}
 }
 
+// Allows user to assign work to a choosen driver
 void Application::driversAssignWork() {
 	Shift newdrivershift;
 	printDrivers();
 	int driverID;
+
+	// Asks which driver, line and bus
+
 	do {
 		cout << endl << "Insert the driver number: ";
 		if (!validArg(driverID)) continue;
@@ -1082,6 +1115,8 @@ void Application::driversAssignWork() {
 	int lineID, busN;
 	lineID = chooseLine();
 	busN = chooseBus(lineID);
+
+	// Shows all of the unassigned shifts of the chosen bus
 
 	cout << "Line " << lineID << " Bus " << busN << endl;
 	cout << "Shifts:\n";
@@ -1111,6 +1146,9 @@ void Application::driversAssignWork() {
 		string foo;
 		getline(cin, foo);
 		normalize(foo);
+
+		// Asks user for various consecutive bus' shifts
+
 		if (foo == "y") {
 			do {
 				bool success = true;
@@ -1161,6 +1199,9 @@ void Application::driversAssignWork() {
 			break;
 
 		}
+
+		// Asks user for only a bus shift
+
 		else if (foo == "n") {
 			int shiftID;
 			do {
@@ -1194,8 +1235,14 @@ void Application::driversAssignWork() {
 	}
 
 	int durationShift = newdrivershift.getEndTime() - newdrivershift.getStartTime();
+
+	// Checks if the shift doesn't reach maximum of hours or if driver doesn't reach maximum of hours per week
+
 	if (durationShift <= max_shift && (duration + durationShift) <= max_week) {
 		if (!d.getShifts().empty()) {
+
+			// Checks if the new shift doesn't overlap with an already existing one
+
 			for (size_t t = 0; t < d.getShifts().size(); t++) {
 				if (newdrivershift.getStartTime() >= (d.getShifts().at(t).getStartTime() - rest) && newdrivershift.getStartTime() <= (d.getShifts().at(t).getEndTime() + rest)) {
 					success = false;
@@ -1234,6 +1281,7 @@ void Application::driversAssignWork() {
 	}
 }
 
+// // Returns the number of the chosen bus of the line with the id lineID
 int Application::chooseBus(int lineID) {
 	int busN;
 	int n = 0;
@@ -1263,6 +1311,7 @@ int Application::chooseBus(int lineID) {
 	}
 }
 
+// Shows detailed information about a chosen bus from a chosen line and its shifts
 void Application::busesShow() {
 	int lineID = chooseLine();
 	int busN = chooseBus(lineID);
@@ -1291,6 +1340,7 @@ void Application::busesShow() {
 	pause();
 }
 
+// Prints daily unassigned shifts of a bus
 void Application::printBus(Bus bus, int day) {
 	for (size_t t = 0; t < bus.getSchedule().size(); t++) {
 		Shift shift = bus.getSchedule().at(t);
@@ -1305,6 +1355,7 @@ void Application::printBus(Bus bus, int day) {
 	}
 }
 
+// Shows all of the unassigned shifts of a chosen bus of a chosen line
 void Application::busesShowFreeTime() {
 	int id = chooseLine();
 	vector<Bus> buses = company.getBuses();
@@ -1339,11 +1390,13 @@ void Application::busesShowFreeTime() {
 	pause();
 }
 
+// Saves changes and exits the program
 void Application::exitMenu() {
 	saveChanges();
 	exit(0);
 }
 
+// Adds functions to the main and drivers update menu
 void Application::setupMenu() {
 	mainMenu["lines show"] = &Application::linesShow;
 	mainMenu["lines schedules"] = &Application::linesSchedule;
@@ -1360,6 +1413,7 @@ void Application::setupMenu() {
 	mainMenu["buses show"] = &Application::busesShow;
 	mainMenu["buses show free time"] = &Application::busesShowFreeTime;
 	mainMenu["exit"] = &Application::exitMenu;
+
 	//shortcuts
 	mainMenu["ls"] = &Application::linesShow;
 	mainMenu["lsch"] = &Application::linesSchedule;
@@ -1376,13 +1430,15 @@ void Application::setupMenu() {
 	mainMenu["bs"] = &Application::busesShow;
 	mainMenu["bsft"] = &Application::busesShowFreeTime;
 	mainMenu["e"] = &Application::exitMenu;
-	//driver update menu
+
+	//drivers' update menu
 	driverUpdateMenu["name"] = &Application::driversUpdateName;
 	driverUpdateMenu["h/shift"] = &Application::driversUpdateMaxShift;
 	driverUpdateMenu["h/week"] = &Application::driversUpdateMaxWeek;
 	driverUpdateMenu["h/rest"] = &Application::driversUpdateMinRest;
 }
 
+// Displays main menu
 void Application::displayMainMenu() {
 	cout << company.getName() << " menu:\n";
 	cout << "\n";
@@ -1397,6 +1453,7 @@ void Application::displayMainMenu() {
 	cout << "Exit" << endl;
 }
 
+// Displays drivers' update menu
 void Application::displayUpdateMenu(int id_number, string identifier) {
 	if (identifier == DRIVERS_IDENTIFIER) {
 		cout << "Drivers Update - Driver " << id_number << " selected" << endl;
@@ -1405,6 +1462,7 @@ void Application::displayUpdateMenu(int id_number, string identifier) {
 	cout << "     Back" << endl;
 }
 
+// Reads the commands given by the user for the main menu
 void Application::inputMenu() {
 	string command;
 	do {
@@ -1423,6 +1481,7 @@ void Application::inputMenu() {
 	} while (true);
 }
 
+// Initiates the program
 void Application::start() {
 	do {
 		displayMainMenu();
@@ -1430,6 +1489,7 @@ void Application::start() {
 	} while (true);
 }
 
+// Reads the commands given by the user for the drivers' update menu
 void Application::updateMenu(int id_number, string identifier) {
 	map<string, UpdateMenuOption> updateMenu;
 	if (identifier == DRIVERS_IDENTIFIER)  updateMenu = driverUpdateMenu;
@@ -1451,6 +1511,7 @@ void Application::updateMenu(int id_number, string identifier) {
 	} while (true);
 }
 
+// Process drivers before storing the data in the file
 vector<string> Application::driversToStrings() {
 	vector<string> v;
 	string next;
@@ -1465,6 +1526,7 @@ vector<string> Application::driversToStrings() {
 	return v;
 }
 
+// Stores data in the output file
 void Application::changeFile(string type) {
 	ofstream output_file;
 	string path;
@@ -1496,7 +1558,7 @@ void Application::changeFile(string type) {
 	}
 }
 
-
+// Asks user whether to save the changes made or not
 void Application::saveChanges() {
 	string command;
 	if (driversChanged) {
@@ -1518,6 +1580,6 @@ void Application::saveChanges() {
 	}
 }
 Application::~Application() {
-	// TODO Auto-generated destructor stub
+	// Auto-generated destructor stub
 }
 
