@@ -753,7 +753,7 @@ void Application::linesStopTimetable(){
 	pause();
 }
 
-// Displays a driver summary and asks if the user wants to see detailed info about an individual driver
+// Displays drivers' information
 void Application::driversShow() {
 	printDrivers();
 	cout << endl << endl;
@@ -761,7 +761,7 @@ void Application::driversShow() {
 
 }
 
-// Displays a driver summary
+// Displays drivers' information
 void Application::printDrivers() {
 	DriverList drivers = company.getDrivers();
 	cout << std::left << setw(4) << "ID" << setw(3) << " " << setw(30) << "NAME" << setw(3) << " " << setw(7);
@@ -774,22 +774,6 @@ void Application::printDrivers() {
 		cout << setw(6) << d.getMaxWeek() << setw(3) << " ";
 		cout << setw(6) << d.getMinRest() << endl;
 	}
-}
-
-// Displays detailed info about the driver with id id_number
-void Application::driversDetailShow(int id_number) {
-	Driver driver = company.getDrivers()[id_number];
-	cout << std::left;
-	cout << setw(15) << "ID: ";
-	cout << driver.getId() << endl;
-	cout << setw(15) << "Name: ";
-	cout << driver.getName() << endl;
-	cout << setw(15) << "Daily shift: ";
-	cout << driver.getMaxWeek() << "h\n";
-	cout << setw(15) << "Weekly shift: ";
-	cout << driver.getMaxShift() << "h\n";
-	cout << setw(15) << "Resting hours: ";
-	cout << driver.getMinRest() << "h\n\n";
 }
 
 // Creates and stores a new driver given the information provided by the user
