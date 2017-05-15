@@ -207,8 +207,6 @@ void Application::searchStops(string stop, vector<Stop> &stopsDirect, vector<Sto
 				for (int z = 0; z < x; z++) {
 					newStop.setTimeFromStart(newStop.getTimeFromStart() + l.getTimes().at(z));
 				}
-				newStop.setStopH(day_start);
-				newStop.setStopM(newStop.getTimeFromStart());
 				stopsD.push_back(newStop);
 
 				// Inverse direction
@@ -224,8 +222,6 @@ void Application::searchStops(string stop, vector<Stop> &stopsDirect, vector<Sto
 					if (z < 0) break;
 					newStop2.setTimeFromStart(newStop2.getTimeFromStart() + l.getTimes().at(z));
 				}
-				newStop2.setStopH(day_start);
-				newStop2.setStopM(newStop.getTimeFromStart());
 				stopsI.push_back(newStop2);
 				break;
 			}
@@ -496,7 +492,7 @@ void Application::linesTravelTimes() {
 			cout << " - ";
 			if (directions.at(i) == 0) cout << "MAIN DIRECTION";
 			else cout << "INVERSE DIRECTION";
-			cout << " - ETA: ";
+			cout << " - Duration: ";
 			if (times.at(i) >= 60) {
 				int t = times.at(i);
 				int h = 0;
@@ -553,7 +549,7 @@ void Application::linesTravelTimes() {
 				cout << endl;
 				cout << "Line " << startIDs.at(i) << " and " << endIDs.at(i);
 				cout << " - ";
-				cout << "ETA: ";
+				cout << "Duration: ";
 				if (times2.at(i) >= 60) {
 					int t = times2.at(i);
 					int h = 0;
@@ -575,7 +571,7 @@ void Application::linesTravelTimes() {
 					}
 				}
 			}
-		}
+		}else cout << "There are no non-direct routes from " << stop1 << " to " << stop2 << ".\n";
 	}
 
 	pause();
@@ -1040,7 +1036,7 @@ void Application::driversShowFreeTime() {
 						timeEnd = nextS.getStartTime() - (d.getMinRest() * 60);
 					}
 					else {
-					timeToMins(i - 1, day_end, 0, timeEnd);
+						timeToMins(i - 1, day_end, 0, timeEnd);
 					}
 					if (freeTimeEnd < timeEnd) {
 						cout << "| "; printDay(i); cout << ": ";
@@ -1121,7 +1117,7 @@ void Application::driversAssignWork() {
 
 				for (size_t i = 0; i < shiftsNumbers.size() - 1; i++) {
 					if (!(shiftsNumbers.at(i) == shiftsNumbers.at(i + 1) - 1 ||
-						shiftsNumbers.at(i) == shiftsNumbers.at(i + 1) + 1)) {
+							shiftsNumbers.at(i) == shiftsNumbers.at(i + 1) + 1)) {
 						success = false;
 					}
 				}
@@ -1443,7 +1439,7 @@ vector<string> Application::driversToStrings() {
 		Driver d = item.second;
 		next.clear();
 		next = to_string(d.getId()) + " ; " + d.getName() + " ; " + to_string(d.getMaxShift()) + " ; " + to_string(d.getMaxWeek()) + " ; " +
-			to_string(d.getMinRest());
+				to_string(d.getMinRest());
 		v.push_back(next);
 	}
 	return v;
