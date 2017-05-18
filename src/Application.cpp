@@ -840,8 +840,6 @@ void Application::driversUpdate() {
 	} while (true);
 
 	cout << endl;
-
-	driversDetailShow(id);
 	do {
 		displayUpdateMenu(id, DRIVERS_IDENTIFIER);
 		updateMenu(id, DRIVERS_IDENTIFIER);
